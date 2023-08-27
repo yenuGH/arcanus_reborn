@@ -30,16 +30,34 @@ class _HomePageState extends State<HomePage> {
           ),
           drawer: const AppDrawer(),
 
+          // TODO: create proper bodies for each tab
+          body: BlocBuilder<TabBarCubit, TabBarState>(
+            builder: (context, state) {
+              if (state == TabBarAnime()) {
+                return const Center(
+                  child: Text("Anime"),
+                );
+              } else if (state == TabBarManga()) {
+                return const Center(
+                  child: Text("Manga"),
+                );
+              } else {
+                return const Center(
+                  child: Text("Anime"),
+                );
+                // if either one fails, default to anime as it is default media type
+              }
+            }
+          ),
+
           // the bottom navigation bar will change depending on a cubit
           bottomNavigationBar: BlocBuilder<TabBarCubit, TabBarState>(
             builder: (context, state) {
               if (state == TabBarAnime()) {
                 return const AnimeFilterBar();
-              }
-              else if (state == TabBarManga()) {
+              } else if (state == TabBarManga()) {
                 return const MangaFilterBar();
-              }
-              else {
+              } else {
                 return const AnimeFilterBar();
                 // if either one fails, default to anime as it is default media type
               }
