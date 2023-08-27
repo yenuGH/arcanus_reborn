@@ -1,7 +1,10 @@
+import 'package:arcanus_reborn/controller/cubits/tab_bar/cubit/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/widgets/app_drawer.dart';
 import 'package:arcanus_reborn/widgets/filter_bar_anime.dart';
+import 'package:arcanus_reborn/widgets/filter_bar_manga.dart';
 import 'package:arcanus_reborn/widgets/media_type_tab_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -16,15 +19,33 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: widget._tabCount,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          bottom: const MediaTypeTabBar(),
+    return BlocProvider(
+      create: (context) => TabBarCubit(),
+      child: DefaultTabController(
+        length: widget._tabCount,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+            bottom: const MediaTypeTabBar(),
+          ),
+          drawer: const AppDrawer(),
+
+          // the bottom navigation bar will change depending on a cubit
+          bottomNavigationBar: BlocBuilder<TabBarCubit, TabBarState>(
+            builder: (context, state) {
+              if (state == TabBarAnime()) {
+                return const AnimeFilterBar();
+              }
+              else if (state == TabBarManga()) {
+                return const MangaFilterBar();
+              }
+              else {
+                return const AnimeFilterBar();
+                // if either one fails, default to anime as it is default media type
+              }
+            },
+          ),
         ),
-        drawer: const AppDrawer(),
-        bottomNavigationBar: const AnimeFilterBar(),
       ),
     );
   }
