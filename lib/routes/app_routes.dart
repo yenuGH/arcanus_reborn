@@ -1,5 +1,5 @@
 import 'package:arcanus_reborn/controller/blocs/search_anime/search_anime_bloc.dart';
-import 'package:arcanus_reborn/controller/cubits/tab_bar/cubit/tab_bar_cubit.dart';
+import 'package:arcanus_reborn/controller/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/pages/home_page.dart';
 import 'package:arcanus_reborn/pages/search_page.dart';
 import 'package:arcanus_reborn/pages/settings_page.dart';
