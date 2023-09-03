@@ -1,4 +1,4 @@
-import 'package:arcanus_reborn/controller/blocs/search_anime/search_anime_bloc.dart';
+import 'package:arcanus_reborn/controllers/blocs/search_anime/search_anime_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +17,14 @@ class _SearchPageState extends State<SearchPage> {
     return BlocConsumer<SearchAnimeBloc, SearchAnimeState>(
       bloc: SearchAnimeBloc(),
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is SearchAnimeLoaded) {
+          // ignore: avoid_print
+          print("The result is: " + state.result.data.toString());
+        }
+        else {
+          // ignore: avoid_print
+          print("The state is: " + state.toString());
+        }
       },
       builder: (context, state) {
         return Scaffold(
@@ -47,11 +54,11 @@ class _SearchPageState extends State<SearchPage> {
                 controller: textFieldController,
                 onSubmitted: (String value) {
                   BlocProvider.of<SearchAnimeBloc>(context)
-                      .add(SearchAnimeNewQuery(query: value));
+                      .add(SearchAnimeNewQueryEvent(query: value));
                 },
                 onChanged: (String value) {
                   BlocProvider.of<SearchAnimeBloc>(context)
-                      .add(SearchAnimeNewQuery(query: value));
+                      .add(SearchAnimeNewQueryEvent(query: value));
                 },
               ),
 

@@ -1,4 +1,4 @@
-import 'package:arcanus_reborn/controller/cubits/tab_bar/tab_bar_cubit.dart';
+import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/widgets/app_drawer.dart';
 import 'package:arcanus_reborn/widgets/filter_bar_anime.dart';
 import 'package:arcanus_reborn/widgets/filter_bar_manga.dart';

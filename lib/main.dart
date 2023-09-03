@@ -1,5 +1,5 @@
 import 'package:arcanus_reborn/constants/arcanus_theme.dart';
-import 'package:arcanus_reborn/controller/anilist_client.dart';
+import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -12,7 +12,7 @@ void main() {
 class MyApp extends StatefulWidget {
   const MyApp({super.key, required this.client});
 
-  final ValueNotifier<GraphQLClient> client;
+  final GraphQLClient client;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -21,16 +21,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return GraphQLProvider(
-      client: widget.client,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Arcanus',
-        theme: ArcanusTheme().arcanusTheme,
-        //home: const HomePage(title: "arcanus"),
-        initialRoute: "/home_page",
-        onGenerateRoute: AppRoutes().onGenerateRoute,
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Arcanus',
+      theme: ArcanusTheme().arcanusTheme,
+      //home: const HomePage(title: "arcanus"),
+      initialRoute: "/home_page",
+      onGenerateRoute: AppRoutes().onGenerateRoute,
     );
   }
 
