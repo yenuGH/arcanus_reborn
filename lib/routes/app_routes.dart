@@ -1,5 +1,5 @@
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
-import 'package:arcanus_reborn/controllers/blocs/search_anime/search_anime_bloc.dart';
+import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
 import 'package:arcanus_reborn/pages/home_page.dart';
 import 'package:arcanus_reborn/pages/search_page.dart';
 import 'package:arcanus_reborn/pages/settings_page.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppRoutes {
   final TabBarCubit tabBarCubit = TabBarCubit();
-  final SearchAnimeBloc searchAnimeBloc = SearchAnimeBloc();
+  final SearchMediaBloc searchMediaBloc = SearchMediaBloc();
 
   Route? onGenerateRoute(RouteSettings routeSettings){
     switch (routeSettings.name){
@@ -23,7 +23,7 @@ class AppRoutes {
       case "/search_page": {
         return MaterialPageRoute(
           builder: (_) => BlocProvider.value(
-            value: searchAnimeBloc,
+            value: searchMediaBloc,
             child: const SearchPage(),
           ),
         );

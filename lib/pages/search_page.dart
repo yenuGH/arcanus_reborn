@@ -1,4 +1,5 @@
-import 'package:arcanus_reborn/controllers/blocs/search_anime/search_anime_bloc.dart';
+import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
+import 'package:arcanus_reborn/widgets/search_anime_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,20 +16,23 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<SearchAnimeBloc>(context).add(SearchAnimeInitialEvent());
+    BlocProvider.of<SearchMediaBloc>(context).add(SearchMediaInitialEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SearchAnimeBloc, SearchAnimeState>(
-      bloc: SearchAnimeBloc(),
+    return BlocConsumer<SearchMediaBloc, SearchMediaState>(
+      bloc: BlocProvider.of<SearchMediaBloc>(context),
       listener: (context, state) {
-        if (state is SearchAnimeLoadingState){
-          print("Loading state");
+        if (state is SearchMediaLoadingState){
+          print("Loading animes and mangas...");
         }
-        if (state is SearchAnimeLoadedState) {
-          for (int i = 0; i < state.result.length; i++) {
-            state.result[i].printAnimeResult();
+        if (state is SearchMediaLoadedState){
+          print("Loaded animes and mangas!");
+          for (int i = 0; i < state.result.length; i++){
+            print(state.result[i].title);
+            print(state.result[i].type);
+            print("\n");print("\n");print("\n");
           }
         }
       },
@@ -44,35 +48,23 @@ class _SearchPageState extends State<SearchPage> {
                 padding: const EdgeInsets.all(10.0),
               ),
 
-              TextField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  ),
-                  labelText: 'Search',
-                  suffixIcon: GestureDetector(
-                      child: const Icon(Icons.clear_rounded),
-                      onTap: () {
-                        textFieldController.clear();
-                      }),
-                  contentPadding: const EdgeInsets.all(10.0),
-                ),
-                controller: textFieldController,
-                onSubmitted: (String value) {
-                  BlocProvider.of<SearchAnimeBloc>(context)
-                      .add(SearchAnimeNewQueryEvent(query: value));
-                },
-                onChanged: (String value) {
-                  BlocProvider.of<SearchAnimeBloc>(context)
-                      .add(SearchAnimeNewQueryEvent(query: value));
-                },
-              ),
+              SearchAnimeTextField(textFieldController: textFieldController),
 
               Container(
                 padding: const EdgeInsets.all(10.0),
               ),
 
-              //const SearchView(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text("Testing $index"),
+                      subtitle: Text("Subtitle $index"),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         );

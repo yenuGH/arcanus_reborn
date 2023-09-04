@@ -1,6 +1,13 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+
+enum MediaType {
+  ANIME,
+  MANGA,
+}
 
 class AnilistClient {
   static late AnilistClient _instance;
@@ -36,13 +43,13 @@ class AnilistClient {
     }
 
     List<dynamic> resultData = result.data?['page']['media'];
-    List<AnimeResult> animeResults = [];
+    List<AnimeResult> searchResults = [];
 
     for (int i = 0; i < resultData.length; i++) {
-      animeResults.add(AnimeResult.fromJson(resultData[i]));
+      searchResults.add(AnimeResult.fromJson(resultData[i]));
     }
 
-    return animeResults;
+    return searchResults;
   }
   
 }

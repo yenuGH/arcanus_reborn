@@ -33,4 +33,24 @@ class AnilistQueries {
     }
   }
   ''';
+
+  static String searchMangaQuery = r'''
+    query searchAnime($query: String!) {
+    page: Page {
+      media(search: $query, type: MANGA, isAdult: false) {
+        id
+        title {
+          userPreferred
+        }
+        averageScore
+        coverImage {
+          extraLarge
+        }
+        status
+        chapters
+        isAdult
+      }
+    }
+  }
+  ''';
 }
