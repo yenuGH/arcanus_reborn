@@ -1,13 +1,13 @@
 // ignore_for_file: unnecessary_this
 
 class AnimeResult {
-  final int id;
-  final String title;
-  final String type;
-  final int averageScore;
-  final String coverImage;
-  final int episodes;
-  final String status;
+  int id;
+  String title;
+  String type;
+  int averageScore;
+  String coverImage;
+  int episodes;
+  String status;
 
   AnimeResult({
     required this.id,
@@ -20,7 +20,7 @@ class AnimeResult {
   });
 
   factory AnimeResult.fromJson(Map<String, dynamic> json) {
-    return AnimeResult(
+    AnimeResult animeResult = AnimeResult(
       id: json['id'] as int? ?? 0,
       title: json['title']['userPreferred'] as String? ?? "",
       type: "ANIME",
@@ -29,6 +29,27 @@ class AnimeResult {
       episodes: json['episodes'] as int? ?? 0,
       status: json['status'] as String? ?? "",
     );
+
+    if (animeResult.status == "RELEASING") {
+      animeResult.status = "RELEASING";
+    }
+    else if (animeResult.status == "FINISHED") {
+      animeResult.status = "FINISHED";
+    }
+    else if (animeResult.status == "NOT_YET_RELEASED") {
+      animeResult.status = "UNRELEASED";
+    }
+    else if (animeResult.status == "CANCELLED") {
+      animeResult.status = "CANCELLED";
+    }
+    else if (animeResult.status == "HIATUS") {
+      animeResult.status = "HIATUS";
+    }
+    else {
+      animeResult.status = "UNKNOWN";
+    }
+
+    return animeResult;
   }
 
   AnimeResult getAnimeResult() {

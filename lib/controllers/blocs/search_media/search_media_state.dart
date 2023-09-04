@@ -9,6 +9,8 @@ sealed class SearchMediaState extends Equatable {
 
 final class SearchMediaInitialState extends SearchMediaState {}
 
+final class SearchMediaEmptyState extends SearchMediaState {}
+
 final class SearchMediaLoadingState extends SearchMediaState {}
 
 final class SearchMediaLoadedState extends SearchMediaState {

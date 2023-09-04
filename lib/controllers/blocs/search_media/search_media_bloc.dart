@@ -11,11 +11,16 @@ part 'search_media_state.dart';
 class SearchMediaBloc extends Bloc<SearchMediaEvent, SearchMediaState> {
   SearchMediaBloc() : super(SearchMediaInitialState()) {
     on<SearchMediaInitialEvent>(searchMediaInitialEvent);
+    on<SearchMediaEmptyEvent>(searchMediaEmptyEvent);
     on<SearchMediaNewQueryEvent>(searchMediaNewQueryEvent);
   }
 
   FutureOr<void> searchMediaInitialEvent(SearchMediaInitialEvent event, Emitter<SearchMediaState> emit) async {
 
+  }
+
+  FutureOr<void> searchMediaEmptyEvent(SearchMediaEmptyEvent event, Emitter<SearchMediaState> emit) async {
+    emit(SearchMediaEmptyState());
   }
 
   Future<FutureOr<void>> searchMediaNewQueryEvent(SearchMediaNewQueryEvent event, Emitter<SearchMediaState> emit) async {
@@ -25,7 +30,10 @@ class SearchMediaBloc extends Bloc<SearchMediaEvent, SearchMediaState> {
 
     List<dynamic> searchResultAnimeManga = [];
     searchResultAnimeManga.addAll(searchResultAnime);
-    //searchResultAnimeManga.addAll(searchResultManga);
+    if (searchResultAnimeManga.isEmpty) {
+      emit(SearchMediaEmptyState());
+      return null;
+    }
 
     emit(SearchMediaLoadedState(result: searchResultAnimeManga));
   }

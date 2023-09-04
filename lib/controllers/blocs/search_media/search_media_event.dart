@@ -9,6 +9,8 @@ sealed class SearchMediaEvent extends Equatable {
 
 final class SearchMediaInitialEvent extends SearchMediaEvent {}
 
+final class SearchMediaEmptyEvent extends SearchMediaEvent {}
+
 final class SearchMediaNewQueryEvent extends SearchMediaEvent{
   final String query;
   const SearchMediaNewQueryEvent({required this.query});
