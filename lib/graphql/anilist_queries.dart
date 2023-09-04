@@ -2,7 +2,7 @@ class AnilistQueries {
   static String searchAnimeQuery = r'''
     query searchAnime($query: String!) {
     page: Page {
-      media(search: $query, type: ANIME, isAdult: true) {
+      media(search: $query, type: ANIME, isAdult: false) {
         id
         title {
           userPreferred

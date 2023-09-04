@@ -1,4 +1,5 @@
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
+import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class AnilistClient {
@@ -20,8 +21,8 @@ class AnilistClient {
     return _instance;
   }
 
-  Future<QueryResult> searchAnimeQueryResult(String query) async {
-    final QueryResult result = await graphQLClient.query(
+  Future<List<AnimeResult>> searchAnimeQueryResult(String query) async {
+    QueryResult result = await graphQLClient.query(
       QueryOptions(
         document: gql(AnilistQueries.searchAnimeQuery),
         variables: {
@@ -30,9 +31,18 @@ class AnilistClient {
       ),
     );
 
-    print("The result is: " + result.data.toString());
+    if (result.hasException) {
+      // print("The exception is: " + result.exception.toString());
+    }
 
-    return result;
+    List<dynamic> resultData = result.data?['page']['media'];
+    List<AnimeResult> animeResults = [];
+
+    for (int i = 0; i < resultData.length; i++) {
+      animeResults.add(AnimeResult.fromJson(resultData[i]));
+    }
+
+    return animeResults;
   }
   
 }

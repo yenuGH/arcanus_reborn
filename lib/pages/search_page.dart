@@ -13,17 +13,23 @@ class _SearchPageState extends State<SearchPage> {
   final textFieldController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<SearchAnimeBloc>(context).add(SearchAnimeInitialEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<SearchAnimeBloc, SearchAnimeState>(
       bloc: SearchAnimeBloc(),
       listener: (context, state) {
-        if (state is SearchAnimeLoaded) {
-          // ignore: avoid_print
-          print("The result is: " + state.result.data.toString());
+        if (state is SearchAnimeLoadingState){
+          print("Loading state");
         }
-        else {
-          // ignore: avoid_print
-          print("The state is: " + state.toString());
+        if (state is SearchAnimeLoadedState) {
+          for (int i = 0; i < state.result.length; i++) {
+            state.result[i].printAnimeResult();
+          }
         }
       },
       builder: (context, state) {

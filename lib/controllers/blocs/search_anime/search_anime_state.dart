@@ -7,16 +7,16 @@ sealed class SearchAnimeState extends Equatable {
   List<Object> get props => [];
 }
 
-final class SearchAnimeInitial extends SearchAnimeState {}
+final class SearchAnimeInitialState extends SearchAnimeState {}
 
-final class SearchAnimeLoading extends SearchAnimeState {}
+final class SearchAnimeLoadingState extends SearchAnimeState {}
 
-final class SearchAnimeLoaded extends SearchAnimeState {
-  final dynamic result;
-  const SearchAnimeLoaded({required this.result});
+final class SearchAnimeLoadedState extends SearchAnimeState {
+  final List<AnimeResult> result;
+  const SearchAnimeLoadedState({required this.result});
 
   @override
   List<Object> get props => [result];
 }
 
-final class SearchAnimeError extends SearchAnimeState {}
+final class SearchAnimeErrorState extends SearchAnimeState {}
