@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Arcanus',
       theme: ArcanusTheme().arcanusTheme,
       //home: const HomePage(title: "arcanus"),
-      initialRoute: "/home_page",
+      initialRoute: "/login_page",
       onGenerateRoute: AppRoutes().onGenerateRoute,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
 import 'package:arcanus_reborn/pages/home_page.dart';
+import 'package:arcanus_reborn/pages/login_page.dart';
 import 'package:arcanus_reborn/pages/search_page.dart';
 import 'package:arcanus_reborn/pages/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,11 @@ class AppRoutes {
 
   Route? onGenerateRoute(RouteSettings routeSettings){
     switch (routeSettings.name){
+      case "/login_page": {
+        return MaterialPageRoute(
+          builder: (_) => const LoginPage(),
+        );
+      }
       case "/home_page": {
         return MaterialPageRoute(
           builder: (_) => BlocProvider.value(
