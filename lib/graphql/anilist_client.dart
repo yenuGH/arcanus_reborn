@@ -17,17 +17,21 @@ class AnilistClient {
   late OAuth2Helper helper;
   late HttpLink httpLink;
   late AuthLink authLink;
+  late Link implicitGrantLink;
+
+  bool isAuthorized = false;
 
   late GraphQLClient graphQLClient;
 
   AnilistClient._internal(){
     helper = createAnilistOAuthHelper();
     httpLink  = HttpLink("https://graphql.anilist.co/");
-    authLink = AuthLink(getToken: () async => "Bearer ${(await helper.getToken())?.accessToken}");
+    authLink = AuthLink(getToken: () async => "Bearer ${(await helper.getTokenFromStorage())!.accessToken}");
+    implicitGrantLink = authLink.concat(httpLink);
 
-    authLink.concat(httpLink);
+    graphQLClient = GraphQLClient(cache: GraphQLCache(), link: implicitGrantLink);
 
-    graphQLClient = GraphQLClient(cache: GraphQLCache(), link: httpLink);
+    isAuthorized = true; // this constructor will not run if the token is invalid
   }
 
   factory AnilistClient() {

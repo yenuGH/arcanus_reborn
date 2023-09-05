@@ -8,6 +8,10 @@ part 'anilist_login_state.dart';
 class AnilistLoginCubit extends Cubit<AnilistLoginState> {
   AnilistLoginCubit() : super(AnilistLoginInitialState());
 
+  void anilistLoginInitial() {
+    emit(AnilistLoginInitialState());
+  }
+
   void saveAnilistLogin() {
     print("Remember me has been checked");
     emit(AnilistLoginSavedState());
@@ -17,14 +21,22 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
     emit(AnilistLoginNotSavedState());
   }
 
-  void anilistLoginPressed(String email, String password) {
-    final String anilistEmail = email;
-    final String anilistPassword = password;
+  void anilistLoginError() {
+    emit(AnilistLoginErrorState());
+  }
 
-    print("Email: $anilistEmail\nPassword: $anilistPassword");
+  void anilistLoginPressed() async {
+    //final String anilistEmail = email;
+    //final String anilistPassword = password;
+
+    //print("Email: $anilistEmail\nPassword: $anilistPassword");
 
     OAuth2Helper helper = AnilistClient().helper;
-    helper.fetchToken();
+    await helper.fetchToken();
+
+    helper.getToken().then((token) {
+      print("Token: ${token?.accessToken}");
+    });
 
     emit(AnilistLoginPressedState());
   }

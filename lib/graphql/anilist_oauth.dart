@@ -16,12 +16,12 @@ class AnilistOAuthClient extends OAuth2Client {
 OAuth2Helper createAnilistOAuthHelper() {
   AnilistOAuthClient anilistOAuthClient = AnilistOAuthClient(
     customUriScheme: "arcanus", 
-    redirectUri: "arcanus://oauth2",
+    redirectUri: "",
   );
 
   return OAuth2Helper(
     anilistOAuthClient,
     grantType: OAuth2Helper.implicitGrant,
-    clientId: "14331",
+    clientId: '14331',
   );
 }

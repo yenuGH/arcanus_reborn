@@ -1,4 +1,5 @@
 import 'package:arcanus_reborn/controllers/cubits/anilist_login/anilist_login_cubit.dart';
+import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,64 +67,85 @@ class _LoginPageState extends State<LoginPage> {
   // The actual login page
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.dark,
-            child: GestureDetector(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                        // Creating a background
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                          Color(0x666B7AFD),
-                          Color(0x996B7AFD),
-                          Color(0xcc6B7AFD),
-                          Color(0xff6B7AFD),
-                        ])),
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 120,
+    return BlocListener<AnilistLoginCubit, AnilistLoginState>(
+      listener: (context, state) {
+        if (state is AnilistLoginPressedState) {
+          AnilistClient().helper.getTokenFromStorage().then((token) {
+            if (token != null) {
+              Navigator.pushNamed(context, "/home_page");
+            } else {
+              BlocProvider.of<AnilistLoginCubit>(context).anilistLoginError();
+            }
+          });
+        }
+        if (state is AnilistLoginErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Login error, please try again."),
+            ),
+          );
+          BlocProvider.of<AnilistLoginCubit>(context).anilistLoginInitial();
+        }
+      },
+      child: Scaffold(
+          body: AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle.dark,
+              child: GestureDetector(
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                          // Creating a background
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                            Color(0x666B7AFD),
+                            Color(0x996B7AFD),
+                            Color(0xcc6B7AFD),
+                            Color(0xff6B7AFD),
+                          ])),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 120,
+                        ),
+                        // Creating a column for title, widgets/buttons
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              'Log Into AniList',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            // Create indent box
+                            // Create email widget
+                            const SizedBox(height: 50),
+                            //buildEmail(),
+                            // Create indent box
+                            // Create password widget
+                            const SizedBox(height: 50),
+                            //buildPassword(),
+                            const SizedBox(height: 15),
+                            // Create smaller indent box
+                            // Create remember me widget
+                            //buildRememberMe(),
+                            // Create login widget/button
+                            buildLoginButton(context),
+                          ],
+                        ),
                       ),
-                      // Creating a column for title, widgets/buttons
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'Log Into AniList',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          // Create indent box
-                          // Create email widget
-                          const SizedBox(height: 50),
-                          buildEmail(),
-                          // Create indent box
-                          // Create password widget
-                          const SizedBox(height: 50),
-                          buildPassword(),
-                          const SizedBox(height: 15),
-                          // Create smaller indent box
-                          // Create remember me widget
-                          buildRememberMe(),
-                          // Create login widget/button
-                          buildLoginButton(context),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )));
+                    )
+                  ],
+                ),
+              ))),
+    );
   }
 
   Widget buildPassword() {
@@ -218,13 +240,8 @@ class _LoginPageState extends State<LoginPage> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          //Navigator.pushReplacementNamed(context, "/home_page");
-          // get access token based on login credentials
-          // if successful, go to home page
-          // if unsuccessful, show error message
-
-          BlocProvider.of<AnilistLoginCubit>(context).anilistLoginPressed(
-              email!, password!); // 
+          BlocProvider.of<AnilistLoginCubit>(context)
+              .anilistLoginPressed(); //
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,

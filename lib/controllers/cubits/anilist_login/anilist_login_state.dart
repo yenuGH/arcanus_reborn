@@ -14,3 +14,7 @@ final class AnilistLoginSavedState extends AnilistLoginState {}
 final class AnilistLoginNotSavedState extends AnilistLoginState {}
 
 final class AnilistLoginPressedState extends AnilistLoginState {}
+
+final class AnilistLoginErrorState extends AnilistLoginState {}
+
+final class AnilistLoginSuccessState extends AnilistLoginState {}

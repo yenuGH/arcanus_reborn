@@ -5,14 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() {
-  AnilistClient anilistClient = AnilistClient();
-  runApp(MyApp(client: anilistClient.graphQLClient));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key, required this.client});
-
-  final GraphQLClient client;
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -25,7 +22,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Arcanus',
       theme: ArcanusTheme().arcanusTheme,
-      //home: const HomePage(title: "arcanus"),
       initialRoute: "/login_page",
       onGenerateRoute: AppRoutes().onGenerateRoute,
     );
