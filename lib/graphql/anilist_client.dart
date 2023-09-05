@@ -1,8 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:oauth2_client/oauth2_helper.dart';
 
 enum MediaType {
   ANIME,
@@ -12,16 +14,21 @@ enum MediaType {
 class AnilistClient {
   static late AnilistClient _instance;
   
-  final HttpLink httpLink = HttpLink(
-    "https://graphql.anilist.co/",
-  );
+  late HttpLink httpLink;
+  late OAuth2Helper helper;
+  late AuthLink authLink;
 
-  final GraphQLClient graphQLClient = GraphQLClient(
-    cache: GraphQLCache(),
-    link: HttpLink("https://graphql.anilist.co/"),
-  );
+  late GraphQLClient graphQLClient;
 
-  AnilistClient._internal();
+  AnilistClient._internal(){
+    helper = createAnilistOAuthHelper();
+    httpLink  = HttpLink("https://graphql.anilist.co/");
+    authLink = AuthLink(getToken: () async => "Bearer ${(await helper.getToken())?.accessToken}");
+
+    authLink.concat(httpLink);
+
+    graphQLClient = GraphQLClient(cache: GraphQLCache(), link: httpLink);
+  }
 
   factory AnilistClient() {
     _instance = AnilistClient._internal();

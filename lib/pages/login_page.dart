@@ -1,5 +1,7 @@
+import 'package:arcanus_reborn/controllers/cubits/anilist_login/anilist_login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +13,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 // Widget for 'Remember Me'
   bool rememberMe = false;
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  late String email;
+  late String password;
+
   Widget buildRememberMe() {
     return Container(
       height: 20,
@@ -18,14 +26,31 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Theme(
             data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: rememberMe,
-              checkColor: Colors.blue,
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  rememberMe = value!;
-                });
+            child: BlocBuilder<AnilistLoginCubit, AnilistLoginState>(
+              builder: (context, state) {
+                if (state is AnilistLoginSavedState) {
+                  rememberMe = true;
+                } else if (state is AnilistLoginNotSavedState) {
+                  rememberMe = false;
+                } else {
+                  rememberMe = false;
+                }
+
+                return Checkbox(
+                  value: rememberMe,
+                  checkColor: Colors.blue,
+                  activeColor: Colors.white,
+                  onChanged: (value) {
+                    if (value == true) {
+                      BlocProvider.of<AnilistLoginCubit>(context)
+                          .saveAnilistLogin();
+                    }
+                    if (value == false) {
+                      BlocProvider.of<AnilistLoginCubit>(context)
+                          .notSaveAnilistLogin();
+                    }
+                  },
+                );
               },
             ),
           ),
@@ -102,71 +127,89 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildPassword() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      const Text(
-        'Password',
-        style: TextStyle(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-      const SizedBox(height: 10),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-            ]),
-        height: 60,
-        child: const TextField(
-          obscureText: true,
-          style: TextStyle(color: Colors.black87),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(Icons.lock, color: Color(0xff6B7AFD)),
-              hintText: 'Password',
-              hintStyle: TextStyle(color: Colors.black38)),
-        ),
-      )
-    ]);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text(
+            'Password',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 2))
+                ]),
+            height: 60,
+            child: TextField(
+              controller: passwordController,
+              obscureText: true,
+              style: const TextStyle(color: Colors.black87),
+              decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(top: 14),
+                  prefixIcon: Icon(Icons.lock, color: Color(0xff6B7AFD)),
+                  hintText: 'Password',
+                  hintStyle: TextStyle(color: Colors.black38)),
+              onChanged: (value) {
+                password = value;
+              },
+              onSubmitted: (value) {
+                password = value;
+              },
+            ),
+          )
+        ]);
   }
 
   Widget buildEmail() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      const Text(
-        'Email Address',
-        style: TextStyle(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-      const SizedBox(height: 10),
-      Container(
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-            ]),
-        height: 60,
-        child: const TextField(
-          keyboardType: TextInputType.emailAddress,
-          style: TextStyle(color: Colors.black87),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(Icons.email, color: Color(0xff6B7AFD)),
-              hintText: 'AniList Associated Email',
-              hintStyle: TextStyle(color: Colors.black38)),
-        ),
-      )
-    ]);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text(
+            'Email Address',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 2))
+                ]),
+            height: 60,
+            child: TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              style: const TextStyle(color: Colors.black87),
+              decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(top: 14),
+                  prefixIcon: Icon(Icons.email, color: Color(0xff6B7AFD)),
+                  hintText: 'AniList Associated Email',
+                  hintStyle: TextStyle(color: Colors.black38)),
+              onChanged: (value) {
+                email = value;
+              },
+              onSubmitted: (value) {
+                email = value;
+              },
+            ),
+          )
+        ]);
   }
 
   Widget buildLoginButton(BuildContext context) {
@@ -175,10 +218,16 @@ class _LoginPageState extends State<LoginPage> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, "/home_page");
+          //Navigator.pushReplacementNamed(context, "/home_page");
+          // get access token based on login credentials
+          // if successful, go to home page
+          // if unsuccessful, show error message
+
+          BlocProvider.of<AnilistLoginCubit>(context).anilistLoginPressed(
+              email, password); // TODO: replace with actual email/password
         },
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
+          backgroundColor: Colors.white,
           padding: const EdgeInsets.all(15),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
