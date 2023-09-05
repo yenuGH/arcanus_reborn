@@ -14,8 +14,8 @@ enum MediaType {
 class AnilistClient {
   static late AnilistClient _instance;
   
-  late HttpLink httpLink;
   late OAuth2Helper helper;
+  late HttpLink httpLink;
   late AuthLink authLink;
 
   late GraphQLClient graphQLClient;

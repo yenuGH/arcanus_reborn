@@ -16,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  late String email;
-  late String password;
+  String? email;
+  String? password;
 
   Widget buildRememberMe() {
     return Container(
@@ -224,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
           // if unsuccessful, show error message
 
           BlocProvider.of<AnilistLoginCubit>(context).anilistLoginPressed(
-              email, password); // TODO: replace with actual email/password
+              email!, password!); // 
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,

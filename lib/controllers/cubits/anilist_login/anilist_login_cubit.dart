@@ -1,5 +1,7 @@
+import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:oauth2_client/oauth2_helper.dart';
 
 part 'anilist_login_state.dart';
 
@@ -20,6 +22,9 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
     final String anilistPassword = password;
 
     print("Email: $anilistEmail\nPassword: $anilistPassword");
+
+    OAuth2Helper helper = AnilistClient().helper;
+    helper.fetchToken();
 
     emit(AnilistLoginPressedState());
   }
