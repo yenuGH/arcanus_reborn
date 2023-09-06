@@ -27,17 +27,19 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
   }
 
   void anilistLoginPressed() async {
-    //final String anilistEmail = email;
-    //final String anilistPassword = password;
-
-    //print("Email: $anilistEmail\nPassword: $anilistPassword");
-
     OAuth2Helper helper = AnilistClient().helper;
-    await helper.fetchToken();
+    try{
+      await helper.getToken();
+    } catch (e) {
+      print("Error: $e");
+      emit(AnilistLoginErrorState());
+      return;
+    }
 
     helper.getToken().then((token) {
       final tokenBox = Hive.box('userToken');
       tokenBox.put("token", token!.accessToken);
+      print("Token: ${tokenBox.get("token")}");
     });
 
     emit(AnilistLoginPressedState());

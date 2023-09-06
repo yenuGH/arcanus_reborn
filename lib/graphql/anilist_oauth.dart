@@ -15,8 +15,8 @@ class AnilistOAuthClient extends OAuth2Client {
 
 OAuth2Helper createAnilistOAuthHelper() {
   AnilistOAuthClient anilistOAuthClient = AnilistOAuthClient(
-    customUriScheme: "arcanus", 
-    redirectUri: "",
+    customUriScheme: "com.arcanus.app", 
+    redirectUri: "com.arcanus.app://login-redirect",
   );
 
   return OAuth2Helper(

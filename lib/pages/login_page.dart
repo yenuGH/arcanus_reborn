@@ -82,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Login error, please try again."),
+              duration: Duration(milliseconds: 700),
             ),
           );
           BlocProvider.of<AnilistLoginCubit>(context).anilistLoginInitial();
