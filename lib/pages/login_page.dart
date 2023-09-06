@@ -19,6 +19,12 @@ class _LoginPageState extends State<LoginPage> {
   String? authToken;
 
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<AnilistLoginCubit>(context).anilistLoginInitial();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<AnilistLoginCubit, AnilistLoginState>(
       listener: (context, state) {
@@ -40,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
               BlocProvider.of<AnilistLoginCubit>(context).anilistLoginError();
             }
           }
+
         }
         if (state is AnilistLoginErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
