@@ -21,6 +21,14 @@ class SettingsPage extends StatelessWidget {
             },
             leading: const Icon(Icons.logout),
           ),
+
+          ListTile(
+            title: const Text("About"),
+            onTap: () {
+              Navigator.pushNamed(context, "/about_page");
+            },
+            leading: const Icon(Icons.info),
+          ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:arcanus_reborn/controllers/cubits/anilist_login/anilist_login_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
+import 'package:arcanus_reborn/pages/about_page.dart';
 import 'package:arcanus_reborn/pages/home_page.dart';
 import 'package:arcanus_reborn/pages/login_page.dart';
 import 'package:arcanus_reborn/pages/search_page.dart';
@@ -47,6 +48,12 @@ class AppRoutes {
         {
           return MaterialPageRoute(
             builder: (_) => const SettingsPage(),
+          );
+        }
+      case "/about_page":
+        {
+          return MaterialPageRoute(
+            builder: (_) => const AboutPage(),
           );
         }
       default:
