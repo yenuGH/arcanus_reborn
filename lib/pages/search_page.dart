@@ -30,12 +30,6 @@ class _SearchPageState extends State<SearchPage> {
           print("Loading animes and mangas...");
         }
         if (state is SearchMediaLoadedState) {
-          /* print("Loaded animes and mangas!");
-          for (int i = 0; i < state.result.length; i++){
-            print(state.result[i].title);
-            print(state.result[i].type);
-            print("\n");print("\n");print("\n");
-          } */
           mediaList = state.result;
         }
       },

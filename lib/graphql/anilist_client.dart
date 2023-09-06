@@ -4,6 +4,7 @@ import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
 enum MediaType {
@@ -13,6 +14,7 @@ enum MediaType {
 
 class AnilistClient {
   static late AnilistClient _instance;
+  final tokenBox = Hive.box('userToken');
   
   late OAuth2Helper helper;
   late HttpLink httpLink;
@@ -26,7 +28,7 @@ class AnilistClient {
   AnilistClient._internal(){
     helper = createAnilistOAuthHelper();
     httpLink  = HttpLink("https://graphql.anilist.co/");
-    authLink = AuthLink(getToken: () async => "Bearer ${(await helper.getTokenFromStorage())!.accessToken}");
+    authLink = AuthLink(getToken: () async => "Bearer ${tokenBox.get("token")}");
     implicitGrantLink = authLink.concat(httpLink);
 
     graphQLClient = GraphQLClient(cache: GraphQLCache(), link: implicitGrantLink);
