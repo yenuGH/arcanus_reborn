@@ -26,7 +26,7 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
     emit(AnilistLoginErrorState());
   }
 
-  void anilistLoginPressed() async {
+  void anilistLoginPressedIOS() async {
     OAuth2Helper helper = AnilistClient().helper;
     try{
       await helper.getToken();
@@ -43,5 +43,28 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
     });
 
     emit(AnilistLoginPressedState());
+  }
+
+  void anilistLoginPressedAndroid(String? token) {
+    if (token == null){
+      emit(AnilistLoginErrorState());
+      return;
+    }
+
+    final tokenBox = Hive.box('userToken');
+    tokenBox.put("token", token);
+    print("Token: ${tokenBox.get("token")}");
+    emit(AnilistLoginPressedState());
+  }
+
+  void anilistLoginGrabToken () async {
+    OAuth2Helper helper = AnilistClient().helper;
+    try{
+      await helper.getToken();
+    } catch (e) {
+      // the helper will return a null value on android
+      // the user will manually paste their token
+      return;
+    }
   }
 }

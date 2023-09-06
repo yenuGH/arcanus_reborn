@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
@@ -14,14 +16,25 @@ class AnilistOAuthClient extends OAuth2Client {
 }
 
 OAuth2Helper createAnilistOAuthHelper() {
+  late String clientId;
+  if (Platform.isAndroid) {
+    clientId = '14331';
+  } else if (Platform.isIOS) {
+    clientId = '14371';
+  } else {
+    throw UnsupportedError('Unsupported platform');
+  }
+
+
   AnilistOAuthClient anilistOAuthClient = AnilistOAuthClient(
     customUriScheme: "com.arcanus.app", 
-    redirectUri: "com.arcanus.app://login-redirect",
+    //redirectUri: "",
+    redirectUri: "",
   );
 
   return OAuth2Helper(
     anilistOAuthClient,
     grantType: OAuth2Helper.implicitGrant,
-    clientId: '14331',
+    clientId: clientId,
   );
 }

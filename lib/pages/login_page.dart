@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:arcanus_reborn/controllers/cubits/anilist_login/anilist_login_cubit.dart';
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,71 +15,31 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-// Widget for 'Remember Me'
-  bool rememberMe = false;
+  final TextEditingController authTokenController = TextEditingController();
+  String? authToken;
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  String? email;
-  String? password;
-
-  Widget buildRememberMe() {
-    return Container(
-      height: 20,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: BlocBuilder<AnilistLoginCubit, AnilistLoginState>(
-              builder: (context, state) {
-                if (state is AnilistLoginSavedState) {
-                  rememberMe = true;
-                } else if (state is AnilistLoginNotSavedState) {
-                  rememberMe = false;
-                } else {
-                  rememberMe = false;
-                }
-
-                return Checkbox(
-                  value: rememberMe,
-                  checkColor: Colors.blue,
-                  activeColor: Colors.white,
-                  onChanged: (value) {
-                    if (value == true) {
-                      BlocProvider.of<AnilistLoginCubit>(context)
-                          .saveAnilistLogin();
-                    }
-                    if (value == false) {
-                      BlocProvider.of<AnilistLoginCubit>(context)
-                          .notSaveAnilistLogin();
-                    }
-                  },
-                );
-              },
-            ),
-          ),
-          const Text(
-            'Remember Me',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
-    );
-  }
-
-  // The actual login page
   @override
   Widget build(BuildContext context) {
     return BlocListener<AnilistLoginCubit, AnilistLoginState>(
       listener: (context, state) {
         if (state is AnilistLoginPressedState) {
-          AnilistClient().helper.getTokenFromStorage().then((token) {
-            if (token != null) {
+          if (Platform.isIOS){
+            AnilistClient().helper.getTokenFromStorage().then((token) {
+              if (token != null) {
+                Navigator.pushNamed(context, "/home_page");
+              } else {
+                BlocProvider.of<AnilistLoginCubit>(context).anilistLoginError();
+              }
+            });
+          }
+          if (Platform.isAndroid){
+            final tokenBox = Hive.box('userToken');
+            if (tokenBox.get("token") != null) {
               Navigator.pushNamed(context, "/home_page");
             } else {
               BlocProvider.of<AnilistLoginCubit>(context).anilistLoginError();
             }
-          });
+          }
         }
         if (state is AnilistLoginErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -128,17 +91,12 @@ class _LoginPageState extends State<LoginPage> {
                             // Create indent box
                             // Create email widget
                             const SizedBox(height: 50),
-                            //buildEmail(),
-                            // Create indent box
-                            // Create password widget
+                            
+                            Platform.isAndroid ? authTokenField() : Container(),
+                            
                             const SizedBox(height: 50),
-                            //buildPassword(),
-                            const SizedBox(height: 15),
-                            // Create smaller indent box
-                            // Create remember me widget
-                            //buildRememberMe(),
-                            // Create login widget/button
-                            buildLoginButton(context),
+
+                            loginButton(context),
                           ],
                         ),
                       ),
@@ -149,16 +107,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildPassword() {
+  Widget authTokenField() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const Text(
-            'Password',
+            'Authorization Token',
             style: TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
           Container(
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
@@ -172,77 +129,49 @@ class _LoginPageState extends State<LoginPage> {
                 ]),
             height: 60,
             child: TextField(
-              controller: passwordController,
-              obscureText: true,
-              style: const TextStyle(color: Colors.black87),
-              decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.only(top: 14),
-                  prefixIcon: Icon(Icons.lock, color: Color(0xff6B7AFD)),
-                  hintText: 'Password',
-                  hintStyle: TextStyle(color: Colors.black38)),
-              onChanged: (value) {
-                password = value;
-              },
-              onSubmitted: (value) {
-                password = value;
-              },
-            ),
-          )
-        ]);
-  }
-
-  Widget buildEmail() {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Text(
-            'Email Address',
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 6,
-                      offset: Offset(0, 2))
-                ]),
-            height: 60,
-            child: TextField(
-              controller: emailController,
+              controller: authTokenController,
               keyboardType: TextInputType.emailAddress,
               style: const TextStyle(color: Colors.black87),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.only(top: 14),
-                  prefixIcon: Icon(Icons.email, color: Color(0xff6B7AFD)),
-                  hintText: 'AniList Associated Email',
-                  hintStyle: TextStyle(color: Colors.black38)),
+                  prefixIcon: GestureDetector(
+                    child: const Icon(
+                      Icons.token, 
+                      color: Color(0xff6B7AFD)
+                    ),
+                    onTap:() {
+                      BlocProvider.of<AnilistLoginCubit>(context)
+                          .anilistLoginGrabToken();
+                    },
+                  ),
+                  hintText: 'Tap the icon to grab your token.',
+                  hintStyle: const TextStyle(color: Colors.black38)),
               onChanged: (value) {
-                email = value;
+                authToken = value;
               },
               onSubmitted: (value) {
-                email = value;
+                authToken = value;
               },
             ),
+            
           )
         ]);
   }
 
-  Widget buildLoginButton(BuildContext context) {
+  Widget loginButton(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          BlocProvider.of<AnilistLoginCubit>(context)
-              .anilistLoginPressed(); //
+          if (Platform.isIOS){
+            BlocProvider.of<AnilistLoginCubit>(context)
+                .anilistLoginPressedIOS();
+          }
+          if (Platform.isAndroid){
+            BlocProvider.of<AnilistLoginCubit>(context)
+                .anilistLoginPressedAndroid(authToken);
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
