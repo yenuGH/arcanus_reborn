@@ -2,18 +2,18 @@ import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:arcanus_reborn/pages/anime_info_page.dart';
 import 'package:flutter/material.dart';
 
-class AnimeCard extends StatefulWidget {
-  const AnimeCard({super.key, required this.animeResult});
+class SearchAnimeCard extends StatefulWidget {
+  const SearchAnimeCard({super.key, required this.animeResult});
 
   final AnimeResult animeResult;
 
   @override
-  State<AnimeCard> createState() => _AnimeCardState(
+  State<SearchAnimeCard> createState() => _SearchAnimeCardState(
 
   );
 }
 
-class _AnimeCardState extends State<AnimeCard> {
+class _SearchAnimeCardState extends State<SearchAnimeCard> {
   @override
   Widget build(BuildContext context) {
     return Card(

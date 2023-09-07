@@ -19,6 +19,8 @@ class AnilistQueries {
           episodes
           status
           nextAiringEpisode {
+            airingAt
+            timeUntilAiring
             episode
           }
           studios(isMain: true) {

@@ -12,6 +12,7 @@ class AnimeResult {
   int averageScore;
   String coverImage;
   int episodes;
+  Map<String, dynamic> nextAiringEpisode;
   String status;
 
   AnimeResult({
@@ -26,6 +27,7 @@ class AnimeResult {
     required this.averageScore,
     required this.coverImage,
     required this.episodes,
+    required this.nextAiringEpisode,
     required this.status,
   });
 
@@ -42,6 +44,7 @@ class AnimeResult {
       averageScore: json['averageScore'] as int? ?? 0,
       coverImage: json['coverImage']['extraLarge'] as String? ?? "",
       episodes: json['episodes'] as int? ?? 0,
+      nextAiringEpisode: Map<String, dynamic>.from(json['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
       status: json['status'] as String? ?? "",
     );
 

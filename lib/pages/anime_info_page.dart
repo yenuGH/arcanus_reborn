@@ -1,5 +1,8 @@
 import 'package:arcanus_reborn/models/anime_result.dart';
+import 'package:arcanus_reborn/pages/anime_edit_page.dart';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:html/parser.dart';
 
 class AnimeInfoPage extends StatefulWidget {
@@ -16,14 +19,27 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Information"),
+        title: const Text("Information"),
         elevation: 0.0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },
-        )
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => AnimeEditPage(animeResult: widget.animeResult)
+                )
+              );
+            },
+          )
+        ],
       ),
 
       body: Container(
@@ -44,39 +60,14 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
 
               createSpacing(),
 
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Status: " + widget.animeResult.status,
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
+              animeStatus(),
 
               createSpacing(),
 
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Episodes: " + widget.animeResult.episodes.toString(),
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
+              animeEpisodes(),
 
               createSpacing(),
 
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Average Score: " + widget.animeResult.averageScore.toString(),
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
             ]
           ),
         ),
@@ -106,6 +97,44 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
+  Widget animeAverageScore () {
+    return Row(
+      children: <Widget>[
+        const Icon(Icons.star_border),
+
+        Container(
+          width: 10,
+        ),
+
+        Text(
+          widget.animeResult.averageScore.toString(),
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget animeAverageScoreRatingBar () {
+    return RatingBar(
+      initialRating: widget.animeResult.averageScore.toDouble() / 10,
+      direction: Axis.horizontal,
+      allowHalfRating: true,
+      itemCount: 10,
+      itemSize: 20,
+      ratingWidget: RatingWidget(
+        full: const Icon(Icons.star),
+        half: const Icon(Icons.star_half),
+        empty: const Icon(Icons.star_border),
+      ),
+      glow: false,
+      ignoreGestures: true,
+      onRatingUpdate: (double value) {},
+    );
+  }
+
   Widget animeTitleUserPreferred() {
     return Text(
       widget.animeResult.titleUserPreferred,
@@ -116,12 +145,24 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeTitleAlternatives() {
+  Widget animeTitleAlternatives(String alternativeTitle) {
     return Text(
-      "\u2022 ${widget.animeResult.titleEnglish}, ${widget.animeResult.titleRomaji}, ${widget.animeResult.titleNative}",
+      "\u2022 $alternativeTitle",
       style: const TextStyle(
         fontSize: 15,
         fontStyle: FontStyle.italic,
+      ),
+    );
+  }
+
+  Widget animeStatus() {
+    return Container(
+      alignment: Alignment.topLeft,
+      child: Text(
+        "Status: ${widget.animeResult.status}",
+        style: const TextStyle(
+          fontSize: 15,
+        ),
       ),
     );
   }
@@ -134,17 +175,24 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
           coverImage(),
-    
+
           createSpacing(),
     
-          Container(
+          SizedBox(
             width: 200,
             height: 250,
             child: ListView(
               children: <Widget>[
                 animeTitleUserPreferred(),
+                Container(
+                  height: 5,
+                ),
+                animeAverageScoreRatingBar(),
                 createSpacing(),
-                animeTitleAlternatives(),
+                const Text("Alternative titles: "),
+                animeTitleAlternatives(widget.animeResult.titleEnglish),
+                animeTitleAlternatives(widget.animeResult.titleRomaji),
+                animeTitleAlternatives(widget.animeResult.titleNative),
               ],
             ),
           ),
@@ -157,14 +205,15 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     var htmlString = parse(widget.animeResult.description);
     var parsedString = parse(htmlString.body!.text).documentElement!.text;
 
-    return Container(
-      alignment: Alignment.topLeft,
-      child: Text(
-        parsedString,
-        style: const TextStyle(
-          fontSize: 15,
-        ),
-      ),
+    return ExpandableText(
+      parsedString,
+      expandText: "read more...",
+      expandOnTextTap: true,
+      collapseText: "read less...",
+      collapseOnTextTap: true,
+      animation: true,
+      animationCurve: Curves.easeInOut,
+      maxLines: 4,
     );
   }
 
@@ -186,4 +235,25 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       ),
     );
   }
+
+  Widget animeEpisodes() {
+    late String episodesString;
+    if (widget.animeResult.status == "FINISHED"){
+      episodesString = "Episodes: ${widget.animeResult.episodes}";
+    }
+    if (widget.animeResult.status == "RELEASING"){
+      episodesString = "Next episode: ${widget.animeResult.nextAiringEpisode['episode']}";
+    }
+
+    return Container(
+      alignment: Alignment.topLeft,
+      child: Text(
+        episodesString,
+        style: const TextStyle(
+          fontSize: 15,
+        ),
+      ),
+    );
+  }
+
 }

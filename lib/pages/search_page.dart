@@ -1,5 +1,5 @@
 import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
-import 'package:arcanus_reborn/widgets/anime_card.dart';
+import 'package:arcanus_reborn/widgets/search_anime_card.dart';
 import 'package:arcanus_reborn/widgets/search_anime_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
                           child: ListView.builder(
                             itemCount: mediaList?.length,
                             itemBuilder: (context, index) {
-                              return AnimeCard(animeResult: mediaList?[index]);
+                              return SearchAnimeCard(animeResult: mediaList?[index]);
                             },
                           ),
                         );
