@@ -1,5 +1,6 @@
 import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
 
 class AnimeInfoPage extends StatefulWidget {
   const AnimeInfoPage({super.key, required this.animeResult});
@@ -15,7 +16,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.animeResult.titleUserPreferred),
+        title: Text("Information"),
         elevation: 0.0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -27,56 +28,21 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
 
       body: Container(
         padding: const EdgeInsets.all(10),
-        alignment: Alignment.topCenter,
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                width: 200,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  child: Image.network(
-                    widget.animeResult.coverImage,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              animeHeader(),
 
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
+              createSpacing(),
 
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  widget.animeResult.titleUserPreferred,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              animeGenres(),
 
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
+              createSpacing(),
 
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  widget.animeResult.description,
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
+              animeDescription(),
 
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
+              createSpacing(),
 
               Container(
                 alignment: Alignment.topLeft,
@@ -88,9 +54,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                 ),
               ),
 
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
+              createSpacing(),
 
               Container(
                 alignment: Alignment.topLeft,
@@ -102,9 +66,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                 ),
               ),
 
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
+              createSpacing(),
 
               Container(
                 alignment: Alignment.topLeft,
@@ -115,27 +77,112 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                   ),
                 ),
               ),
-
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
-
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Genres: " + widget.animeResult.genres.toString(),
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
             ]
           ),
         ),
+      ),
+    );
+  }
+
+  Widget createSpacing() {
+    return Container(
+      padding: const EdgeInsets.all(10),
+    );
+  }
+
+  Widget coverImage() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      height: 250,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        child: Image.network(
+          widget.animeResult.coverImage,
+          fit: BoxFit.fill,
+        ),
+      ),
+    );
+  }
+
+  Widget animeTitleUserPreferred() {
+    return Text(
+      widget.animeResult.titleUserPreferred,
+      style: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget animeTitleAlternatives() {
+    return Text(
+      "\u2022 ${widget.animeResult.titleEnglish}, ${widget.animeResult.titleRomaji}, ${widget.animeResult.titleNative}",
+      style: const TextStyle(
+        fontSize: 15,
+        fontStyle: FontStyle.italic,
+      ),
+    );
+  }
+
+  Widget animeHeader() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget> [
+          coverImage(),
+    
+          createSpacing(),
+    
+          Container(
+            width: 200,
+            height: 250,
+            child: ListView(
+              children: <Widget>[
+                animeTitleUserPreferred(),
+                createSpacing(),
+                animeTitleAlternatives(),
+              ],
+            ),
+          ),
+        ]
+      ),
+    );
+  }
+
+  Widget animeDescription() {
+    var htmlString = parse(widget.animeResult.description);
+    var parsedString = parse(htmlString.body!.text).documentElement!.text;
+
+    return Container(
+      alignment: Alignment.topLeft,
+      child: Text(
+        parsedString,
+        style: const TextStyle(
+          fontSize: 15,
+        ),
+      ),
+    );
+  }
+
+  Widget animeGenres() {
+    return SizedBox(
+      height: 40,
+      child: ListView.separated(
+        itemCount: widget.animeResult.genres.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return Chip(
+            label: Text(widget.animeResult.genres[index]),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
       ),
     );
   }
