@@ -1,4 +1,5 @@
 import 'package:arcanus_reborn/models/anime_result.dart';
+import 'package:arcanus_reborn/pages/anime_info_page.dart';
 import 'package:flutter/material.dart';
 
 class AnimeCard extends StatefulWidget {
@@ -19,7 +20,12 @@ class _AnimeCardState extends State<AnimeCard> {
       child: InkWell(
       splashColor: Colors.blue.withAlpha(30),
       onTap: () {
-        print('Card tapped.');
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (context) => AnimeInfoPage(animeResult: widget.animeResult)
+          )
+        );
       },
       child: Container(
         margin: const EdgeInsets.all(5),
@@ -55,7 +61,7 @@ class _AnimeCardState extends State<AnimeCard> {
                   children: <Widget>[
                     
                     Text(
-                      widget.animeResult.title,
+                      widget.animeResult.titleUserPreferred,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

@@ -2,7 +2,12 @@
 
 class AnimeResult {
   int id;
-  String title;
+  String titleUserPreferred;
+  String titleEnglish;
+  String titleRomaji;
+  String titleNative;
+  String description;
+  List<String> genres;
   String type;
   int averageScore;
   String coverImage;
@@ -11,7 +16,12 @@ class AnimeResult {
 
   AnimeResult({
     required this.id,
-    required this.title,
+    required this.titleUserPreferred,
+    required this.titleEnglish,
+    required this.titleRomaji,
+    required this.titleNative,
+    required this.description,
+    required this.genres,
     required this.type,
     required this.averageScore,
     required this.coverImage,
@@ -22,7 +32,12 @@ class AnimeResult {
   factory AnimeResult.fromJson(Map<String, dynamic> json) {
     AnimeResult animeResult = AnimeResult(
       id: json['id'] as int? ?? 0,
-      title: json['title']['userPreferred'] as String? ?? "",
+      titleUserPreferred: json['title']['userPreferred'] as String? ?? "",
+      titleEnglish: json['title']['english'] as String? ?? "",
+      titleRomaji: json['title']['romaji'] as String? ?? "",
+      titleNative: json['title']['native'] as String? ?? "",
+      description: json['description'] as String? ?? "",
+      genres: List<String>.from(json['genres'] as List<dynamic>? ?? []),
       type: "ANIME",
       averageScore: json['averageScore'] as int? ?? 0,
       coverImage: json['coverImage']['extraLarge'] as String? ?? "",
@@ -58,7 +73,7 @@ class AnimeResult {
 
   void printMediaResult() {
     print("id: " + this.id.toString());
-    print("title: " + this.title);
+    print("title: " + this.titleUserPreferred);
     print("type: " + this.type);
     print("averageScore: " + this.averageScore.toString());
     print("coverImage: " + this.coverImage);
