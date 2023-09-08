@@ -1,7 +1,8 @@
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
+import 'package:arcanus_reborn/views/anime/anime_watching_view.dart';
 import 'package:arcanus_reborn/widgets/app_drawer.dart';
-import 'package:arcanus_reborn/widgets/filter_bar_anime.dart';
-import 'package:arcanus_reborn/widgets/filter_bar_manga.dart';
+import 'package:arcanus_reborn/widgets/anime/filter_bar_anime.dart';
+import 'package:arcanus_reborn/widgets/manga/filter_bar_manga.dart';
 import 'package:arcanus_reborn/widgets/media_type_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,13 +31,10 @@ class _HomePageState extends State<HomePage> {
           ),
           drawer: const AppDrawer(),
 
-          // TODO: create proper bodies for each tab
           body: BlocBuilder<TabBarCubit, TabBarState>(
-            builder: (context, state) {
+            builder: (_, state) {
               if (state == TabBarAnime()) {
-                return const Center(
-                  child: Text("Anime"),
-                );
+                return AnimeWatchingView(homePageContext: context);
               } else if (state == TabBarManga()) {
                 return const Center(
                   child: Text("Manga"),
@@ -65,6 +63,19 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Something extends StatelessWidget {
+  const Something({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text("Anime"),
     );
   }
 }

@@ -119,10 +119,10 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
 
   Widget animeAverageScoreRatingBar () {
     return RatingBar(
-      initialRating: widget.animeResult.averageScore.toDouble() / 10,
+      initialRating: widget.animeResult.averageScore.toDouble() / 20,
       direction: Axis.horizontal,
       allowHalfRating: true,
-      itemCount: 10,
+      itemCount: 5,
       itemSize: 20,
       ratingWidget: RatingWidget(
         full: const Icon(Icons.star),

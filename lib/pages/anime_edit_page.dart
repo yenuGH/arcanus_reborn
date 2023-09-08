@@ -15,7 +15,7 @@ class _AnimeEditPageState extends State<AnimeEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit"),
+        title: const Text("Edit"),
       ),
       body: Text("edit page for ${widget.animeResult.titleUserPreferred}"),
     );

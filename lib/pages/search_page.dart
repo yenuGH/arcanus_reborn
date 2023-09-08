@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
-import 'package:arcanus_reborn/widgets/search_anime_card.dart';
-import 'package:arcanus_reborn/widgets/search_anime_text_field.dart';
+import 'package:arcanus_reborn/widgets/anime/search_anime_card.dart';
+import 'package:arcanus_reborn/widgets/anime/search_anime_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,7 +29,7 @@ class _SearchPageState extends State<SearchPage> {
       bloc: BlocProvider.of<SearchMediaBloc>(context),
       listener: (context, state) {
         if (state is SearchMediaLoadingState) {
-          print("Loading animes and mangas...");
+          log("Loading animes and mangas...");
         }
         if (state is SearchMediaLoadedState) {
           mediaList = state.result;

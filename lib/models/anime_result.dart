@@ -73,14 +73,4 @@ class AnimeResult {
   AnimeResult getAnimeResult() {
     return this;
   }
-
-  void printMediaResult() {
-    print("id: " + this.id.toString());
-    print("title: " + this.titleUserPreferred);
-    print("type: " + this.type);
-    print("averageScore: " + this.averageScore.toString());
-    print("coverImage: " + this.coverImage);
-    print("episodes: " + this.episodes.toString());
-    print("status: " + this.status);
-  }
 }

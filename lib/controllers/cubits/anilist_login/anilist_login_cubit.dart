@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -14,11 +16,11 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
   }
 
   void saveAnilistLogin() {
-    print("Remember me has been checked");
+    log("Remember me has been checked");
     emit(AnilistLoginSavedState());
   }
   void notSaveAnilistLogin() {
-    print("Remember me has been unchecked");
+    log("Remember me has been unchecked");
     emit(AnilistLoginNotSavedState());
   }
 
@@ -31,7 +33,7 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
     try{
       await helper.getToken();
     } catch (e) {
-      print("Error: $e");
+      log("Error: $e");
       emit(AnilistLoginErrorState());
       return;
     }
@@ -39,7 +41,7 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
     helper.getToken().then((token) {
       final tokenBox = Hive.box('userToken');
       tokenBox.put("token", token!.accessToken);
-      print("Token: ${tokenBox.get("token")}");
+      log("Token: ${tokenBox.get("token")}");
     });
 
     emit(AnilistLoginPressedState());
@@ -53,7 +55,7 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
 
     final tokenBox = Hive.box('userToken');
     tokenBox.put("token", token);
-    print("Token: ${tokenBox.get("token")}");
+    log("Token: ${tokenBox.get("token")}");
     emit(AnilistLoginPressedState());
   }
 

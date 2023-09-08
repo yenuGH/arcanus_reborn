@@ -1,3 +1,4 @@
+import 'package:arcanus_reborn/controllers/blocs/anime_filter/anime_filter_bloc.dart';
 import 'package:arcanus_reborn/controllers/cubits/anilist_login/anilist_login_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppRoutes {
   final TabBarCubit tabBarCubit = TabBarCubit();
+  final AnimeFilterBloc animeFilterBloc = AnimeFilterBloc();
   final AnilistLoginCubit anilistLoginCubit = AnilistLoginCubit();
   final SearchMediaBloc searchMediaBloc = SearchMediaBloc();
 
@@ -28,8 +30,11 @@ class AppRoutes {
       case "/home_page":
         {
           return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-                value: tabBarCubit,
+            builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: tabBarCubit),
+                  BlocProvider.value(value: animeFilterBloc),
+                ],
                 child: const HomePage(
                   title: "arcanus",
                 )),
