@@ -1,4 +1,6 @@
+import 'package:arcanus_reborn/controllers/cubits/filter_bar/manga/filter_bar_manga_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MangaFilterBar extends StatefulWidget {
   const MangaFilterBar({super.key});
@@ -38,6 +40,34 @@ class _MangaFilterBarState extends State<MangaFilterBar> {
         setState(() {
           _selectedIndex = value;
         });
+
+        switch (value) {
+          case 0:
+            {
+              BlocProvider.of<FilterBarMangaCubit>(context).readingTab();
+              break;
+            }
+          case 1:
+            {
+              BlocProvider.of<FilterBarMangaCubit>(context).planningTab();
+              break;
+            }
+          case 2:
+            {
+              BlocProvider.of<FilterBarMangaCubit>(context).completedTab();
+              break;
+            }
+          case 3:
+            {
+              BlocProvider.of<FilterBarMangaCubit>(context).droppedTab();
+              break;
+            }
+          default:
+            {
+              BlocProvider.of<FilterBarMangaCubit>(context).readingTab();
+              break;
+            }
+        }
       },
     );
   }

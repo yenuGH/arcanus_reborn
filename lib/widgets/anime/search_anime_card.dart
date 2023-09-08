@@ -1,5 +1,5 @@
 import 'package:arcanus_reborn/models/anime_result.dart';
-import 'package:arcanus_reborn/pages/anime_info_page.dart';
+import 'package:arcanus_reborn/pages/anime/anime_info_page.dart';
 import 'package:flutter/material.dart';
 
 class SearchAnimeCard extends StatefulWidget {
@@ -18,85 +18,85 @@ class _SearchAnimeCardState extends State<SearchAnimeCard> {
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-      splashColor: Colors.blue.withAlpha(30),
-      onTap: () {
-        Navigator.push(
-          context, 
-          MaterialPageRoute(
-            builder: (context) => AnimeInfoPage(animeResult: widget.animeResult)
-          )
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        height: 150,
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => AnimeInfoPage(animeResult: widget.animeResult)
+            )
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          height: 150,
 
-        child: Row(
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(5.0),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          child: Row(
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.all(5.0),
               ),
-              width: 100,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                child: Image.network(
-                  widget.animeResult.coverImage,
-                  fit: BoxFit.cover,
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                ),
+                width: 100,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  child: Image.network(
+                    widget.animeResult.coverImage,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
 
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    
-                    Text(
-                      widget.animeResult.titleUserPreferred,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      
+                      Text(
+                        widget.animeResult.titleUserPreferred,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                    episodeCounter(),
+                      episodeCounter(),
 
-                    const Spacer(),
+                      const Spacer(),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        status(),
-                        const Spacer(),
-                        Text(
-                          widget.animeResult.averageScore.toString(),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          status(),
+                          const Spacer(),
+                          Text(
+                            widget.animeResult.averageScore.toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                        ),
-                      ],
-                    ),
-                  ],
+                          const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        )
+            ],
+          )
         ),
       ),
     );

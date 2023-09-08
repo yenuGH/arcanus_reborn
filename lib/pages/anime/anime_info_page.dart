@@ -1,5 +1,5 @@
 import 'package:arcanus_reborn/models/anime_result.dart';
-import 'package:arcanus_reborn/pages/anime_edit_page.dart';
+import 'package:arcanus_reborn/pages/anime/anime_edit_page.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -243,6 +243,9 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     }
     if (widget.animeResult.status == "RELEASING"){
       episodesString = "Next episode: ${widget.animeResult.nextAiringEpisode['episode']}";
+    }
+    if (widget.animeResult.status == "UNRELEASED"){
+      episodesString = "Episodes: Unknown";
     }
 
     return Container(

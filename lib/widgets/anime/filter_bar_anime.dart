@@ -1,8 +1,10 @@
+import 'package:arcanus_reborn/controllers/cubits/filter_bar/anime/filter_bar_anime_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class AnimeFilterBar extends StatefulWidget {
   const AnimeFilterBar({super.key});
-
   @override
   State<AnimeFilterBar> createState() => _AnimeFilterBarState();
 }
@@ -42,6 +44,39 @@ class _AnimeFilterBarState extends State<AnimeFilterBar> {
         setState(() {
           _selectedIndex = value;
         });
+
+        switch (value) {
+          case 0:
+            {
+              BlocProvider.of<FilterBarAnimeCubit>(context).watchingTab();
+              break;
+            }
+          case 1:
+            {
+              BlocProvider.of<FilterBarAnimeCubit>(context).planningTab();
+              break;
+            }
+          case 2:
+            {
+              BlocProvider.of<FilterBarAnimeCubit>(context).completedTab();
+              break;
+            }
+          case 3:
+            {
+              BlocProvider.of<FilterBarAnimeCubit>(context).pausedTab();
+              break;
+            }
+          case 4:
+            {
+              BlocProvider.of<FilterBarAnimeCubit>(context).droppedTab();
+              break;
+            }
+          default:
+            {
+              BlocProvider.of<FilterBarAnimeCubit>(context).watchingTab();
+              break;
+            }
+        }
       },
     );
   }

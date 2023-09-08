@@ -1,7 +1,15 @@
 part of 'filter_bar_anime_cubit.dart';
 
-@immutable
-sealed class FilterBarAnimeState {}
+sealed class FilterBarAnimeState extends Equatable {
+  const FilterBarAnimeState();
+
+  @override
+  List<Object> get props => [];
+}
+
+final class FilterBarAnimeInitial extends FilterBarAnimeState {
+
+}
 
 final class FilterBarAnimeWatching extends FilterBarAnimeState {
   
