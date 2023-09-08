@@ -1,5 +1,6 @@
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/views/anime/anime_watching_view.dart';
+import 'package:arcanus_reborn/views/manga/manga_watching_view.dart';
 import 'package:arcanus_reborn/widgets/app_drawer.dart';
 import 'package:arcanus_reborn/widgets/anime/filter_bar_anime.dart';
 import 'package:arcanus_reborn/widgets/manga/filter_bar_manga.dart';
@@ -36,9 +37,7 @@ class _HomePageState extends State<HomePage> {
               if (state == TabBarAnime()) {
                 return AnimeWatchingView(homePageContext: context);
               } else if (state == TabBarManga()) {
-                return const Center(
-                  child: Text("Manga"),
-                );
+                return MangaWatchingView(homePageContext: context);
               } else {
                 return const Center(
                   child: Text("Anime"),
