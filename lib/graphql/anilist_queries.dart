@@ -41,8 +41,22 @@ class AnilistQueries {
     }
   ''';
 
+  static String userQuery = r''' 
+    query userQuery () {
+      Viewer {
+        id
+        name
+        avatar {
+          large
+          medium
+        }
+        
+      }
+    }
+  ''';
+
   static String userAnimeQuery = r'''
-    query getAnimeWatching($userId: Int!, $status: MediaListStatus!) {
+    query getAnimeWatching($status: MediaListStatus!) {
       page: Page {
         mediaList(type: ANIME, status: $status) {
           id

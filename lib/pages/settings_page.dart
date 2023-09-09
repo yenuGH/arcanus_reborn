@@ -57,6 +57,9 @@ class SettingsPage extends StatelessWidget {
             final tokenBox = Hive.box('userToken');
             tokenBox.delete("token");
 
+            final anilistUserBox = Hive.box('anilistUser');
+            anilistUserBox.deleteFromDisk();
+
             AnilistClient().helper.removeAllTokens();
 
             Navigator.pushReplacementNamed(context, "/login_page");

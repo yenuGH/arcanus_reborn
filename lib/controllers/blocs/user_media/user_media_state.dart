@@ -9,6 +9,8 @@ sealed class UserMediaState extends Equatable {
 
 final class UserMediaInitialState extends UserMediaState {}
 
+final class UserMediaIntializingState extends UserMediaState {}
+
 final class UserMediaLoadingState extends UserMediaState {}
 
 final class UserMediaLoadedState extends UserMediaState {}

@@ -25,12 +25,16 @@ class _LoadingPageState extends State<LoadingPage> {
         child: BlocBuilder<UserMediaBloc, UserMediaState>(
           builder: (_, state) {
             if (state is UserMediaInitialState){
-              log("LoadingPage: Initialized");
-              return initializeLoginPage();
+              return initializeUserAccount();
+            }
+            else if (state is UserMediaIntializingState) {
+              return initializeUserAccount();
             }
             else if (state is UserMediaLoadingState) {
-              log("LoadingPage: Loading user databases");
               return loadingUserDatabases();
+            }
+            else if (state is UserMediaLoadedState) {
+              return Container();
             }
             else {
               return errorLoadingUserDatabases();
@@ -41,9 +45,9 @@ class _LoadingPageState extends State<LoadingPage> {
     );
   }
 
-  Text initializeLoginPage() {
+  Text initializeUserAccount() {
     return const Text(
-      'Initializing...',
+      'Initializing user account...',
       style: TextStyle(
         fontStyle: FontStyle.italic,
       ),
@@ -62,9 +66,16 @@ class _LoadingPageState extends State<LoadingPage> {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircularProgressIndicator(),
+        CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          strokeCap: StrokeCap.round,
+        ),
         SizedBox(height: 20),
-        Text('Loading user databases...'),
+        Text('Loading user media lists...',
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+          )
+        ),
       ],
     );
   }

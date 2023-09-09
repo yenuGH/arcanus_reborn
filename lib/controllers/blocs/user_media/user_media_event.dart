@@ -9,4 +9,6 @@ sealed class UserMediaEvent extends Equatable {
 
 final class UserMediaInitialEvent extends UserMediaEvent {}
 
+final class UserMediaInitializeEvent extends UserMediaEvent {}
+
 final class UserMediaLoadingEvent extends UserMediaEvent {}

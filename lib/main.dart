@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:arcanus_reborn/constants/arcanus_theme.dart';
 import 'package:arcanus_reborn/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +9,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  // ignore: unused_local_variable
   var tokenBox = await Hive.openBox('userToken');
+  var anilistUserBox = await Hive.openBox('anilistUser');
 
   runApp(const MyApp());
 }

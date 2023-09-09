@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
+import 'package:arcanus_reborn/models/anilist_user.dart';
 import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -41,6 +42,22 @@ class AnilistClient {
   factory AnilistClient() {
     _instance = AnilistClient._internal();
     return _instance;
+  }
+
+  Future<AnilistUser> userQuery() async {
+    QueryResult result = await graphQLClient.query(
+      QueryOptions(
+        document: gql(AnilistQueries.userQuery),
+      ),
+    );
+
+    if (result.hasException) {
+      log("The exception is: ${result.exception}");
+    }
+
+    Map<String, dynamic> resultData = result.data?['Viewer'];
+
+    return AnilistUser.fromJson(resultData);
   }
 
   Future<List<AnimeResult>> searchAnimeQueryResult(String query) async {
