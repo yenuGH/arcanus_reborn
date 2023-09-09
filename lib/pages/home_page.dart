@@ -2,10 +2,14 @@ import 'package:arcanus_reborn/controllers/cubits/filter_bar/anime/filter_bar_an
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/manga/filter_bar_manga_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/views/anime/anime_completed_view.dart';
+import 'package:arcanus_reborn/views/anime/anime_dropped_view.dart';
 import 'package:arcanus_reborn/views/anime/anime_paused_view.dart';
 import 'package:arcanus_reborn/views/anime/anime_planning_view.dart';
 import 'package:arcanus_reborn/views/anime/anime_watching_view.dart';
-import 'package:arcanus_reborn/views/manga/manga_watching_view.dart';
+import 'package:arcanus_reborn/views/manga/manga_completed_view.dart';
+import 'package:arcanus_reborn/views/manga/manga_dropped_view.dart';
+import 'package:arcanus_reborn/views/manga/manga_planning_view.dart';
+import 'package:arcanus_reborn/views/manga/manga_reading_view.dart';
 import 'package:arcanus_reborn/widgets/app_drawer.dart';
 import 'package:arcanus_reborn/widgets/anime/filter_bar_anime.dart';
 import 'package:arcanus_reborn/widgets/manga/filter_bar_manga.dart';
@@ -63,13 +67,16 @@ class _HomePageState extends State<HomePage> {
                                   break;
                                 case FilterBarAnimeCompleted:
                                   selectedView = const AnimeCompletedView();
+                                  break;
                                 case FilterBarAnimePaused:
                                   selectedView = const AnimePausedView();
+                                   break;
                                 case FilterBarAnimeDropped:
-                                  selectedView = const AnimeWatchingView();
+                                  selectedView = const AnimeDroppedView();
                                   break;
                                 default:
                                   selectedView = const AnimeWatchingView();
+                                  break;
                               }
                             }
                             break;
@@ -77,20 +84,26 @@ class _HomePageState extends State<HomePage> {
                             {
                               switch (filterBarMangaState.runtimeType) {
                                 case FilterBarMangaReading:
-                                  selectedView = const MangaWatchingView();
+                                  selectedView = const MangaReadingView();
                                   break;
                                 case FilterBarMangaPlanning:
+                                  selectedView = const MangaPlanningView();
+                                  break;
                                 case FilterBarMangaCompleted:
+                                  selectedView = const MangaCompletedView();
+                                  break;
                                 case FilterBarMangaDropped:
-                                  selectedView = const MangaWatchingView();
+                                  selectedView = const MangaDroppedView();
                                   break;
                                 default:
-                                  selectedView = const MangaWatchingView();
+                                  selectedView = const MangaReadingView();
+                                  break;
                               }
                             }
                             break;
                           default:
                             selectedView = const AnimeWatchingView();
+                            break;
                         }
 
                         return selectedView;

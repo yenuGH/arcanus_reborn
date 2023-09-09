@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MangaWatchingView extends StatelessWidget {
-  const MangaWatchingView({super.key});
+class MangaReadingView extends StatelessWidget {
+  const MangaReadingView({super.key});
 
   @override
   Widget build(BuildContext context) {
