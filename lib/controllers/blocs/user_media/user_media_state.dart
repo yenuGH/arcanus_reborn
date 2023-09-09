@@ -14,3 +14,7 @@ final class UserMediaIntializingState extends UserMediaState {}
 final class UserMediaLoadingState extends UserMediaState {}
 
 final class UserMediaLoadedState extends UserMediaState {}
+
+final class UserMediaEmptyState extends UserMediaState {}
+
+final class UserMediaErrorState extends UserMediaState {}

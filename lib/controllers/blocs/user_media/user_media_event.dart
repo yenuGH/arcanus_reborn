@@ -12,3 +12,9 @@ final class UserMediaInitialEvent extends UserMediaEvent {}
 final class UserMediaInitializeEvent extends UserMediaEvent {}
 
 final class UserMediaLoadingEvent extends UserMediaEvent {}
+
+final class UserMediaLoadedEvent extends UserMediaEvent {}
+
+final class UserMediaEmptyEvent extends UserMediaEvent {}
+
+final class UserMediaErrorEvent extends UserMediaEvent {}

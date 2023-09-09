@@ -16,6 +16,7 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
     on<UserMediaInitialEvent>(userMediaInitialEvent);
     on<UserMediaInitializeEvent>(userMediaInitializeEvent);
     on<UserMediaLoadingEvent>(userMediaLoadingEvent);
+    on<UserMediaErrorEvent>(userMediaErrorEvent);
   }
 
   FutureOr<void> userMediaInitialEvent(UserMediaInitialEvent event, Emitter<UserMediaState> emit) async {
@@ -48,6 +49,17 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
 
   FutureOr<void> userMediaLoadingEvent(UserMediaLoadingEvent event, Emitter<UserMediaState> emit) async {
     emit(UserMediaLoadingState());
+
+    await AnilistClient().userAnimeWatchingQueryResult();
+
+    /* if (watchingAnime.isEmpty) {
+      add(UserMediaErrorEvent());
+      return null;
+    } */
+  }
+
+  FutureOr<void> userMediaErrorEvent(UserMediaErrorEvent event, Emitter<UserMediaState> emit) async {
+    emit(UserMediaErrorState());
   }
   
 }

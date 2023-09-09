@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:arcanus_reborn/constants/anime_list_status.dart';
 import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anilist_user.dart';
@@ -84,12 +85,12 @@ class AnilistClient {
     return searchResults;
   }
 
-  Future<List<AnimeResult>> userAnimeQueryResult(String status) async {
+  Future<void> userAnimeWatchingQueryResult() async {
     QueryResult result = await graphQLClient.query(
       QueryOptions(
-        document: gql(AnilistQueries.userAnimeQuery),
+        document: gql(AnilistQueries.userAnimeWatchingQuery),
         variables: {
-          'status': status,
+          'userId': Hive.box('anilistUser').get('anilistUserId'),
         },
       ),
     );
@@ -98,13 +99,14 @@ class AnilistClient {
       log("The exception is: ${result.exception}");
     }
 
-    List<dynamic> resultData = result.data?['page']['mediaList'];
-    List<AnimeResult> userAnimeResults = [];
-
-    for (int i = 0; i < resultData.length; i++) {
-      userAnimeResults.add(AnimeResult.fromJson(resultData[i]));
+    //log("result: ${result.data?['MediaListCollection']['lists']}");
+    
+    for (int i = 0; i < result.data?['MediaListCollection']['lists'].length; i++) {
+      for (int j = 0; j < result.data?['MediaListCollection']['lists'][i]['entries'].length; j++) {
+        log("Anime title: ${result.data?['MediaListCollection']['lists'][i]['entries'][j]['media']['title']['userPreferred']}");
+        log("Anime status: ${result.data?['MediaListCollection']['lists'][i]['entries'][j]['status']}");
+        log("\n");
+      }
     }
-
-    return userAnimeResults;
   }
 }

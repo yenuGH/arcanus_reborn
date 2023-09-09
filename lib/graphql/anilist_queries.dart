@@ -55,40 +55,40 @@ class AnilistQueries {
     }
   ''';
 
-  static String userAnimeQuery = r'''
-    query getAnimeWatching($status: MediaListStatus!) {
-      page: Page {
-        mediaList(type: ANIME, status: $status) {
-          id
-          media {
+  static String userAnimeWatchingQuery = r'''
+    query userAnimeWatchingQuery($userId: Int!) {
+      MediaListCollection(userId: $userId, type: ANIME, status: PLANNING) {
+        lists {
+          entries {
             id
-            title {
-              userPreferred
-            }
-            description
-            genres
-            averageScore
-            coverImage {
-              extraLarge
-            }
-            episodes
+            mediaId
             status
-            nextAiringEpisode {
-              airingAt
-              timeUntilAiring
-              episode
-            }
-            studios(isMain: true) {
-              nodes {
-                name
-                isAnimationStudio
+            score
+            progress
+            media {
+              id
+              title {
+                userPreferred
               }
+              coverImage {
+                extraLarge
+              }
+              status
+              episodes
+              nextAiringEpisode {
+                airingAt
+                timeUntilAiring
+                episode
+              }
+              studios(isMain: true) {
+                nodes {
+                  name
+                  isAnimationStudio
+                }
+              }
+              isAdult
             }
-            isAdult
           }
-          status
-          score
-          progress
         }
       }
     }
