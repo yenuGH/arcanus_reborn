@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
           if (Platform.isIOS){
             AnilistClient().helper.getTokenFromStorage().then((token) {
               if (token != null) {
-                Navigator.pushNamed(context, "/home_page");
+                Navigator.pushNamed(context, "/loading_page");
               } else {
                 BlocProvider.of<AnilistLoginCubit>(context).anilistLoginError();
               }
@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
           if (Platform.isAndroid){
             final tokenBox = Hive.box('userToken');
             if (tokenBox.get("token") != null) {
-              Navigator.pushNamed(context, "/home_page");
+              Navigator.pushNamed(context, "/loading_page");
             } else {
               BlocProvider.of<AnilistLoginCubit>(context).anilistLoginError();
             }

@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anime_result.dart';
@@ -64,5 +66,28 @@ class AnilistClient {
 
     return searchResults;
   }
-  
+
+  Future<List<AnimeResult>> userAnimeQueryResult(String status) async {
+    QueryResult result = await graphQLClient.query(
+      QueryOptions(
+        document: gql(AnilistQueries.userAnimeQuery),
+        variables: {
+          'status': status,
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      log("The exception is: ${result.exception}");
+    }
+
+    List<dynamic> resultData = result.data?['page']['mediaList'];
+    List<AnimeResult> userAnimeResults = [];
+
+    for (int i = 0; i < resultData.length; i++) {
+      userAnimeResults.add(AnimeResult.fromJson(resultData[i]));
+    }
+
+    return userAnimeResults;
+  }
 }

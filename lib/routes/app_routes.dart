@@ -1,3 +1,4 @@
+import 'package:arcanus_reborn/controllers/blocs/user_media/user_media_bloc.dart';
 import 'package:arcanus_reborn/controllers/cubits/anilist_login/anilist_login_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/anime/filter_bar_anime_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/manga/filter_bar_manga_cubit.dart';
@@ -5,6 +6,7 @@ import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
 import 'package:arcanus_reborn/pages/about_page.dart';
 import 'package:arcanus_reborn/pages/home_page.dart';
+import 'package:arcanus_reborn/pages/loading_page.dart';
 import 'package:arcanus_reborn/pages/login_page.dart';
 import 'package:arcanus_reborn/pages/search_page.dart';
 import 'package:arcanus_reborn/pages/settings_page.dart';
@@ -17,6 +19,7 @@ class AppRoutes {
   final FilterBarMangaCubit filterBarMangaCubit = FilterBarMangaCubit();
   final AnilistLoginCubit anilistLoginCubit = AnilistLoginCubit();
   final SearchMediaBloc searchMediaBloc = SearchMediaBloc();
+  final UserMediaBloc userMediaBloc = UserMediaBloc();
 
   Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -26,6 +29,15 @@ class AppRoutes {
             builder: (_) => BlocProvider.value(
               value: anilistLoginCubit,
               child: const LoginPage(),
+            ),
+          );
+        }
+      case "/loading_page":
+        {
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: userMediaBloc,
+              child: const LoadingPage(),
             ),
           );
         }

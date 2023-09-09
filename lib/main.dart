@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Arcanus',
         theme: ArcanusTheme().arcanusTheme,
-        initialRoute: "/home_page",
+        initialRoute: "/loading_page",
         onGenerateRoute: AppRoutes().onGenerateRoute,
       );
     }

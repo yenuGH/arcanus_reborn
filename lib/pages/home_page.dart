@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TabBarCubit, TabBarState>(
-      builder: (context, state) {
+      builder: (_, state) {
         return DefaultTabController(
           length: widget._tabCount,
           child: Scaffold(
