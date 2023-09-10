@@ -35,20 +35,20 @@ class AnimeResult {
 
   factory AnimeResult.fromJson(Map<String, dynamic> json) {
     AnimeResult animeResult = AnimeResult(
-      id: json['id'] as int? ?? 0,
-      titleUserPreferred: json['title']['userPreferred'] as String? ?? "",
-      titleEnglish: json['title']['english'] as String? ?? "",
-      titleRomaji: json['title']['romaji'] as String? ?? "",
-      titleNative: json['title']['native'] as String? ?? "",
-      description: json['description'] as String? ?? "",
-      genres: List<String>.from(json['genres'] as List<dynamic>? ?? []),
+      id: json['media']['id'] as int? ?? 0,
+      titleUserPreferred: json['media']['title']['userPreferred'] as String? ?? "",
+      titleEnglish: json['media']['title']['english'] as String? ?? "",
+      titleRomaji: json['media']['title']['romaji'] as String? ?? "",
+      titleNative: json['media']['title']['native'] as String? ?? "",
+      description: json['media']['description'] as String? ?? "",
+      genres: List<String>.from(json['media']['genres'] as List<dynamic>? ?? []),
       type: "ANIME",
-      averageScore: json['averageScore'] as int? ?? 0,
-      coverImage: json['coverImage']['extraLarge'] as String? ?? "",
-      episodes: json['episodes'] as int? ?? 0,
+      averageScore: json['media']['averageScore'] as int? ?? 0,
+      coverImage: json['media']['coverImage']['extraLarge'] as String? ?? "",
+      episodes: json['media']['episodes'] as int? ?? 0,
       progress: json['progress'] as int? ?? 0,
-      nextAiringEpisode: Map<String, dynamic>.from(json['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
-      status: json['status'] as String? ?? "",
+      nextAiringEpisode: Map<String, dynamic>.from(json['media']['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
+      status: json['media']['status'] as String? ?? "",
     );
 
     if (animeResult.status == "RELEASING") {

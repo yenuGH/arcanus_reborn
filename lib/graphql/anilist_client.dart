@@ -105,7 +105,7 @@ class AnilistClient {
 
     for (int i = 0; i < resultData.length; i++) {
       for (int j = 0; j < resultData[i]['entries'].length; j++) {
-        userAnimeList.add(AnimeResult.fromJson(resultData[i]['entries'][j]['media']));
+        userAnimeList.add(AnimeResult.fromJson(resultData[i]['entries'][j]));
       }
     }
 

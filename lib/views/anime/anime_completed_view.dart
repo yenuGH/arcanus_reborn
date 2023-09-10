@@ -1,4 +1,3 @@
-import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:arcanus_reborn/widgets/anime/user_anime_card.dart';
 import 'package:flutter/material.dart';

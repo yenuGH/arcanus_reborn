@@ -30,18 +30,20 @@ class _UserAnimeCardState extends State<UserAnimeCard> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           ),
-          height: 150,
+          height: 125,
 
           child: Row(
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.all(5.0),
               ),
+
+              // cover image
               Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
-                width: 100,
+                height: 120,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   child: Image.network(
@@ -51,13 +53,13 @@ class _UserAnimeCardState extends State<UserAnimeCard> {
                 ),
               ),
 
+              // text
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      
                       Text(
                         widget.animeResult.titleUserPreferred,
                         style: const TextStyle(
@@ -68,24 +70,15 @@ class _UserAnimeCardState extends State<UserAnimeCard> {
                         maxLines: 2,
                       ),
 
+                      episodeCounter(),
+
                       const Spacer(),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          const Spacer(),
-                          Text(
-                            widget.animeResult.averageScore.toString(),
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                        ],
+                      Text(
+                        widget.animeResult.status,
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
                     ],
                   ),
@@ -94,6 +87,17 @@ class _UserAnimeCardState extends State<UserAnimeCard> {
             ],
           )
         ),
+      ),
+    );
+  }
+
+  Text episodeCounter() {
+    String episodeCount = widget.animeResult.episodes == 0 ? "?" : widget.animeResult.episodes.toString();
+
+    return Text(
+      '${widget.animeResult.progress}/$episodeCount',
+      style: const TextStyle(
+        fontSize: 15,
       ),
     );
   }
