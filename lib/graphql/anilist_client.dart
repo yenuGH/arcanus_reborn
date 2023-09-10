@@ -11,19 +11,20 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
-enum MediaType {
-  ANIME,
-  MANGA,
-}
-
 class AnilistClient {
-  static late AnilistClient _instance;
+  static final AnilistClient _instance = AnilistClient._internal();
   final tokenBox = Hive.box('userToken');
   
   late OAuth2Helper helper;
   late HttpLink httpLink;
   late AuthLink authLink;
   late Link implicitGrantLink;
+
+  List<AnimeResult>? userAnimeListCurrent;
+  List<AnimeResult>? userAnimeListPlanning;
+  List<AnimeResult>? userAnimeListCompleted;
+  List<AnimeResult>? userAnimeListDropped;
+  List<AnimeResult>? userAnimeListPaused;
 
   bool isAuthorized = false;
 
@@ -41,7 +42,6 @@ class AnilistClient {
   }
 
   factory AnilistClient() {
-    _instance = AnilistClient._internal();
     return _instance;
   }
 
@@ -85,12 +85,13 @@ class AnilistClient {
     return searchResults;
   }
 
-  Future<void> userAnimeWatchingQueryResult() async {
+  Future<List<AnimeResult>> userAnimeQueryResult(String status) async {
     QueryResult result = await graphQLClient.query(
       QueryOptions(
-        document: gql(AnilistQueries.userAnimeWatchingQuery),
+        document: gql(AnilistQueries.userAnimeQuery),
         variables: {
           'userId': Hive.box('anilistUser').get('anilistUserId'),
+          'status': AnimeListStatus.values.byName(status).name,
         },
       ),
     );
@@ -99,14 +100,39 @@ class AnilistClient {
       log("The exception is: ${result.exception}");
     }
 
-    //log("result: ${result.data?['MediaListCollection']['lists']}");
+    List<dynamic> resultData = result.data?['MediaListCollection']['lists'];
+    List<AnimeResult> userAnimeList = [];
+
+    for (int i = 0; i < resultData.length; i++) {
+      for (int j = 0; j < resultData[i]['entries'].length; j++) {
+        userAnimeList.add(AnimeResult.fromJson(resultData[i]['entries'][j]['media']));
+      }
+    }
+
+    return userAnimeList;
+
+    //log("result.data: ${result.data}");
     
-    for (int i = 0; i < result.data?['MediaListCollection']['lists'].length; i++) {
+    /* for (int i = 0; i < result.data?['MediaListCollection']['lists'].length; i++) {
       for (int j = 0; j < result.data?['MediaListCollection']['lists'][i]['entries'].length; j++) {
         log("Anime title: ${result.data?['MediaListCollection']['lists'][i]['entries'][j]['media']['title']['userPreferred']}");
         log("Anime status: ${result.data?['MediaListCollection']['lists'][i]['entries'][j]['status']}");
         log("\n");
       }
-    }
+    } */
+  }
+
+  void setUserAnimeLists(
+    List<AnimeResult> userAnimeListCurrent,
+    List<AnimeResult> userAnimeListPlanning,
+    List<AnimeResult> userAnimeListCompleted,
+    List<AnimeResult> userAnimeListDropped,
+    List<AnimeResult> userAnimeListPaused,
+  ) {
+    this.userAnimeListCurrent = userAnimeListCurrent;
+    this.userAnimeListPlanning = userAnimeListPlanning;
+    this.userAnimeListCompleted = userAnimeListCompleted;
+    this.userAnimeListDropped = userAnimeListDropped;
+    this.userAnimeListPaused = userAnimeListPaused;
   }
 }

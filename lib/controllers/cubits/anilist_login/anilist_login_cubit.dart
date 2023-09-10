@@ -44,10 +44,12 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
       log("Token: ${tokenBox.get("token")}");
     });
 
+    await Hive.openBox('anilistUser');
+
     emit(AnilistLoginPressedState());
   }
 
-  void anilistLoginPressedAndroid(String? token) {
+  void anilistLoginPressedAndroid(String? token) async{
     if (token == null){
       emit(AnilistLoginErrorState());
       return;
@@ -56,6 +58,9 @@ class AnilistLoginCubit extends Cubit<AnilistLoginState> {
     final tokenBox = Hive.box('userToken');
     tokenBox.put("token", token);
     log("Token: ${tokenBox.get("token")}");
+
+    await Hive.openBox('anilistUser');
+
     emit(AnilistLoginPressedState());
   }
 

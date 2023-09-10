@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:arcanus_reborn/controllers/blocs/user_media/user_media_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,25 +19,26 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: BlocBuilder<UserMediaBloc, UserMediaState>(
-          builder: (_, state) {
-            if (state is UserMediaInitialState){
-              return initializeUserAccount();
-            }
-            else if (state is UserMediaIntializingState) {
-              return initializeUserAccount();
-            }
-            else if (state is UserMediaLoadingState) {
-              return loadingUserDatabases();
-            }
-            else if (state is UserMediaLoadedState) {
-              return Container();
-            }
-            else {
-              return errorLoadingUserDatabases();
-            }
-          },
+      body: BlocListener<UserMediaBloc, UserMediaState>(
+        listener: (_, state) {
+          if (state is UserMediaLoadedState) {
+            Navigator.pushNamed(context, "/home_page");
+          }
+        },
+        child: Center(
+          child: BlocBuilder<UserMediaBloc, UserMediaState>(
+            builder: (_, state) {
+              if (state is UserMediaInitialState) {
+                return initializeUserAccount();
+              } else if (state is UserMediaIntializingState) {
+                return initializeUserAccount();
+              } else if (state is UserMediaLoadingState) {
+                return loadingUserDatabases();
+              } else {
+                return errorLoadingUserDatabases();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -72,10 +71,9 @@ class _LoadingPageState extends State<LoadingPage> {
         ),
         SizedBox(height: 20),
         Text('Loading user media lists...',
-          style: TextStyle(
-            fontStyle: FontStyle.italic,
-          )
-        ),
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+            )),
       ],
     );
   }

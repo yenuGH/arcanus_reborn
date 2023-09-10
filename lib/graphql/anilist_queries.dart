@@ -55,9 +55,9 @@ class AnilistQueries {
     }
   ''';
 
-  static String userAnimeWatchingQuery = r'''
-    query userAnimeWatchingQuery($userId: Int!) {
-      MediaListCollection(userId: $userId, type: ANIME, status: PLANNING) {
+  static String userAnimeQuery = r'''
+    query userAnimeQuery($userId: Int!, $status: MediaListStatus!) {
+      MediaListCollection(userId: $userId, type: ANIME, status: $status) {
         lists {
           entries {
             id

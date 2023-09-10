@@ -16,6 +16,7 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
     on<UserMediaInitialEvent>(userMediaInitialEvent);
     on<UserMediaInitializeEvent>(userMediaInitializeEvent);
     on<UserMediaLoadingEvent>(userMediaLoadingEvent);
+    on<UserMediaLoadedEvent>(userMediaLoadedEvent);
     on<UserMediaErrorEvent>(userMediaErrorEvent);
   }
 
@@ -29,7 +30,7 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
 
     await Future.delayed(const Duration(seconds: 2));
     
-    final anilistUserBox = Hive.box('anilistUser');
+    var anilistUserBox = Hive.box('anilistUser');
     if (anilistUserBox.isEmpty) {
       AnilistUser anilistUser = await AnilistClient().userQuery();
       
@@ -41,8 +42,6 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
 
     log("UserID: ${anilistUserBox.get("anilistUserId")}");
     log("UserName: ${anilistUserBox.get("anilistUserName")}");
-    log("UserAvatarLarge: ${anilistUserBox.get("anilistUserAvatarLarge")}");
-    log("UserAvatarMedium: ${anilistUserBox.get("anilistUserAvatarMedium")}");
 
     add(UserMediaLoadingEvent());
   }
@@ -50,12 +49,31 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
   FutureOr<void> userMediaLoadingEvent(UserMediaLoadingEvent event, Emitter<UserMediaState> emit) async {
     emit(UserMediaLoadingState());
 
-    await AnilistClient().userAnimeWatchingQueryResult();
+    List<AnimeResult>? userAnimeListCurrent;
+    List<AnimeResult>? userAnimeListPlanning;
+    List<AnimeResult>? userAnimeListCompleted;
+    List<AnimeResult>? userAnimeListDropped;
+    List<AnimeResult>? userAnimeListPaused;
 
-    /* if (watchingAnime.isEmpty) {
-      add(UserMediaErrorEvent());
-      return null;
-    } */
+    userAnimeListCurrent = await AnilistClient().userAnimeQueryResult("CURRENT");
+    userAnimeListPlanning = await AnilistClient().userAnimeQueryResult("PLANNING");
+    userAnimeListCompleted = await AnilistClient().userAnimeQueryResult("COMPLETED");
+    userAnimeListPaused = await AnilistClient().userAnimeQueryResult("PAUSED");
+    userAnimeListDropped = await AnilistClient().userAnimeQueryResult("DROPPED");
+
+    AnilistClient().setUserAnimeLists(
+      userAnimeListCurrent,
+      userAnimeListPlanning,
+      userAnimeListCompleted,
+      userAnimeListDropped,
+      userAnimeListPaused,
+    );
+
+    add(UserMediaLoadedEvent());
+  }
+
+  FutureOr<void> userMediaLoadedEvent(UserMediaLoadedEvent event, Emitter<UserMediaState> emit) async {
+    emit(UserMediaLoadedState());
   }
 
   FutureOr<void> userMediaErrorEvent(UserMediaErrorEvent event, Emitter<UserMediaState> emit) async {

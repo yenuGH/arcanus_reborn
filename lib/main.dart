@@ -1,17 +1,21 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:arcanus_reborn/constants/arcanus_theme.dart';
+import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
 
+
+  await Hive.initFlutter();
   var tokenBox = await Hive.openBox('userToken');
   var anilistUserBox = await Hive.openBox('anilistUser');
 
+  AnilistClient anilistClient = AnilistClient();
+  
   runApp(const MyApp());
 }
 

@@ -1,6 +1,7 @@
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/anime/filter_bar_anime_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/manga/filter_bar_manga_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
+import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/views/anime/anime_completed_view.dart';
 import 'package:arcanus_reborn/views/anime/anime_dropped_view.dart';
 import 'package:arcanus_reborn/views/anime/anime_paused_view.dart';
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                                   selectedView = const AnimePlanningView();
                                   break;
                                 case FilterBarAnimeCompleted:
-                                  selectedView = const AnimeCompletedView();
+                                  selectedView = AnimeCompletedView(userAnimeListCompleted: AnilistClient().userAnimeListCompleted!);
                                   break;
                                 case FilterBarAnimePaused:
                                   selectedView = const AnimePausedView();
