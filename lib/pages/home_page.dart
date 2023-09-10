@@ -85,25 +85,25 @@ class _HomePageState extends State<HomePage> {
                             {
                               switch (filterBarMangaState.runtimeType) {
                                 case FilterBarMangaReading:
-                                  selectedView = const MangaReadingView();
+                                  selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
                                   break;
                                 case FilterBarMangaPlanning:
-                                  selectedView = const MangaPlanningView();
+                                  selectedView = MangaPlanningView(userMangaListPlanning: AnilistClient().userMangaListPlanning!);
                                   break;
                                 case FilterBarMangaCompleted:
-                                  selectedView = const MangaCompletedView();
+                                  selectedView = MangaCompletedView(userMangaListCompleted: AnilistClient().userMangaListCompleted!);
                                   break;
                                 case FilterBarMangaDropped:
-                                  selectedView = const MangaDroppedView();
+                                  selectedView = MangaDroppedView(userMangaListDropped: AnilistClient().userMangaListDropped!);
                                   break;
                                 default:
-                                  selectedView = const MangaReadingView();
+                                  selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
                                   break;
                               }
                             }
                             break;
                           default:
-                            selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
+                            selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userMangaListCurrent!);
                             break;
                         }
 

@@ -1,27 +1,17 @@
+import 'package:arcanus_reborn/widgets/manga/user_manga_card.dart';
 import 'package:flutter/material.dart';
 
 class MangaReadingView extends StatelessWidget {
-  const MangaReadingView({super.key});
+  const MangaReadingView({super.key, required this.userMangaListCurrent});
+
+  final List<dynamic> userMangaListCurrent;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: userMangaListCurrent.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            onTap: () {
-              
-            },
-            child: ListTile(
-              leading: const Icon(Icons.image),
-              title: Text("Manga $index"),
-              subtitle: Text("Chapter $index"),
-              trailing: const Icon(Icons.more_vert),
-            ),
-          ),
-        );
+        return UserMangaCard(mangaResult: userMangaListCurrent[index]);
       },
     );
   }

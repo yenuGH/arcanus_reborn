@@ -49,6 +49,8 @@ dependencies:
   html: ^0.15.4
   expandable_text: ^2.3.0
   flutter_rating_bar: ^4.0.1
+  bordered_text: ^2.0.0
+  stroke_text: ^0.0.2
 
 dev_dependencies:
   flutter_test:

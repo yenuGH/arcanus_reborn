@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:arcanus_reborn/constants/search_type.dart';
 import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.dart';
 import 'package:arcanus_reborn/widgets/anime/search_anime_card.dart';
+import 'package:arcanus_reborn/widgets/manga/search_manga_card.dart';
 import 'package:arcanus_reborn/widgets/search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,8 +67,8 @@ class _SearchPageState extends State<SearchPage> {
                   builder: (context, state) {
                     switch (state) {
                       case SearchMediaInitialState():
-                        return const Center(
-                          child: Text("Search for an anime or manga!"),
+                        return Center(
+                          child: SearchType().isAnime ? const Text("Search for an anime!") : const Text("Search for a manga!"),
                         );
                       case SearchMediaLoadingState():
                         return const Center(
@@ -74,15 +76,15 @@ class _SearchPageState extends State<SearchPage> {
                         );
                       case SearchMediaLoadedState():
                         if (textFieldController.text.isEmpty) {
-                          return const Center(
-                            child: Text("Search for an anime or manga!"),
+                          return Center(
+                            child: SearchType().isAnime ? const Text("Search for an anime!") : const Text("Search for a manga!"),
                           );
                         }
                         return Expanded(
                           child: ListView.builder(
                             itemCount: mediaList?.length,
                             itemBuilder: (context, index) {
-                              return SearchAnimeCard(animeResult: mediaList?[index]);
+                              return SearchType().isAnime ? SearchAnimeCard(animeResult: mediaList?[index]) : SeachMangaCard(mangaResult: mediaList?[index]);
                             },
                           ),
                         );

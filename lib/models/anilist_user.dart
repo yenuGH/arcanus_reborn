@@ -3,12 +3,14 @@ class AnilistUser {
   String anilistUserName;
   String anilistUserAvatarLarge;
   String anilistUserAvatarMedium;
+  String anilistUserBannerImage;
 
   AnilistUser({
     required this.anilistUserId,
     required this.anilistUserName,
     required this.anilistUserAvatarLarge,
-    required this.anilistUserAvatarMedium
+    required this.anilistUserAvatarMedium,
+    required this.anilistUserBannerImage,
   });
 
   factory AnilistUser.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class AnilistUser {
       anilistUserName: json['name'] as String? ?? "",
       anilistUserAvatarLarge: json['avatar']['large'] as String? ?? "",
       anilistUserAvatarMedium: json['avatar']['medium'] as String? ?? "",
+      anilistUserBannerImage: json['bannerImage'] as String? ?? "",
     );
   }
 
@@ -38,5 +41,9 @@ class AnilistUser {
 
   String getAnilistUserAvatarMedium() {
     return anilistUserAvatarMedium;
+  }
+
+  String getAnilistUserBannerImage() {
+    return anilistUserBannerImage;
   }
 }

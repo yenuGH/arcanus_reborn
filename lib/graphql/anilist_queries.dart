@@ -41,6 +41,43 @@ class AnilistQueries {
     }
   ''';
 
+  static String searchMangaQuery = r'''
+    query searchManga($query: String!) {
+      page: Page {
+        media(search: $query, type: MANGA, isAdult: false) {
+          id
+          title {
+            userPreferred
+            romaji
+            english
+            native
+          }
+          description
+          genres
+          averageScore
+          coverImage {
+            extraLarge
+          }
+          chapters
+          status
+          studios(isMain: true) {
+            nodes {
+              name
+              isAnimationStudio
+            }
+          }
+          isAdult
+          mediaListEntry {
+            id
+            status
+            score
+            progress
+          }
+        }
+      }
+    }
+  ''';
+
   static String userQuery = r''' 
     query userQuery () {
       Viewer {
@@ -50,7 +87,7 @@ class AnilistQueries {
           large
           medium
         }
-        
+        bannerImage
       }
     }
   ''';
@@ -94,23 +131,37 @@ class AnilistQueries {
     }
   ''';
 
-  static String searchMangaQuery = r'''
-    query searchAnime($query: String!) {
-    page: Page {
-      media(search: $query, type: MANGA, isAdult: false) {
-        id
-        title {
-          userPreferred
+  static String userMangaQuery = r'''
+    query userMangaQuery($userId: Int!, $status: MediaListStatus!) {
+      MediaListCollection(userId: $userId, type: MANGA, status: $status) {
+        lists {
+          entries {
+            id
+            mediaId
+            status
+            score
+            progress
+            media {
+              id
+              title {
+                userPreferred
+              }
+              coverImage {
+                extraLarge
+              }
+              status
+              chapters
+              studios(isMain: true) {
+                nodes {
+                  name
+                  isAnimationStudio
+                }
+              }
+              isAdult
+            }
+          }
         }
-        averageScore
-        coverImage {
-          extraLarge
-        }
-        status
-        chapters
-        isAdult
       }
     }
-  }
   ''';
 }

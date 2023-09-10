@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:arcanus_reborn/constants/search_type.dart';
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/models/search_anime_result.dart';
+import 'package:arcanus_reborn/models/search_manga_result.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -25,16 +27,27 @@ class SearchMediaBloc extends Bloc<SearchMediaEvent, SearchMediaState> {
 
   Future<FutureOr<void>> searchMediaNewQueryEvent(SearchMediaNewQueryEvent event, Emitter<SearchMediaState> emit) async {
     emit(SearchMediaLoadingState());
-    final List<SearchAnimeResult> searchResultAnime = await AnilistClient().searchAnimeQueryResult(event.query);
-    //final List<SearchResult> searchResultManga = await AnilistClient().searchMangaQueryResult(event.query);
 
-    List<dynamic> searchResultAnimeManga = [];
-    searchResultAnimeManga.addAll(searchResultAnime);
-    if (searchResultAnimeManga.isEmpty) {
-      emit(SearchMediaEmptyState());
-      return null;
+    if (SearchType().isAnime == true){
+      final List<SearchAnimeResult> searchResultAnime = await AnilistClient().searchAnimeQueryResult(event.query);
+
+      if (searchResultAnime.isEmpty) {
+        emit(SearchMediaEmptyState());
+        return null;
+      }
+
+      emit(SearchMediaLoadedState(result: searchResultAnime));
+    }
+    else {
+      final List<SearchMangaResult> searchResultManga = await AnilistClient().searchMangaQueryResult(event.query);
+
+      if (searchResultManga.isEmpty) {
+        emit(SearchMediaEmptyState());
+        return null;
+      }
+
+      emit(SearchMediaLoadedState(result: searchResultManga));
     }
 
-    emit(SearchMediaLoadedState(result: searchResultAnimeManga));
   }
 }

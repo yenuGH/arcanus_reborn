@@ -1,20 +1,19 @@
-
-import 'package:arcanus_reborn/pages/anime/anime_edit_page.dart';
+import 'package:arcanus_reborn/pages/manga/manga_edit_page.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:html/parser.dart';
 
-class AnimeInfoPage extends StatefulWidget {
-  const AnimeInfoPage({super.key, required this.animeResult});
+class MangaInfoPage extends StatefulWidget {
+  const MangaInfoPage({super.key, required this.mangaResult});
 
-  final dynamic animeResult;
+  final dynamic mangaResult;
 
   @override
-  State<AnimeInfoPage> createState() => _AnimeInfoPageState();
+  State<MangaInfoPage> createState() => _MangaInfoPageState();
 }
 
-class _AnimeInfoPageState extends State<AnimeInfoPage> {
+class _MangaInfoPageState extends State<MangaInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +33,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => AnimeEditPage(animeResult: widget.animeResult)
+                  builder: (context) => MangaEditPage(mangaResult: widget.mangaResult)
                 )
               );
             },
@@ -48,23 +47,23 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              animeHeader(),
+              mangaHeader(),
 
               createSpacing(),
 
-              animeGenres(),
+              mangaGenres(),
 
               createSpacing(),
 
-              animeDescription(),
+              mangaDescription(),
 
               createSpacing(),
 
-              animeStatus(),
+              mangaStatus(),
 
               createSpacing(),
 
-              animeEpisodes(),
+              mangaChapters(),
 
               createSpacing(),
             ]
@@ -89,14 +88,14 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         child: Image.network(
-          widget.animeResult.coverImage,
+          widget.mangaResult.coverImage,
           fit: BoxFit.fill,
         ),
       ),
     );
   }
 
-  Widget animeAverageScore () {
+  Widget mangaAverageScore () {
     return Row(
       children: <Widget>[
         const Icon(Icons.star_border),
@@ -106,7 +105,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
         ),
 
         Text(
-          widget.animeResult.averageScore.toString(),
+          widget.mangaResult.averageScore.toString(),
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -116,9 +115,9 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeAverageScoreRatingBar () {
+  Widget mangaAverageScoreRatingBar () {
     return RatingBar(
-      initialRating: widget.animeResult.averageScore.toDouble() / 20,
+      initialRating: widget.mangaResult.averageScore.toDouble() / 20,
       direction: Axis.horizontal,
       allowHalfRating: true,
       itemCount: 5,
@@ -134,9 +133,9 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeTitleUserPreferred() {
+  Widget mangaTitleUserPreferred() {
     return Text(
-      widget.animeResult.titleUserPreferred,
+      widget.mangaResult.titleUserPreferred,
       style: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
@@ -144,7 +143,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeTitleAlternatives(String alternativeTitle) {
+  Widget mangaTitleAlternatives(String alternativeTitle) {
     return Text(
       "\u2022 $alternativeTitle",
       style: const TextStyle(
@@ -154,11 +153,11 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeStatus() {
+  Widget mangaStatus() {
     return Container(
       alignment: Alignment.topLeft,
       child: Text(
-        "Status: ${widget.animeResult.status}",
+        "Status: ${widget.mangaResult.status}",
         style: const TextStyle(
           fontSize: 15,
         ),
@@ -166,7 +165,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeHeader() {
+  Widget mangaHeader() {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -182,16 +181,16 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
             height: 250,
             child: ListView(
               children: <Widget>[
-                animeTitleUserPreferred(),
+                mangaTitleUserPreferred(),
                 Container(
                   height: 5,
                 ),
-                animeAverageScoreRatingBar(),
+                mangaAverageScoreRatingBar(),
                 createSpacing(),
                 const Text("Alternative titles: "),
-                animeTitleAlternatives(widget.animeResult.titleEnglish),
-                animeTitleAlternatives(widget.animeResult.titleRomaji),
-                animeTitleAlternatives(widget.animeResult.titleNative),
+                mangaTitleAlternatives(widget.mangaResult.titleEnglish),
+                mangaTitleAlternatives(widget.mangaResult.titleRomaji),
+                mangaTitleAlternatives(widget.mangaResult.titleNative),
               ],
             ),
           ),
@@ -200,8 +199,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeDescription() {
-    var htmlString = parse(widget.animeResult.description);
+  Widget mangaDescription() {
+    var htmlString = parse(widget.mangaResult.description);
     var parsedString = parse(htmlString.body!.text).documentElement!.text;
 
     return ExpandableText(
@@ -216,15 +215,15 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeGenres() {
+  Widget mangaGenres() {
     return SizedBox(
       height: 40,
       child: ListView.separated(
-        itemCount: widget.animeResult.genres.length,
+        itemCount: widget.mangaResult.genres.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return Chip(
-            label: Text(widget.animeResult.genres[index]),
+            label: Text(widget.mangaResult.genres[index]),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),
@@ -235,16 +234,16 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Widget animeEpisodes() {
+  Widget mangaChapters() {
     late String episodesString;
-    if (widget.animeResult.status == "FINISHED"){
-      episodesString = "Episodes: ${widget.animeResult.episodes}";
+    if (widget.mangaResult.status == "FINISHED"){
+      episodesString = "Chapters: ${widget.mangaResult.chapters}";
     }
-    if (widget.animeResult.status == "RELEASING"){
-      episodesString = "Next episode: ${widget.animeResult.nextAiringEpisode['episode']}";
+    if (widget.mangaResult.status == "RELEASING"){
+      episodesString = "Next chapter: ??";
     }
-    if (widget.animeResult.status == "UNRELEASED"){
-      episodesString = "Episodes: Unknown";
+    if (widget.mangaResult.status == "UNRELEASED"){
+      episodesString = "Chapter: Unknown";
     }
 
     return Container(
