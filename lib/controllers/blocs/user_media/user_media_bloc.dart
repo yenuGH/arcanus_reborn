@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/models/anilist_user.dart';
-import 'package:arcanus_reborn/models/anime_result.dart';
+import 'package:arcanus_reborn/models/user_anime_result.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
@@ -27,8 +27,6 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
 
   FutureOr<void> userMediaInitializeEvent(UserMediaInitializeEvent event, Emitter<UserMediaState> emit) async {
     emit(UserMediaIntializingState());
-
-    await Future.delayed(const Duration(seconds: 2));
     
     var anilistUserBox = Hive.box('anilistUser');
     if (anilistUserBox.isEmpty) {
@@ -49,11 +47,11 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
   FutureOr<void> userMediaLoadingEvent(UserMediaLoadingEvent event, Emitter<UserMediaState> emit) async {
     emit(UserMediaLoadingState());
 
-    List<AnimeResult>? userAnimeListCurrent;
-    List<AnimeResult>? userAnimeListPlanning;
-    List<AnimeResult>? userAnimeListCompleted;
-    List<AnimeResult>? userAnimeListDropped;
-    List<AnimeResult>? userAnimeListPaused;
+    List<UserAnimeResult>? userAnimeListCurrent;
+    List<UserAnimeResult>? userAnimeListPlanning;
+    List<UserAnimeResult>? userAnimeListCompleted;
+    List<UserAnimeResult>? userAnimeListDropped;
+    List<UserAnimeResult>? userAnimeListPaused;
 
     userAnimeListCurrent = await AnilistClient().userAnimeQueryResult("CURRENT");
     userAnimeListPlanning = await AnilistClient().userAnimeQueryResult("PLANNING");

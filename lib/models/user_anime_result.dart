@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_this
 
-class AnimeResult {
+class UserAnimeResult {
   int id;
   String titleUserPreferred;
   String titleEnglish;
@@ -16,7 +16,7 @@ class AnimeResult {
   Map<String, dynamic> nextAiringEpisode;
   String status;
 
-  AnimeResult({
+  UserAnimeResult({
     required this.id,
     required this.titleUserPreferred,
     required this.titleEnglish,
@@ -33,8 +33,8 @@ class AnimeResult {
     required this.status,
   });
 
-  factory AnimeResult.fromJson(Map<String, dynamic> json) {
-    AnimeResult animeResult = AnimeResult(
+  factory UserAnimeResult.fromJson(Map<String, dynamic> json) {
+    UserAnimeResult userAnimeResult = UserAnimeResult(
       id: json['media']['id'] as int? ?? 0,
       titleUserPreferred: json['media']['title']['userPreferred'] as String? ?? "",
       titleEnglish: json['media']['title']['english'] as String? ?? "",
@@ -51,29 +51,29 @@ class AnimeResult {
       status: json['media']['status'] as String? ?? "",
     );
 
-    if (animeResult.status == "RELEASING") {
-      animeResult.status = "RELEASING";
+    if (userAnimeResult.status == "RELEASING") {
+      userAnimeResult.status = "RELEASING";
     }
-    else if (animeResult.status == "FINISHED") {
-      animeResult.status = "FINISHED";
+    else if (userAnimeResult.status == "FINISHED") {
+      userAnimeResult.status = "FINISHED";
     }
-    else if (animeResult.status == "NOT_YET_RELEASED") {
-      animeResult.status = "UNRELEASED";
+    else if (userAnimeResult.status == "NOT_YET_RELEASED") {
+      userAnimeResult.status = "UNRELEASED";
     }
-    else if (animeResult.status == "CANCELLED") {
-      animeResult.status = "CANCELLED";
+    else if (userAnimeResult.status == "CANCELLED") {
+      userAnimeResult.status = "CANCELLED";
     }
-    else if (animeResult.status == "HIATUS") {
-      animeResult.status = "HIATUS";
+    else if (userAnimeResult.status == "HIATUS") {
+      userAnimeResult.status = "HIATUS";
     }
     else {
-      animeResult.status = "UNKNOWN";
+      userAnimeResult.status = "UNKNOWN";
     }
 
-    return animeResult;
+    return userAnimeResult;
   }
 
-  AnimeResult getAnimeResult() {
+  UserAnimeResult getAnimeResult() {
     return this;
   }
 }

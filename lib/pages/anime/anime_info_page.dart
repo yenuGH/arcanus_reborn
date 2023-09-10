@@ -1,4 +1,4 @@
-import 'package:arcanus_reborn/models/anime_result.dart';
+
 import 'package:arcanus_reborn/pages/anime/anime_edit_page.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:html/parser.dart';
 class AnimeInfoPage extends StatefulWidget {
   const AnimeInfoPage({super.key, required this.animeResult});
 
-  final AnimeResult animeResult;
+  final dynamic animeResult;
 
   @override
   State<AnimeInfoPage> createState() => _AnimeInfoPageState();
@@ -179,7 +179,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
           createSpacing(),
     
           SizedBox(
-            width: 200,
+            width: 190,
             height: 250,
             child: ListView(
               children: <Widget>[

@@ -2,8 +2,8 @@ import 'package:arcanus_reborn/controllers/blocs/search_media/search_media_bloc.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SearchAnimeTextField extends StatelessWidget {
-  const SearchAnimeTextField({
+class SearchTextField extends StatelessWidget {
+  const SearchTextField({
     super.key,
     required this.textFieldController,
   });

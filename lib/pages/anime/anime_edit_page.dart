@@ -1,10 +1,10 @@
-import 'package:arcanus_reborn/models/anime_result.dart';
+
 import 'package:flutter/material.dart';
 
 class AnimeEditPage extends StatefulWidget {
   const AnimeEditPage({super.key, required this.animeResult});
 
-  final AnimeResult animeResult;
+  final dynamic animeResult;
 
   @override
   State<AnimeEditPage> createState() => _AnimeEditPageState();

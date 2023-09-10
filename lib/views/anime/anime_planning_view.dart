@@ -1,11 +1,12 @@
-import 'package:arcanus_reborn/models/anime_result.dart';
+
+import 'package:arcanus_reborn/models/user_anime_result.dart';
 import 'package:arcanus_reborn/widgets/anime/user_anime_card.dart';
 import 'package:flutter/material.dart';
 
 class AnimePlanningView extends StatelessWidget {
   const AnimePlanningView({super.key, required this.userAnimeListPlanning});
 
-  final List<AnimeResult> userAnimeListPlanning;
+  final List<UserAnimeResult> userAnimeListPlanning;
 
   @override
   Widget build(BuildContext context) {

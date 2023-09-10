@@ -6,7 +6,8 @@ import 'package:arcanus_reborn/constants/anime_list_status.dart';
 import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anilist_user.dart';
-import 'package:arcanus_reborn/models/anime_result.dart';
+import 'package:arcanus_reborn/models/search_anime_result.dart';
+import 'package:arcanus_reborn/models/user_anime_result.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
@@ -20,11 +21,11 @@ class AnilistClient {
   late AuthLink authLink;
   late Link implicitGrantLink;
 
-  List<AnimeResult>? userAnimeListCurrent;
-  List<AnimeResult>? userAnimeListPlanning;
-  List<AnimeResult>? userAnimeListCompleted;
-  List<AnimeResult>? userAnimeListDropped;
-  List<AnimeResult>? userAnimeListPaused;
+  List<UserAnimeResult>? userAnimeListCurrent;
+  List<UserAnimeResult>? userAnimeListPlanning;
+  List<UserAnimeResult>? userAnimeListCompleted;
+  List<UserAnimeResult>? userAnimeListDropped;
+  List<UserAnimeResult>? userAnimeListPaused;
 
   bool isAuthorized = false;
 
@@ -61,7 +62,7 @@ class AnilistClient {
     return AnilistUser.fromJson(resultData);
   }
 
-  Future<List<AnimeResult>> searchAnimeQueryResult(String query) async {
+  Future<List<SearchAnimeResult>> searchAnimeQueryResult(String query) async {
     QueryResult result = await graphQLClient.query(
       QueryOptions(
         document: gql(AnilistQueries.searchAnimeQuery),
@@ -76,16 +77,16 @@ class AnilistClient {
     }
 
     List<dynamic> resultData = result.data?['page']['media'];
-    List<AnimeResult> searchResults = [];
+    List<SearchAnimeResult> searchResults = [];
 
     for (int i = 0; i < resultData.length; i++) {
-      searchResults.add(AnimeResult.fromJson(resultData[i]));
+      searchResults.add(SearchAnimeResult.fromJson(resultData[i]));
     }
 
     return searchResults;
   }
 
-  Future<List<AnimeResult>> userAnimeQueryResult(String status) async {
+  Future<List<UserAnimeResult>> userAnimeQueryResult(String status) async {
     QueryResult result = await graphQLClient.query(
       QueryOptions(
         document: gql(AnilistQueries.userAnimeQuery),
@@ -101,11 +102,11 @@ class AnilistClient {
     }
 
     List<dynamic> resultData = result.data?['MediaListCollection']['lists'];
-    List<AnimeResult> userAnimeList = [];
+    List<UserAnimeResult> userAnimeList = [];
 
     for (int i = 0; i < resultData.length; i++) {
       for (int j = 0; j < resultData[i]['entries'].length; j++) {
-        userAnimeList.add(AnimeResult.fromJson(resultData[i]['entries'][j]));
+        userAnimeList.add(UserAnimeResult.fromJson(resultData[i]['entries'][j]));
       }
     }
 
@@ -123,11 +124,11 @@ class AnilistClient {
   }
 
   void setUserAnimeLists(
-    List<AnimeResult> userAnimeListCurrent,
-    List<AnimeResult> userAnimeListPlanning,
-    List<AnimeResult> userAnimeListCompleted,
-    List<AnimeResult> userAnimeListDropped,
-    List<AnimeResult> userAnimeListPaused,
+    List<UserAnimeResult> userAnimeListCurrent,
+    List<UserAnimeResult> userAnimeListPlanning,
+    List<UserAnimeResult> userAnimeListCompleted,
+    List<UserAnimeResult> userAnimeListDropped,
+    List<UserAnimeResult> userAnimeListPaused,
   ) {
     this.userAnimeListCurrent = userAnimeListCurrent;
     this.userAnimeListPlanning = userAnimeListPlanning;

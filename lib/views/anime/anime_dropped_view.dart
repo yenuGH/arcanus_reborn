@@ -1,11 +1,11 @@
-import 'package:arcanus_reborn/models/anime_result.dart';
+
 import 'package:arcanus_reborn/widgets/anime/user_anime_card.dart';
 import 'package:flutter/material.dart';
 
 class AnimeDroppedView extends StatelessWidget {
   const AnimeDroppedView({super.key, required this.userAnimeListDropped});
 
-  final List<AnimeResult> userAnimeListDropped;
+  final List<dynamic> userAnimeListDropped;
 
   @override
   Widget build(BuildContext context) {

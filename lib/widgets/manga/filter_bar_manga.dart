@@ -1,3 +1,4 @@
+import 'package:arcanus_reborn/constants/filter_bar_index.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/manga/filter_bar_manga_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +11,6 @@ class MangaFilterBar extends StatefulWidget {
 }
 
 class _MangaFilterBarState extends State<MangaFilterBar> {
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -35,10 +34,10 @@ class _MangaFilterBarState extends State<MangaFilterBar> {
           label: 'Dropped',
         ),
       ],
-      currentIndex: _selectedIndex,
+      currentIndex: FilterBarIndex().mangaFilterBarIndex,
       onTap: (value) {
         setState(() {
-          _selectedIndex = value;
+          FilterBarIndex().mangaFilterBarIndex = value;
         });
 
         switch (value) {

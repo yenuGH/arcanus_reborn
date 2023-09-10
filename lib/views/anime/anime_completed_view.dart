@@ -1,11 +1,11 @@
-import 'package:arcanus_reborn/models/anime_result.dart';
+
 import 'package:arcanus_reborn/widgets/anime/user_anime_card.dart';
 import 'package:flutter/material.dart';
 
 class AnimeCompletedView extends StatelessWidget {
   const AnimeCompletedView({super.key, required this.userAnimeListCompleted});
 
-  final List<AnimeResult> userAnimeListCompleted;
+  final List<dynamic> userAnimeListCompleted;
 
   @override
   Widget build(BuildContext context) {

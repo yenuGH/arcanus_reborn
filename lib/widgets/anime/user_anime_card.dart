@@ -1,11 +1,10 @@
-import 'package:arcanus_reborn/models/anime_result.dart';
 import 'package:arcanus_reborn/pages/anime/anime_edit_page.dart';
 import 'package:flutter/material.dart';
 
 class UserAnimeCard extends StatefulWidget {
   const UserAnimeCard({super.key, required this.animeResult});
 
-  final AnimeResult animeResult;
+  final dynamic animeResult;
 
   @override
   State<UserAnimeCard> createState() => _UserAnimeCardState();
