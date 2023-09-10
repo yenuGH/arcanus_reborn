@@ -61,22 +61,22 @@ class _HomePageState extends State<HomePage> {
                             {
                               switch (filterBarAnimeState.runtimeType) {
                                 case FilterBarAnimeWatching:
-                                  selectedView = const AnimeWatchingView();
+                                  selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
                                   break;
                                 case FilterBarAnimePlanning:
-                                  selectedView = const AnimePlanningView();
+                                  selectedView = AnimePlanningView(userAnimeListPlanning: AnilistClient().userAnimeListPlanning!);
                                   break;
                                 case FilterBarAnimeCompleted:
                                   selectedView = AnimeCompletedView(userAnimeListCompleted: AnilistClient().userAnimeListCompleted!);
                                   break;
                                 case FilterBarAnimePaused:
-                                  selectedView = const AnimePausedView();
+                                  selectedView = AnimePausedView(userAnimeListPaused: AnilistClient().userAnimeListPaused!);
                                    break;
                                 case FilterBarAnimeDropped:
-                                  selectedView = const AnimeDroppedView();
+                                  selectedView = AnimeDroppedView(userAnimeListDropped: AnilistClient().userAnimeListDropped!);
                                   break;
                                 default:
-                                  selectedView = const AnimeWatchingView();
+                                  selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
                                   break;
                               }
                             }
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                             }
                             break;
                           default:
-                            selectedView = const AnimeWatchingView();
+                            selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
                             break;
                         }
 

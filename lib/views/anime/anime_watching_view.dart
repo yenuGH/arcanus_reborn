@@ -1,26 +1,18 @@
+import 'package:arcanus_reborn/models/anime_result.dart';
+import 'package:arcanus_reborn/widgets/anime/user_anime_card.dart';
 import 'package:flutter/material.dart';
 
 class AnimeWatchingView extends StatelessWidget {
-  const AnimeWatchingView({super.key});
+  const AnimeWatchingView({super.key, required this.userAnimeListCurrent});
+
+  final List<AnimeResult> userAnimeListCurrent;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: userAnimeListCurrent.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            onTap: () {
-              
-            },
-            child: ListTile(
-              leading: const Icon(Icons.image),
-              title: Text("Anime $index"),
-              subtitle: Text("Episode $index"),
-            ),
-          ),
-        );
+        return UserAnimeCard(animeResult: userAnimeListCurrent[index]);
       },
     );
   }

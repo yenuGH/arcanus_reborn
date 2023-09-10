@@ -44,6 +44,7 @@ class _UserAnimeCardState extends State<UserAnimeCard> {
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
                 height: 120,
+                width: 80,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   child: Image.network(
