@@ -2,7 +2,7 @@
 
 import 'dart:developer';
 
-import 'package:arcanus_reborn/constants/MediaListStatus.dart';
+import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anilist_user.dart';
@@ -28,6 +28,7 @@ class AnilistClient {
   List<UserAnimeResult>? userAnimeListCompleted;
   List<UserAnimeResult>? userAnimeListDropped;
   List<UserAnimeResult>? userAnimeListPaused;
+  List<UserAnimeResult>? userAnimeListAll;
 
   List<UserMangaResult>? userMangaListCurrent;
   List<UserMangaResult>? userMangaListPlanning;
@@ -183,6 +184,14 @@ class AnilistClient {
     this.userAnimeListCompleted = userAnimeListCompleted;
     this.userAnimeListDropped = userAnimeListDropped;
     this.userAnimeListPaused = userAnimeListPaused;
+
+    userAnimeListAll = [
+      ...userAnimeListCurrent,
+      ...userAnimeListPlanning,
+      ...userAnimeListCompleted,
+      ...userAnimeListDropped,
+      ...userAnimeListPaused,
+    ];
   }
 
   void setUserMangaLists(
