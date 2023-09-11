@@ -18,6 +18,26 @@ class AnimeView extends StatelessWidget {
         animeList = AnilistClient().userAnimeListCurrent!;
         break;
       }
+      case (MediaListStatus.PLANNING):
+      {
+        animeList = AnilistClient().userAnimeListPlanning!;
+        break;
+      }
+      case (MediaListStatus.COMPLETED):
+      {
+        animeList = AnilistClient().userAnimeListCompleted!;
+        break;
+      }
+      case (MediaListStatus.DROPPED):
+      {
+        animeList = AnilistClient().userAnimeListDropped!;
+        break;
+      }
+      case (MediaListStatus.PAUSED):
+      {
+        animeList = AnilistClient().userAnimeListPaused!;
+        break;
+      }
       default:
       {
         animeList = AnilistClient().userAnimeListCurrent!;

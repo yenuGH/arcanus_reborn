@@ -1,16 +1,9 @@
+import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/anime/filter_bar_anime_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/manga/filter_bar_manga_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
-import 'package:arcanus_reborn/graphql/anilist_client.dart';
-import 'package:arcanus_reborn/views/anime/anime_completed_view.dart';
-import 'package:arcanus_reborn/views/anime/anime_dropped_view.dart';
-import 'package:arcanus_reborn/views/anime/anime_paused_view.dart';
-import 'package:arcanus_reborn/views/anime/anime_planning_view.dart';
-import 'package:arcanus_reborn/views/anime/anime_watching_view.dart';
-import 'package:arcanus_reborn/views/manga/manga_completed_view.dart';
-import 'package:arcanus_reborn/views/manga/manga_dropped_view.dart';
-import 'package:arcanus_reborn/views/manga/manga_planning_view.dart';
-import 'package:arcanus_reborn/views/manga/manga_reading_view.dart';
+import 'package:arcanus_reborn/views/anime_view.dart';
+import 'package:arcanus_reborn/views/manga_view.dart';
 import 'package:arcanus_reborn/widgets/app_drawer.dart';
 import 'package:arcanus_reborn/widgets/anime/filter_bar_anime.dart';
 import 'package:arcanus_reborn/widgets/manga/filter_bar_manga.dart';
@@ -63,22 +56,22 @@ class _HomePageState extends State<HomePage> {
                               {
                                 switch (filterBarAnimeState.runtimeType) {
                                   case FilterBarAnimeWatching:
-                                    selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
+                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
                                     break;
                                   case FilterBarAnimePlanning:
-                                    selectedView = AnimePlanningView(userAnimeListPlanning: AnilistClient().userAnimeListPlanning!);
+                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.PLANNING);
                                     break;
                                   case FilterBarAnimeCompleted:
-                                    selectedView = AnimeCompletedView(userAnimeListCompleted: AnilistClient().userAnimeListCompleted!);
+                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.COMPLETED);
                                     break;
                                   case FilterBarAnimePaused:
-                                    selectedView = AnimePausedView(userAnimeListPaused: AnilistClient().userAnimeListPaused!);
-                                     break;
+                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.PAUSED);
+                                    break;
                                   case FilterBarAnimeDropped:
-                                    selectedView = AnimeDroppedView(userAnimeListDropped: AnilistClient().userAnimeListDropped!);
+                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.DROPPED);
                                     break;
                                   default:
-                                    selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
+                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
                                     break;
                                 }
                               }
@@ -87,25 +80,25 @@ class _HomePageState extends State<HomePage> {
                               {
                                 switch (filterBarMangaState.runtimeType) {
                                   case FilterBarMangaReading:
-                                    selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
+                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.CURRENT);
                                     break;
                                   case FilterBarMangaPlanning:
-                                    selectedView = MangaPlanningView(userMangaListPlanning: AnilistClient().userMangaListPlanning!);
+                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.PLANNING);
                                     break;
                                   case FilterBarMangaCompleted:
-                                    selectedView = MangaCompletedView(userMangaListCompleted: AnilistClient().userMangaListCompleted!);
+                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.COMPLETED);
                                     break;
                                   case FilterBarMangaDropped:
-                                    selectedView = MangaDroppedView(userMangaListDropped: AnilistClient().userMangaListDropped!);
+                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.DROPPED);
                                     break;
                                   default:
-                                    selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
+                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.CURRENT);
                                     break;
                                 }
                               }
                               break;
                             default:
-                              selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userMangaListCurrent!);
+                              selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
                               break;
                           }
           
