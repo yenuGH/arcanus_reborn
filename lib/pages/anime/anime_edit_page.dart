@@ -1,9 +1,7 @@
 
 import 'package:arcanus_reborn/pages/anime/anime_info_page.dart';
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:html/parser.dart';
 
 class AnimeEditPage extends StatefulWidget {
   const AnimeEditPage({super.key, required this.animeResult});

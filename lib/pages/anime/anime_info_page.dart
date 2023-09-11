@@ -1,5 +1,4 @@
 
-import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/pages/anime/anime_edit_page.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';

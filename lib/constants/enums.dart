@@ -7,3 +7,8 @@ enum MediaListStatus {
   PAUSED,
   REPEATING,
 }
+
+enum MediaType {
+  ANIME,
+  MANGA,
+}

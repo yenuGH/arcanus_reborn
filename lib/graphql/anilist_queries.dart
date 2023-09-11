@@ -1,4 +1,51 @@
 class AnilistQueries {
+  static String authorizedMediaQuery = r'''
+    query authorizedMediaQuery($userId: Int!, $status: MediaListStatus!) {
+      MediaListCollection(userId: $userId, type: ANIME, status: $status) {
+        lists {
+          entries {
+            id
+            mediaId
+            status
+            score
+            progress
+            media {
+              id
+              type
+              title {
+                userPreferred
+                native
+                romaji
+                english
+              }
+              coverImage {
+                extraLarge
+              }
+              description
+              genres
+              averageScore
+              status
+              episodes
+              chapters
+              nextAiringEpisode {
+                airingAt
+                timeUntilAiring
+                episode
+              }
+              studios(isMain: true) {
+                nodes {
+                  name
+                  isAnimationStudio
+                }
+              }
+              isAdult
+            }
+          }
+        }
+      }
+    }
+  ''';
+
   static String searchAnimeQuery = r'''
     query searchAnime($query: String!) {
       page: Page {
@@ -104,6 +151,7 @@ class AnilistQueries {
             progress
             media {
               id
+              type
               title {
                 userPreferred
                 native
@@ -118,6 +166,7 @@ class AnilistQueries {
               averageScore
               status
               episodes
+              chapters
               nextAiringEpisode {
                 airingAt
                 timeUntilAiring
