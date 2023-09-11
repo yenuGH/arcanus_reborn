@@ -24,17 +24,17 @@ class AnilistClient {
   late AuthLink authLink;
   late Link implicitGrantLink;
 
-  List<UserAnimeResult>? userAnimeListCurrent;
-  List<UserAnimeResult>? userAnimeListPlanning;
-  List<UserAnimeResult>? userAnimeListCompleted;
-  List<UserAnimeResult>? userAnimeListDropped;
-  List<UserAnimeResult>? userAnimeListPaused;
-  List<UserAnimeResult>? userAnimeListAll;
+  List<MediaListResult>? userAnimeListCurrent;
+  List<MediaListResult>? userAnimeListPlanning;
+  List<MediaListResult>? userAnimeListCompleted;
+  List<MediaListResult>? userAnimeListDropped;
+  List<MediaListResult>? userAnimeListPaused;
+  List<MediaListResult>? userAnimeListAll;
 
-  List<UserMangaResult>? userMangaListCurrent;
-  List<UserMangaResult>? userMangaListPlanning;
-  List<UserMangaResult>? userMangaListCompleted;
-  List<UserMangaResult>? userMangaListDropped;
+  List<MediaListResult>? userMangaListCurrent;
+  List<MediaListResult>? userMangaListPlanning;
+  List<MediaListResult>? userMangaListCompleted;
+  List<MediaListResult>? userMangaListDropped;
 
   bool isAuthorized = false;
 
@@ -71,7 +71,7 @@ class AnilistClient {
     return AnilistUser.fromJson(resultData);
   }
 
-  Future<void> mediaListQuery(MediaType mediaType, String status) async{
+  Future<List<MediaListResult>> mediaListQuery(MediaType mediaType, String status) async{
     QueryResult queryResult = await graphQLClient.query(
       QueryOptions(
         document: gql(AnilistQueries.mediaListQuery),
@@ -96,7 +96,7 @@ class AnilistClient {
       }
     }
 
-    log("MediaListResults: ${mediaListResults.length}");
+    return mediaListResults;
   }
 
   Future<List<SearchAnimeResult>> searchAnimeQueryResult(String query) async {
@@ -202,11 +202,11 @@ class AnilistClient {
   }
 
   void setUserAnimeLists(
-    List<UserAnimeResult> userAnimeListCurrent,
-    List<UserAnimeResult> userAnimeListPlanning,
-    List<UserAnimeResult> userAnimeListCompleted,
-    List<UserAnimeResult> userAnimeListDropped,
-    List<UserAnimeResult> userAnimeListPaused,
+    List<MediaListResult> userAnimeListCurrent,
+    List<MediaListResult> userAnimeListPlanning,
+    List<MediaListResult> userAnimeListCompleted,
+    List<MediaListResult> userAnimeListDropped,
+    List<MediaListResult> userAnimeListPaused,
   ) {
     this.userAnimeListCurrent = userAnimeListCurrent;
     this.userAnimeListPlanning = userAnimeListPlanning;
@@ -224,10 +224,10 @@ class AnilistClient {
   }
 
   void setUserMangaLists(
-    List<UserMangaResult> userMangaListCurrent,
-    List<UserMangaResult> userMangaListPlanning,
-    List<UserMangaResult> userMangaListCompleted,
-    List<UserMangaResult> userMangaListDropped,
+    List<MediaListResult> userMangaListCurrent,
+    List<MediaListResult> userMangaListPlanning,
+    List<MediaListResult> userMangaListCompleted,
+    List<MediaListResult> userMangaListDropped,
   ) {
     this.userMangaListCurrent = userMangaListCurrent;
     this.userMangaListPlanning = userMangaListPlanning;

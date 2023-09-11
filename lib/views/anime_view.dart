@@ -1,5 +1,6 @@
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
+import 'package:arcanus_reborn/models/media_list_result.dart';
 import 'package:arcanus_reborn/models/user_anime_result.dart';
 import 'package:arcanus_reborn/widgets/anime/user_anime_card.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class AnimeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<UserAnimeResult> animeList = [];
+    List<MediaListResult> animeList;
     switch (mediaListStatus) {
       case (MediaListStatus.CURRENT):
       {
