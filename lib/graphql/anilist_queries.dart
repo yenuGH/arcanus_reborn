@@ -1,7 +1,64 @@
 class AnilistQueries {
-  static String authorizedMediaQuery = r'''
-    query authorizedMediaQuery($userId: Int!, $status: MediaListStatus!) {
-      MediaListCollection(userId: $userId, type: ANIME, status: $status) {
+    static String userQuery = r''' 
+    query userQuery () {
+      Viewer {
+        id
+        name
+        avatar {
+          large
+          medium
+        }
+        bannerImage
+      }
+    }
+  ''';
+
+  static String mediaQuery = r'''
+    query mediaQuery($query: String!, $type: MediaType!) {
+      page: Page {
+        media(search: $query, type: $type, isAdult: false) {
+          id
+          type
+          title {
+            userPreferred
+            native
+            romaji
+            english
+          }
+          coverImage {
+            extraLarge
+          }
+          description
+          genres
+          averageScore
+          status
+          episodes
+          chapters
+          nextAiringEpisode {
+            airingAt
+            timeUntilAiring
+            episode
+          }
+          studios(isMain: true) {
+            nodes {
+              name
+              isAnimationStudio
+            }
+          }
+          mediaListEntry {
+            id
+            status
+            score
+            progress
+          }
+        }
+      }
+    }
+  ''';
+
+  static String mediaListQuery = r'''
+    query mediaListQuery($userId: Int!, $type: MediaType!, $status: MediaListStatus!) {
+      MediaListCollection(userId: $userId, type: $type, status: $status) {
         lists {
           entries {
             id
@@ -121,20 +178,6 @@ class AnilistQueries {
             progress
           }
         }
-      }
-    }
-  ''';
-
-  static String userQuery = r''' 
-    query userQuery () {
-      Viewer {
-        id
-        name
-        avatar {
-          large
-          medium
-        }
-        bannerImage
       }
     }
   ''';

@@ -40,45 +40,45 @@ class MediaResult {
   });
 
   factory MediaResult.fromJson(Map<String, dynamic> json) {
-    MediaResult userAnimeResult = MediaResult(
-      id: json['media']['id'] as int? ?? 0,
-      mediaType: json['media']['type'] == "ANIME" ? MediaType.ANIME : MediaType.MANGA,
-      titleUserPreferred: json['media']['title']['userPreferred'] as String? ?? "",
-      titleEnglish: json['media']['title']['english'] as String? ?? "",
-      titleRomaji: json['media']['title']['romaji'] as String? ?? "",
-      titleNative: json['media']['title']['native'] as String? ?? "",
-      description: json['media']['description'] as String? ?? "",
-      genres: List<String>.from(json['media']['genres'] as List<dynamic>? ?? []),
-      averageScore: json['media']['averageScore'] as int? ?? 0,
-      coverImage: json['media']['coverImage']['extraLarge'] as String? ?? "",
-      episodes: json['media']['episodes'] as int? ?? 0,
-      chapters: json['media']['chapters'] as int? ?? 0,
-      progress: json['progress'] as int? ?? 0,
+    MediaResult mediaResult = MediaResult(
+      id: json['id'] as int? ?? 0,
+      mediaType: json['type'] == "ANIME" ? MediaType.ANIME : MediaType.MANGA,
+      titleUserPreferred: json['title']['userPreferred'] as String? ?? "",
+      titleEnglish: json['title']['english'] as String? ?? "",
+      titleRomaji: json['title']['romaji'] as String? ?? "",
+      titleNative: json['title']['native'] as String? ?? "",
+      description: json['description'] as String? ?? "",
+      genres: List<String>.from(json['genres'] as List<dynamic>? ?? []),
+      averageScore: json['averageScore'] as int? ?? 0,
+      coverImage: json['coverImage']['extraLarge'] as String? ?? "",
+      episodes: json['episodes'] as int? ?? 0,
+      chapters: json['chapters'] as int? ?? 0,
       nextAiringEpisode: Map<String, dynamic>.from(json['media']['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
-      status: json['media']['status'] as String? ?? "",
-      userStatus: json['status'] as String? ?? "",
+      status: json['status'] as String? ?? "",
+      userStatus: json['mediaListEntry']['status'] as String? ?? "",
+      progress: json['mediaListEntry']['progress'] as int? ?? 0,
     );
 
-    if (userAnimeResult.status == "RELEASING") {
-      userAnimeResult.status = "RELEASING";
+    if (mediaResult.status == "RELEASING") {
+      mediaResult.status = "RELEASING";
     }
-    else if (userAnimeResult.status == "FINISHED") {
-      userAnimeResult.status = "FINISHED";
+    else if (mediaResult.status == "FINISHED") {
+      mediaResult.status = "FINISHED";
     }
-    else if (userAnimeResult.status == "NOT_YET_RELEASED") {
-      userAnimeResult.status = "UNRELEASED";
+    else if (mediaResult.status == "NOT_YET_RELEASED") {
+      mediaResult.status = "UNRELEASED";
     }
-    else if (userAnimeResult.status == "CANCELLED") {
-      userAnimeResult.status = "CANCELLED";
+    else if (mediaResult.status == "CANCELLED") {
+      mediaResult.status = "CANCELLED";
     }
-    else if (userAnimeResult.status == "HIATUS") {
-      userAnimeResult.status = "HIATUS";
+    else if (mediaResult.status == "HIATUS") {
+      mediaResult.status = "HIATUS";
     }
     else {
-      userAnimeResult.status = "UNKNOWN";
+      mediaResult.status = "UNKNOWN";
     }
 
-    return userAnimeResult;
+    return mediaResult;
   }
 
   MediaResult getAnimeResult() {

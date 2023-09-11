@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/models/anilist_user.dart';
 import 'package:arcanus_reborn/models/user_anime_result.dart';
@@ -49,7 +50,9 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
   FutureOr<void> userMediaLoadingEvent(UserMediaLoadingEvent event, Emitter<UserMediaState> emit) async {
     emit(UserMediaLoadingState());
 
-    List<UserAnimeResult>? userAnimeListCurrent;
+    await AnilistClient().mediaListQuery(MediaType.ANIME, "COMPLETED");
+
+    /* List<UserAnimeResult>? userAnimeListCurrent;
     List<UserAnimeResult>? userAnimeListPlanning;
     List<UserAnimeResult>? userAnimeListCompleted;
     List<UserAnimeResult>? userAnimeListDropped;
@@ -87,7 +90,7 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
       userMangaListDropped,
     );
 
-    add(UserMediaLoadedEvent());
+    add(UserMediaLoadedEvent()); */
   }
 
   FutureOr<void> userMediaLoadedEvent(UserMediaLoadedEvent event, Emitter<UserMediaState> emit) async {
