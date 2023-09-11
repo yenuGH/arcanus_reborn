@@ -18,6 +18,8 @@ class _AnimeEditPageState extends State<AnimeEditPage> {
   final List<String> _statusItems = ["CURRENT", "PLANNING", "COMPLETED", "DROPPED", "PAUSED"];
   String? _dropdownValue;
 
+  late int episodesWatched;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +63,13 @@ class _AnimeEditPageState extends State<AnimeEditPage> {
 
               createSpacing(),
 
-              statusDropdown(),
+              createSpacing(),
+
+              statusDropdownMenu(),
+              
+              createSpacing(),
+
+              episodeCounter(),
             ]
           ),
         ),
@@ -195,44 +203,118 @@ class _AnimeEditPageState extends State<AnimeEditPage> {
     );
   }
 
-  Widget statusDropdown () {
+  Widget statusDropdownMenu() {
+    List<String> statusValues = ["CURRENT", "PLANNING", "COMPLETED", "DROPPED", "PAUSED"];
+    List<DropdownMenuEntry<String>> statusDropdownMenuItems = [];
+
+    for (String statusValue in statusValues){
+      statusDropdownMenuItems.add(
+        DropdownMenuEntry(value: statusValue, label: statusValue)
+      );
+    }
+
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(10),
-      ),
       alignment: Alignment.topLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           const Text("Status: "),
 
-          DropdownButton<String>(
-            value: _dropdownValue,
-            icon: const Icon(Icons.arrow_downward),
-            iconSize: 24,
-            elevation: 16,
-            style: const TextStyle(
-              color: Colors.white
-            ),
-            underline: Container(
-              height: 1,
-              color: Colors.white,
-            ),
-            onChanged: (String? newValue) {
+          const SizedBox(
+            height: 5,
+          ),
+
+          DropdownMenu<String>(
+            initialSelection: widget.animeResult.userStatus,
+            dropdownMenuEntries: statusDropdownMenuItems,
+            onSelected: (String? value) {
               setState(() {
-                _dropdownValue = newValue!;
+                _dropdownValue = value;
               });
             },
-            items: _statusItems.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-              }).toList(),
+            inputDecorationTheme: const InputDecorationTheme(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+            )
+          ),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration customBoxDecoration () {
+    return const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      border: Border(
+        top: BorderSide(width: 1.0, color: Colors.white),
+        left: BorderSide(width: 1.0, color: Colors.white),
+        right: BorderSide(width: 1.0, color: Colors.white),
+        bottom: BorderSide(width: 1.0, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget episodeCounter() {
+    episodesWatched = widget.animeResult.progress;
+
+    return Container(
+      alignment: Alignment.topLeft,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Episodes watched: " ),
+
+              const SizedBox(
+                height: 5,
+              ),
+              
+              Row(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: 100,
+                    height: 60,
+                    decoration: customBoxDecoration(), 
+                    child: Text(
+                      "$episodesWatched/${widget.animeResult.episodes}",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    width: 10,
+                  ),
+
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    splashRadius: 500,
+                    onPressed: () {
+                      setState(() {
+                        episodesWatched--;
+                      });
+                    },
+                  ),
+
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    splashRadius: 500,
+                    onPressed: () {
+                      setState(() {
+                        episodesWatched++;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

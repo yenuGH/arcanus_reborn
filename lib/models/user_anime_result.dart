@@ -15,6 +15,7 @@ class UserAnimeResult {
   int progress;
   Map<String, dynamic> nextAiringEpisode;
   String status;
+  String userStatus;
 
   UserAnimeResult({
     required this.id,
@@ -31,6 +32,7 @@ class UserAnimeResult {
     required this.progress,
     required this.nextAiringEpisode,
     required this.status,
+    required this.userStatus,
   });
 
   factory UserAnimeResult.fromJson(Map<String, dynamic> json) {
@@ -49,6 +51,7 @@ class UserAnimeResult {
       progress: json['progress'] as int? ?? 0,
       nextAiringEpisode: Map<String, dynamic>.from(json['media']['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
       status: json['media']['status'] as String? ?? "",
+      userStatus: json['status'] as String? ?? "",
     );
 
     if (userAnimeResult.status == "RELEASING") {
