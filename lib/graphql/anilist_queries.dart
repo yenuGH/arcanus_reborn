@@ -106,10 +106,16 @@ class AnilistQueries {
               id
               title {
                 userPreferred
+                native
+                romaji
+                english
               }
               coverImage {
                 extraLarge
               }
+              description
+              genres
+              averageScore
               status
               episodes
               nextAiringEpisode {

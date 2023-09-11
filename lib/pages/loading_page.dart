@@ -18,26 +18,29 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocListener<UserMediaBloc, UserMediaState>(
-        listener: (_, state) {
-          if (state is UserMediaLoadedState) {
-            Navigator.pushNamed(context, "/home_page");
-          }
-        },
-        child: Center(
-          child: BlocBuilder<UserMediaBloc, UserMediaState>(
-            builder: (_, state) {
-              if (state is UserMediaInitialState) {
-                return initializeUserAccount();
-              } else if (state is UserMediaIntializingState) {
-                return initializeUserAccount();
-              } else if (state is UserMediaLoadingState) {
-                return loadingUserDatabases();
-              } else {
-                return errorLoadingUserDatabases();
-              }
-            },
+    return WillPopScope(
+      onWillPop: () async => false, // Disable back button
+      child: Scaffold(
+        body: BlocListener<UserMediaBloc, UserMediaState>(
+          listener: (_, state) {
+            if (state is UserMediaLoadedState) {
+              Navigator.pushNamed(context, "/home_page");
+            }
+          },
+          child: Center(
+            child: BlocBuilder<UserMediaBloc, UserMediaState>(
+              builder: (_, state) {
+                if (state is UserMediaInitialState) {
+                  return initializeUserAccount();
+                } else if (state is UserMediaIntializingState) {
+                  return initializeUserAccount();
+                } else if (state is UserMediaLoadingState) {
+                  return loadingUserDatabases();
+                } else {
+                  return errorLoadingUserDatabases();
+                }
+              },
+            ),
           ),
         ),
       ),

@@ -41,95 +41,98 @@ class _HomePageState extends State<HomePage> {
       builder: (_, state) {
         return DefaultTabController(
           length: widget._tabCount,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-              bottom: const MediaTypeTabBar(),
-            ),
-            drawer: const AppDrawer(),
-
-            body: BlocBuilder<TabBarCubit, TabBarState>(
-              builder: (_, tabBarState) {
-                return BlocBuilder<FilterBarAnimeCubit, FilterBarAnimeState>(
-                  builder: (_, filterBarAnimeState) {
-                    return BlocBuilder<FilterBarMangaCubit, FilterBarMangaState>(
-                      builder: (_, filterBarMangaState) {
-                        Widget selectedView;
-
-                        switch (tabBarState.runtimeType) {
-                          case TabBarAnime:
-                            {
-                              switch (filterBarAnimeState.runtimeType) {
-                                case FilterBarAnimeWatching:
-                                  selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
-                                  break;
-                                case FilterBarAnimePlanning:
-                                  selectedView = AnimePlanningView(userAnimeListPlanning: AnilistClient().userAnimeListPlanning!);
-                                  break;
-                                case FilterBarAnimeCompleted:
-                                  selectedView = AnimeCompletedView(userAnimeListCompleted: AnilistClient().userAnimeListCompleted!);
-                                  break;
-                                case FilterBarAnimePaused:
-                                  selectedView = AnimePausedView(userAnimeListPaused: AnilistClient().userAnimeListPaused!);
-                                   break;
-                                case FilterBarAnimeDropped:
-                                  selectedView = AnimeDroppedView(userAnimeListDropped: AnilistClient().userAnimeListDropped!);
-                                  break;
-                                default:
-                                  selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
-                                  break;
+          child: WillPopScope(
+            onWillPop: () async => false, // Disable back button
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title),
+                bottom: const MediaTypeTabBar(),
+              ),
+              drawer: const AppDrawer(),
+          
+              body: BlocBuilder<TabBarCubit, TabBarState>(
+                builder: (_, tabBarState) {
+                  return BlocBuilder<FilterBarAnimeCubit, FilterBarAnimeState>(
+                    builder: (_, filterBarAnimeState) {
+                      return BlocBuilder<FilterBarMangaCubit, FilterBarMangaState>(
+                        builder: (_, filterBarMangaState) {
+                          Widget selectedView;
+          
+                          switch (tabBarState.runtimeType) {
+                            case TabBarAnime:
+                              {
+                                switch (filterBarAnimeState.runtimeType) {
+                                  case FilterBarAnimeWatching:
+                                    selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
+                                    break;
+                                  case FilterBarAnimePlanning:
+                                    selectedView = AnimePlanningView(userAnimeListPlanning: AnilistClient().userAnimeListPlanning!);
+                                    break;
+                                  case FilterBarAnimeCompleted:
+                                    selectedView = AnimeCompletedView(userAnimeListCompleted: AnilistClient().userAnimeListCompleted!);
+                                    break;
+                                  case FilterBarAnimePaused:
+                                    selectedView = AnimePausedView(userAnimeListPaused: AnilistClient().userAnimeListPaused!);
+                                     break;
+                                  case FilterBarAnimeDropped:
+                                    selectedView = AnimeDroppedView(userAnimeListDropped: AnilistClient().userAnimeListDropped!);
+                                    break;
+                                  default:
+                                    selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userAnimeListCurrent!);
+                                    break;
+                                }
                               }
-                            }
-                            break;
-                          case TabBarManga:
-                            {
-                              switch (filterBarMangaState.runtimeType) {
-                                case FilterBarMangaReading:
-                                  selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
-                                  break;
-                                case FilterBarMangaPlanning:
-                                  selectedView = MangaPlanningView(userMangaListPlanning: AnilistClient().userMangaListPlanning!);
-                                  break;
-                                case FilterBarMangaCompleted:
-                                  selectedView = MangaCompletedView(userMangaListCompleted: AnilistClient().userMangaListCompleted!);
-                                  break;
-                                case FilterBarMangaDropped:
-                                  selectedView = MangaDroppedView(userMangaListDropped: AnilistClient().userMangaListDropped!);
-                                  break;
-                                default:
-                                  selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
-                                  break;
+                              break;
+                            case TabBarManga:
+                              {
+                                switch (filterBarMangaState.runtimeType) {
+                                  case FilterBarMangaReading:
+                                    selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
+                                    break;
+                                  case FilterBarMangaPlanning:
+                                    selectedView = MangaPlanningView(userMangaListPlanning: AnilistClient().userMangaListPlanning!);
+                                    break;
+                                  case FilterBarMangaCompleted:
+                                    selectedView = MangaCompletedView(userMangaListCompleted: AnilistClient().userMangaListCompleted!);
+                                    break;
+                                  case FilterBarMangaDropped:
+                                    selectedView = MangaDroppedView(userMangaListDropped: AnilistClient().userMangaListDropped!);
+                                    break;
+                                  default:
+                                    selectedView = MangaReadingView(userMangaListCurrent: AnilistClient().userMangaListCurrent!);
+                                    break;
+                                }
                               }
-                            }
-                            break;
-                          default:
-                            selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userMangaListCurrent!);
-                            break;
-                        }
-
-                        return selectedView;
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-
-
-            // the bottom navigation bar will change depending on a cubit
-            bottomNavigationBar: BlocBuilder<TabBarCubit, TabBarState>(
-              builder: (_, state) {
-                if (state == TabBarAnime()) {
-                  return const AnimeFilterBar();
-                } 
-                else if (state == TabBarManga()) {
-                  return const MangaFilterBar();
-                } 
-                else {
-                  return const AnimeFilterBar();
-                  // if either one fails, default to anime as it is default media type
-                }
-              },
+                              break;
+                            default:
+                              selectedView = AnimeWatchingView(userAnimeListCurrent: AnilistClient().userMangaListCurrent!);
+                              break;
+                          }
+          
+                          return selectedView;
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+          
+          
+              // the bottom navigation bar will change depending on a cubit
+              bottomNavigationBar: BlocBuilder<TabBarCubit, TabBarState>(
+                builder: (_, state) {
+                  if (state == TabBarAnime()) {
+                    return const AnimeFilterBar();
+                  } 
+                  else if (state == TabBarManga()) {
+                    return const MangaFilterBar();
+                  } 
+                  else {
+                    return const AnimeFilterBar();
+                    // if either one fails, default to anime as it is default media type
+                  }
+                },
+              ),
             ),
           ),
         );
