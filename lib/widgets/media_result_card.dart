@@ -1,25 +1,31 @@
 import 'package:arcanus_reborn/constants/enums.dart';
+import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:flutter/material.dart';
 
-class MediaCard extends StatefulWidget {
-  const MediaCard({super.key, required this.mediaResult});
+class MediaResultCard extends StatefulWidget {
+  const MediaResultCard({super.key, required this.mediaResult});
 
   final dynamic mediaResult;
 
   @override
-  State<MediaCard> createState() => _MediaCardState(
+  State<MediaResultCard> createState() => _MediaResultCardState(
 
   );
 }
 
-class _MediaCardState extends State<MediaCard> {
+class _MediaResultCardState extends State<MediaResultCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
-          
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => MediaInfoPage(mediaResult: widget.mediaResult)
+            )
+          );
         },
         child: Container(
           margin: const EdgeInsets.all(5),
