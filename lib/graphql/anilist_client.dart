@@ -7,10 +7,7 @@ import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anilist_user.dart';
 import 'package:arcanus_reborn/models/media_list_result.dart';
-import 'package:arcanus_reborn/models/search_anime_result.dart';
-import 'package:arcanus_reborn/models/search_manga_result.dart';
-import 'package:arcanus_reborn/models/user_anime_result.dart';
-import 'package:arcanus_reborn/models/user_manga_result.dart';
+import 'package:arcanus_reborn/models/media_result.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
@@ -71,10 +68,10 @@ class AnilistClient {
     return AnilistUser.fromJson(resultData);
   }
 
-  Future<List<MediaListResult>> mediaListQuery(MediaType mediaType, String status) async{
+  Future<List<MediaListResult>> userMediaListQuery(MediaType mediaType, String status) async {
     QueryResult queryResult = await graphQLClient.query(
       QueryOptions(
-        document: gql(AnilistQueries.mediaListQuery),
+        document: gql(AnilistQueries.userMediaListQuery),
         variables: {
           'userId': Hive.box('anilistUser').get('anilistUserId'),
           'type': mediaType.name,
@@ -99,12 +96,13 @@ class AnilistClient {
     return mediaListResults;
   }
 
-  Future<List<SearchAnimeResult>> searchAnimeQueryResult(String query) async {
+  Future<List<MediaResult>> mediaQuery(MediaType mediaType, String query) async {
     QueryResult result = await graphQLClient.query(
       QueryOptions(
-        document: gql(AnilistQueries.searchAnimeQuery),
+        document: gql(AnilistQueries.mediaQuery),
         variables: {
           'query': query,
+          'type': mediaType.name,
         },
       ),
     );
@@ -114,91 +112,13 @@ class AnilistClient {
     }
 
     List<dynamic> resultData = result.data?['page']['media'];
-    List<SearchAnimeResult> searchResults = [];
+    List<MediaResult> mediaResults = [];
 
     for (int i = 0; i < resultData.length; i++) {
-      searchResults.add(SearchAnimeResult.fromJson(resultData[i]));
+      mediaResults.add(MediaResult.fromJson(resultData[i]));
     }
 
-    return searchResults;
-  }
-
-  Future<List<SearchMangaResult>> searchMangaQueryResult(String query) async {
-    QueryResult result = await graphQLClient.query(
-      QueryOptions(
-        document: gql(AnilistQueries.searchMangaQuery),
-        variables: {
-          'query': query,
-        },
-      ),
-    );
-
-    if (result.hasException) {
-      // print("The exception is: " + result.exception.toString());
-    }
-
-    List<dynamic> resultData = result.data?['page']['media'];
-    List<SearchMangaResult> searchResults = [];
-
-    for (int i = 0; i < resultData.length; i++) {
-      searchResults.add(SearchMangaResult.fromJson(resultData[i]));
-    }
-
-    return searchResults;
-  }
-
-  Future<List<UserAnimeResult>> userAnimeQueryResult(String status) async {
-    QueryResult result = await graphQLClient.query(
-      QueryOptions(
-        document: gql(AnilistQueries.userAnimeQuery),
-        variables: {
-          'userId': Hive.box('anilistUser').get('anilistUserId'),
-          'status': MediaListStatus.values.byName(status).name,
-        },
-      ),
-    );
-
-    if (result.hasException) {
-      log("The exception is: ${result.exception}");
-    }
-
-    List<dynamic> resultData = result.data?['MediaListCollection']['lists'];
-    List<UserAnimeResult> userAnimeList = [];
-
-    for (int i = 0; i < resultData.length; i++) {
-      for (int j = 0; j < resultData[i]['entries'].length; j++) {
-        userAnimeList.add(UserAnimeResult.fromJson(resultData[i]['entries'][j]));
-      }
-    }
-
-    return userAnimeList;
-  }
-
-  Future<List<UserMangaResult>> userMangaQueryResult(String status) async {
-    QueryResult result = await graphQLClient.query(
-      QueryOptions(
-        document: gql(AnilistQueries.userMangaQuery),
-        variables: {
-          'userId': Hive.box('anilistUser').get('anilistUserId'),
-          'status': MediaListStatus.values.byName(status).name,
-        },
-      ),
-    );
-
-    if (result.hasException) {
-      log("The exception is: ${result.exception}");
-    }
-
-    List<dynamic> resultData = result.data?['MediaListCollection']['lists'];
-    List<UserMangaResult> userMangaList = [];
-
-    for (int i = 0; i < resultData.length; i++) {
-      for (int j = 0; j < resultData[i]['entries'].length; j++) {
-        userMangaList.add(UserMangaResult.fromJson(resultData[i]['entries'][j]));
-      }
-    }
-
-    return userMangaList;
+    return mediaResults;
   }
 
   void setUserAnimeLists(

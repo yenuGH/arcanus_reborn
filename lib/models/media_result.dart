@@ -15,10 +15,8 @@ class MediaResult {
   String coverImage;
   int episodes;
   int chapters;
-  int progress;
   Map<String, dynamic> nextAiringEpisode;
   String status;
-  String userStatus;
 
   MediaResult({
     required this.id,
@@ -33,10 +31,8 @@ class MediaResult {
     required this.coverImage,
     required this.episodes,
     required this.chapters,
-    required this.progress,
     required this.nextAiringEpisode,
     required this.status,
-    required this.userStatus,
   });
 
   factory MediaResult.fromJson(Map<String, dynamic> json) {
@@ -53,10 +49,8 @@ class MediaResult {
       coverImage: json['coverImage']['extraLarge'] as String? ?? "",
       episodes: json['episodes'] as int? ?? 0,
       chapters: json['chapters'] as int? ?? 0,
-      nextAiringEpisode: Map<String, dynamic>.from(json['media']['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
+      nextAiringEpisode: Map<String, dynamic>.from(json['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
       status: json['status'] as String? ?? "",
-      userStatus: json['mediaListEntry']['status'] as String? ?? "",
-      progress: json['mediaListEntry']['progress'] as int? ?? 0,
     );
 
     if (mediaResult.status == "RELEASING") {
