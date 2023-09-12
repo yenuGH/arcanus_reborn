@@ -9,6 +9,8 @@ sealed class MediaEntryState extends Equatable {
 
 final class MediaEntryInitialState extends MediaEntryState {}
 
+final class MediaEntryIdleState extends MediaEntryState {}
+
 final class MediaEntryLoadingState extends MediaEntryState {}
 
 final class MediaEntryLoadedState extends MediaEntryState {
@@ -18,6 +20,10 @@ final class MediaEntryLoadedState extends MediaEntryState {
 
   @override
   List<Object> get props => [mediaResult];
+}
+
+final class MediaEntryScoreUpdateState extends MediaEntryState {
+
 }
 
 final class MediaEntryErrorState extends MediaEntryState {}

@@ -19,6 +19,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   final MediaEntryBloc mediaEntryBloc = MediaEntryBloc();
   late MediaResult mediaEntryResult;
 
+  late double score;
+
   @override
   void initState() {
     super.initState();
@@ -27,67 +29,85 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<MediaEntryBloc, MediaEntryState>(
+    return BlocListener<MediaEntryBloc, MediaEntryState>(
       bloc: mediaEntryBloc,
       listener: (_, state) {
         if (state is MediaEntryLoadedState) {
           mediaEntryResult = state.mediaResult;
+
+          if (mediaEntryResult.inUserLists == true) {
+            score = mediaEntryResult.userScore!.toDouble();
+          } else {
+            score = 0;
+          }
         }
       },
-      builder: (blocContext, state) {
-        if (state is MediaEntryLoadedState){
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Edit"),
-              elevation: 0.0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.save),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.info),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MediaInfoPage(mediaResult: mediaEntryResult)));
-                  },
-                ),
-              ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Edit"),
+          elevation: 0.0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.save),
+              onPressed: () {},
             ),
-            body: Container(
-              padding: const EdgeInsets.all(10),
-              child: SingleChildScrollView(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      mediaHeader(),
-                      createSpacing(),
-                      createSpacing(),
-                      statusDropdownMenu(),
-                      createSpacing(),
-                      progressCounter(),
-                      createSpacing(),
-                      scoreCounter(),
-                    ]),
-              ),
+            IconButton(
+              icon: const Icon(Icons.info),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MediaInfoPage(mediaResult: widget.mediaResult)));
+              },
             ),
-          );
-        }
-        else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+          ],
+        ),
+        body: BlocBuilder<MediaEntryBloc, MediaEntryState>(
+          bloc: mediaEntryBloc,
+          builder: (_, state) {
+            switch (state.runtimeType) {
+              case (MediaEntryLoadedState || MediaEntryIdleState || MediaEntryScoreUpdateState):
+                {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            mediaHeader(),
+                            createSpacing(),
+                            scoreSlider(),
+                            statusDropdownMenu(),
+                            createSpacing(),
+                            createSpacing(),
+                            progressCounter(),
+                          ]),
+                    ),
+                  );
+                }
+              case (MediaEntryErrorState):
+                {
+                  return const Center(
+                    child: Text("Error, please restart the app."),
+                  );
+                }
+              default:
+                {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+            }
+          },
+        ),
+      ),
     );
   }
 
@@ -340,71 +360,35 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     );
   }
 
-  Widget scoreCounter() {
-    int score = mediaEntryResult.inUserLists
-        ? mediaEntryResult.userScore!
-        : 0;
-
-    return BlocBuilder<MediaEntryBloc, MediaEntryState>(
-      bloc: mediaEntryBloc,
-      builder: (_, state) {
-        return Container(
-          alignment: Alignment.topLeft,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Score: "),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        width: 100,
-                        height: 60,
-                        decoration: customBoxDecoration(),
-                        child: Text(
-                          mediaEntryResult.userScore.toString(),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.remove),
-                        splashRadius: 500,
-                        onPressed: () {
-                          setState(() {
-                            score--;
-                          });
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        splashRadius: 500,
-                        onPressed: () {
-                          setState(() {
-                            score--;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
+  Widget scoreSlider() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("Rating"),
+        const SizedBox(
+          height: 5,
+        ),
+        BlocBuilder<MediaEntryBloc, MediaEntryState>(
+          bloc: mediaEntryBloc,
+          buildWhen: (previous, current) {
+            return (previous == current);
+          },
+          builder: (context, state) {
+            return Slider(
+              value: score,
+              max: 10,
+              activeColor: Colors.white,
+              divisions: 20,
+              label: score.toString(),
+              onChanged: (value) {
+                score = value;
+                mediaEntryBloc.add(MediaEntryScoreUpdateEvent());
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }

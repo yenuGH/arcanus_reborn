@@ -16,8 +16,10 @@ final class MediaEntryInitialEvent extends MediaEntryEvent {
   List<Object> get props => [mediaResult];
 }
 
-final class MediaEntryUpdateStatusEvent extends MediaEntryEvent {}
+final class MediaEntryStatusUpdateEvent extends MediaEntryEvent {}
 
 final class MediaEntryProgressUpdateEvent extends MediaEntryEvent {}
+
+final class MediaEntryScoreUpdateEvent extends MediaEntryEvent {}
 
 final class MediaEntrySaveEvent extends MediaEntryEvent {}

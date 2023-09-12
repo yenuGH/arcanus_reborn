@@ -1,3 +1,4 @@
+import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/pages/media_entry_page.dart.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _MediaInfoPageState extends State<MediaInfoPage> {
 
               createSpacing(),
 
-              widget.mediaResult.mediaType == "ANIME" ? mediaEpisodes() : mediaChapters(),
+              widget.mediaResult.mediaType == MediaType.ANIME ? mediaEpisodes() : mediaChapters(),
 
               createSpacing(),
             ]
