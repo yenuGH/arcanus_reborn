@@ -20,6 +20,7 @@ class MediaResult {
   String? userStatus;
   int? userProgress;
   int? userScore;
+  late bool inUserLists;
 
   MediaResult({
     required this.id,
@@ -60,12 +61,13 @@ class MediaResult {
       mediaResult.userStatus = json['mediaListEntry']['status'] as String? ?? "";
       mediaResult.userProgress = json['mediaListEntry']['progress'] as int? ?? 0;
       mediaResult.userScore = json['mediaListEntry']['score'] as int? ?? 0;
+      mediaResult.inUserLists = true;
     }
     catch (e) {
-      mediaResult.userStatus = "";
-      mediaResult.userProgress = 0;
-      mediaResult.userScore = 0;
-      //log("Media not in user's lists - Exception: $e");
+      mediaResult.userStatus = null;
+      mediaResult.userProgress = null;
+      mediaResult.userScore = null;
+      mediaResult.inUserLists = false;
     }
 
     if (mediaResult.status == "RELEASING") {

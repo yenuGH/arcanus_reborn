@@ -16,17 +16,6 @@ class MediaEntryPage extends StatefulWidget {
 class _MediaEntryPageState extends State<MediaEntryPage> {
   final MediaEntryBloc mediaEntryBloc = MediaEntryBloc();
 
-  final List<String> _statusItems = [
-    "CURRENT",
-    "PLANNING",
-    "COMPLETED",
-    "DROPPED",
-    "PAUSED"
-  ];
-  late String _dropdownValue;
-
-  late int episodesWatched;
-
   @override
   void initState() {
     super.initState();
@@ -76,11 +65,11 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
                   createSpacing(),
 
-                  // statusDropdownMenu(),
+                  statusDropdownMenu(),
 
                   createSpacing(),
 
-                  // progressCounter(),
+                  progressCounter(),
                 ]),
           ),
         ),
@@ -220,8 +209,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     List<DropdownMenuEntry<String>> statusDropdownMenuItems = [];
 
     for (String statusValue in statusValues) {
-      statusDropdownMenuItems
-          .add(DropdownMenuEntry(value: statusValue, label: statusValue));
+      statusDropdownMenuItems.add(DropdownMenuEntry(value: statusValue, label: statusValue));
     }
 
     return Container(
@@ -238,7 +226,6 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
               dropdownMenuEntries: statusDropdownMenuItems,
               onSelected: (String? value) {
                 setState(() {
-                  _dropdownValue = value!;
                 });
               },
               inputDecorationTheme: const InputDecorationTheme(
@@ -264,14 +251,13 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget progressCounter() {
-    episodesWatched = widget.mediaResult.progress;
-
-    String mediaProgressTitle = widget.mediaResult.type == "ANIME"
+    int progress = widget.mediaResult.inUserLists ? widget.mediaResult.progress : 0;
+    String mediaProgressTitle = widget.mediaResult.mediaType == "ANIME"
         ? "Episodes watched: "
         : "Chapters read: ";
-    String mediaProgressCounter = widget.mediaResult.type == "ANIME"
-        ? "${widget.mediaResult.progress}/${widget.mediaResult.episodes}"
-        : "${widget.mediaResult.progress}/${widget.mediaResult.chapters}";
+    String mediaProgressCounter = widget.mediaResult.mediaType == "ANIME"
+        ? "$progress/${widget.mediaResult.episodes}"
+        : "$progress/${widget.mediaResult.chapters}";
 
     return Container(
       alignment: Alignment.topLeft,
@@ -309,7 +295,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     splashRadius: 500,
                     onPressed: () {
                       setState(() {
-                        episodesWatched--;
+                        
                       });
                     },
                   ),
@@ -318,7 +304,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     splashRadius: 500,
                     onPressed: () {
                       setState(() {
-                        episodesWatched++;
+                        
                       });
                     },
                   ),
