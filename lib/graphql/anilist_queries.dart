@@ -96,4 +96,34 @@ class AnilistQueries {
       }
     }
   ''';
+
+  static String mediaEntryQuery = r'''
+    query mediaEntryQuery($mediaId: Int!) {
+      Media(id: $mediaId) {
+        id
+        type
+        title {
+          userPreferred
+          native
+          romaji
+          english
+        }
+        coverImage {
+          extraLarge
+        }
+        description
+        genres
+        averageScore
+        status
+        episodes
+        chapters
+        mediaListEntry {
+          id
+          status
+          score
+          progress
+        }
+      }
+    }
+  ''';
 }

@@ -14,7 +14,7 @@ class MediaEntryPage extends StatefulWidget {
 }
 
 class _MediaEntryPageState extends State<MediaEntryPage> {
-  final MediaEntryBloc animeEditBloc = MediaEntryBloc();
+  final MediaEntryBloc mediaEntryBloc = MediaEntryBloc();
 
   final List<String> _statusItems = [
     "CURRENT",
@@ -30,12 +30,13 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   @override
   void initState() {
     super.initState();
+    mediaEntryBloc.add(MediaEntryInitialEvent(widget.mediaResult));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => animeEditBloc,
+      create: (context) => mediaEntryBloc,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Edit"),

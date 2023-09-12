@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_this
-
 import 'package:arcanus_reborn/constants/enums.dart';
 
 class MediaResult {
@@ -17,6 +16,10 @@ class MediaResult {
   int chapters;
   Map<String, dynamic> nextAiringEpisode;
   String status;
+
+  String? userStatus;
+  int? userProgress;
+  int? userScore;
 
   MediaResult({
     required this.id,
@@ -52,6 +55,18 @@ class MediaResult {
       nextAiringEpisode: Map<String, dynamic>.from(json['nextAiringEpisode'] as Map<String, dynamic>? ?? {}),
       status: json['status'] as String? ?? "",
     );
+
+    try {
+      mediaResult.userStatus = json['mediaListEntry']['status'] as String? ?? "";
+      mediaResult.userProgress = json['mediaListEntry']['progress'] as int? ?? 0;
+      mediaResult.userScore = json['mediaListEntry']['score'] as int? ?? 0;
+    }
+    catch (e) {
+      mediaResult.userStatus = "";
+      mediaResult.userProgress = 0;
+      mediaResult.userScore = 0;
+      //log("Media not in user's lists - Exception: $e");
+    }
 
     if (mediaResult.status == "RELEASING") {
       mediaResult.status = "RELEASING";

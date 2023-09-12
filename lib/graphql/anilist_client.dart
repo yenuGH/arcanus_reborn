@@ -121,6 +121,26 @@ class AnilistClient {
     return mediaResults;
   }
 
+  Future<MediaResult> mediaEntryQuery(MediaType mediaType, int mediaId) async {
+    QueryResult result = await graphQLClient.query(
+      QueryOptions(
+        document: gql(AnilistQueries.mediaEntryQuery),
+        variables: {
+          'mediaId': mediaId,
+          'type': mediaType.name,
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      log("The exception is: ${result.exception}");
+    }
+
+    Map<String, dynamic> resultData = result.data?['Media'];
+
+    return MediaResult.fromJson(resultData);
+  }
+
   void setUserAnimeLists(
     List<MediaListResult> userAnimeListCurrent,
     List<MediaListResult> userAnimeListPlanning,
