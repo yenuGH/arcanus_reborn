@@ -1,5 +1,4 @@
-
-import 'package:arcanus_reborn/pages/anime/anime_edit_page.dart';
+import 'package:arcanus_reborn/pages/media_entry_page.dart.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -31,7 +30,12 @@ class _MediaInfoPageState extends State<MediaInfoPage> {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => MediaEntryPage(mediaResult: widget.mediaResult)
+                )
+              );
             },
           )
         ],

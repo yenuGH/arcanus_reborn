@@ -1,7 +1,7 @@
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/models/media_list_result.dart';
-import 'package:arcanus_reborn/widgets/anime/user_anime_card.dart';
+import 'package:arcanus_reborn/widgets/media_list_card.dart';
 import 'package:flutter/material.dart';
 
 class AnimeView extends StatelessWidget {
@@ -47,7 +47,7 @@ class AnimeView extends StatelessWidget {
     return ListView.builder(
       itemCount: animeList.length,
       itemBuilder: (context, index) {
-        return UserAnimeCard(animeResult: animeList[index]);
+        return MediaListCard(mediaResult: animeList[index]);
       },
     );
   }
