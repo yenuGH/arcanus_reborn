@@ -102,6 +102,7 @@ class AppDrawer extends Drawer {
               Navigator.of(context).pushNamed("/search_page");
             }
           ),
+          const Divider(),
           ListTile(
             trailing: const Icon(Icons.settings),
             title: const Text(

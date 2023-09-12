@@ -83,11 +83,11 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                           children: <Widget>[
                             mediaHeader(),
                             createSpacing(),
-                            scoreSlider(),
                             statusDropdownMenu(),
                             createSpacing(),
-                            createSpacing(),
                             progressCounter(),
+                            createSpacing(),
+                            scoreSlider(),
                           ]),
                     ),
                   );
@@ -285,75 +285,54 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget progressCounter() {
-    String progress = mediaEntryResult.inUserLists
-        ? mediaEntryResult.userProgress.toString()
-        : 0.toString();
-    String total;
-    if (mediaEntryResult.mediaType == MediaType.ANIME) {
-      total = mediaEntryResult.episodes == 0
-          ? "?"
-          : mediaEntryResult.episodes.toString();
-    } else {
-      total = mediaEntryResult.chapters == 0
-          ? "?"
-          : mediaEntryResult.chapters.toString();
-    }
-
-    String mediaProgressTitle = mediaEntryResult.mediaType == MediaType.ANIME
-        ? "Episodes watched: "
-        : "Chapters read: ";
-    String mediaProgressCounter = mediaEntryResult.mediaType == MediaType.ANIME
-        ? "$progress/$total"
-        : "$progress/$total";
-
     return Container(
       alignment: Alignment.topLeft,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(mediaProgressTitle),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 100,
-                    height: 60,
-                    decoration: customBoxDecoration(),
-                    child: Text(
-                      mediaProgressCounter,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget> [
+          const Text("Progress: "),
+          
+          const SizedBox(
+            height: 5,
+          ),
+
+          Container(
+            alignment: Alignment.center,
+            height: 60,
+            decoration: customBoxDecoration(),
+            child: Row(
+              children: [
+                const Spacer(),
+
+                Text(
+                  mediaEntryResult.userProgress.toString(),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(
-                    width: 10,
+                ),
+
+                const Spacer(),
+
+                const VerticalDivider(
+                  color: Colors.white,
+                  indent: 10,
+                  endIndent: 10,
+                ),
+
+                const Spacer(),
+
+                Text(
+                  mediaEntryResult.mediaType == MediaType.ANIME ? mediaEntryResult.episodes.toString() : mediaEntryResult.chapters.toString(),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    splashRadius: 500,
-                    onPressed: () {
-                      setState(() {});
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    splashRadius: 500,
-                    onPressed: () {
-                      setState(() {});
-                    },
-                  ),
-                ],
-              ),
-            ],
+                ),
+
+                const Spacer(),
+              ],
+            ),
           ),
         ],
       ),
@@ -365,7 +344,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Rating"),
+        const Text("Rating: "),
         const SizedBox(
           height: 5,
         ),
