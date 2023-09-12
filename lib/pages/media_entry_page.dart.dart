@@ -3,6 +3,7 @@ import 'package:arcanus_reborn/controllers/blocs/media_entry/media_entry_bloc.da
 import 'package:arcanus_reborn/models/media_result.dart';
 import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -18,6 +19,9 @@ class MediaEntryPage extends StatefulWidget {
 class _MediaEntryPageState extends State<MediaEntryPage> {
   final MediaEntryBloc mediaEntryBloc = MediaEntryBloc();
   late MediaResult mediaEntryResult;
+
+  late int progress = mediaEntryResult.userProgress ?? 0;
+  late TextEditingController progressTextController;
 
   late double score;
 
@@ -42,70 +46,73 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           }
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Edit"),
-          elevation: 0.0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.save),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.info),
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text("Edit"),
+            elevation: 0.0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MediaInfoPage(mediaResult: widget.mediaResult)));
+                Navigator.pop(context);
               },
             ),
-          ],
-        ),
-        body: BlocBuilder<MediaEntryBloc, MediaEntryState>(
-          bloc: mediaEntryBloc,
-          builder: (_, state) {
-            switch (state.runtimeType) {
-              case (MediaEntryLoadedState || MediaEntryIdleState || MediaEntryScoreUpdateState):
-                {
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    child: SingleChildScrollView(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            mediaHeader(),
-                            createSpacing(),
-                            statusDropdownMenu(),
-                            createSpacing(),
-                            progressCounter(),
-                            createSpacing(),
-                            scoreSlider(),
-                          ]),
-                    ),
-                  );
-                }
-              case (MediaEntryErrorState):
-                {
-                  return const Center(
-                    child: Text("Error, please restart the app."),
-                  );
-                }
-              default:
-                {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-            }
-          },
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.save),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.info),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MediaInfoPage(mediaResult: widget.mediaResult)));
+                },
+              ),
+            ],
+          ),
+          body: BlocBuilder<MediaEntryBloc, MediaEntryState>(
+            bloc: mediaEntryBloc,
+            builder: (_, state) {
+              switch (state.runtimeType) {
+                case (MediaEntryLoadedState || MediaEntryIdleState || MediaEntryScoreUpdateState):
+                  {
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      child: SingleChildScrollView(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              mediaHeader(),
+                              createSpacing(),
+                              statusDropdownMenu(),
+                              createSpacing(),
+                              progressCounter(),
+                              createSpacing(),
+                              scoreSlider(),
+                            ]),
+                      ),
+                    );
+                  }
+                case (MediaEntryErrorState):
+                  {
+                    return const Center(
+                      child: Text("Error, please restart the app."),
+                    );
+                  }
+                default:
+                  {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+              }
+            },
+          ),
         ),
       ),
     );
@@ -285,6 +292,11 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget progressCounter() {
+    String episodeCount = widget.mediaResult.episodes == 0 ? "?" : widget.mediaResult.episodes.toString();
+    String chapterCount = widget.mediaResult.chapters == 0 ? "?" : widget.mediaResult.chapters.toString();
+
+    progressTextController = TextEditingController(text: progress.toString());
+
     return Container(
       alignment: Alignment.topLeft,
       child: Column(
@@ -301,14 +313,50 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             height: 60,
             decoration: customBoxDecoration(),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const Spacer(),
 
-                Text(
-                  mediaEntryResult.userProgress.toString(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                SizedBox(
+                  width: 150,
+                  child: TextField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    controller: progressTextController,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onChanged: (value) {
+                      if (value == ""){
+                        value = "0";
+                      }
+                      if (mediaEntryResult.episodes != 0 || mediaEntryResult.chapters != 0){
+                        if (int.parse(value) > mediaEntryResult.episodes && int.parse(value) > mediaEntryResult.chapters){
+                          value = mediaEntryResult.mediaType == MediaType.ANIME ? mediaEntryResult.episodes.toString() : mediaEntryResult.chapters.toString();
+                        }
+                      }
+                      progress = int.parse(value);
+                      progressTextController.text = progress.toString();
+                    },
+                    onSubmitted: (value) {
+                      if (value == ""){
+                        value = "0";
+                      }
+                      if (mediaEntryResult.episodes != 0 || mediaEntryResult.chapters != 0){
+                        if (int.parse(value) > mediaEntryResult.episodes && int.parse(value) > mediaEntryResult.chapters){
+                          value = mediaEntryResult.mediaType == MediaType.ANIME ? mediaEntryResult.episodes.toString() : mediaEntryResult.chapters.toString();
+                        }
+                      }
+                      progress = int.parse(value);
+                      progressTextController.text = progress.toString();
+                    },
                   ),
                 ),
 
@@ -322,17 +370,72 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
                 const Spacer(),
 
-                Text(
-                  mediaEntryResult.mediaType == MediaType.ANIME ? mediaEntryResult.episodes.toString() : mediaEntryResult.chapters.toString(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                SizedBox(
+                  width: 150,
+                  child: Text(
+                    mediaEntryResult.mediaType == MediaType.ANIME ? episodeCount : chapterCount,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
 
                 const Spacer(),
               ],
             ),
+          ),
+
+          const SizedBox(
+            height: 5,
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 30,
+              ),
+              IconButton(
+                iconSize: 35,
+                icon: const Icon(Icons.remove),
+                onPressed: () {
+                  progress--;
+                  if (progress < 0){
+                    progress = 0;
+                  }
+                  progressTextController.text = progress.toString();
+                },
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+              IconButton(
+                iconSize: 35,
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  progress++;
+                  if (mediaEntryResult.episodes != 0 || mediaEntryResult.chapters != 0){
+                    if (progress > mediaEntryResult.episodes && progress > mediaEntryResult.chapters){
+                      progress = mediaEntryResult.mediaType == MediaType.ANIME ? mediaEntryResult.episodes : mediaEntryResult.chapters;
+                    }
+                  }
+                  progressTextController.text = progress.toString();
+                },
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: (){
+                  progress = mediaEntryResult.userProgress ?? 0;
+                  progressTextController.text = progress.toString();
+                }, 
+                child: const Text("Reset")
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+            ],
           ),
         ],
       ),
