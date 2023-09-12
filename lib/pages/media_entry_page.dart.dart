@@ -1,6 +1,7 @@
-
+import 'package:arcanus_reborn/controllers/blocs/media_entry/media_entry_bloc.dart';
 import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class MediaEntryPage extends StatefulWidget {
@@ -13,62 +14,73 @@ class MediaEntryPage extends StatefulWidget {
 }
 
 class _MediaEntryPageState extends State<MediaEntryPage> {
-  final List<String> _statusItems = ["CURRENT", "PLANNING", "COMPLETED", "DROPPED", "PAUSED"];
-  String? _dropdownValue;
+  final MediaEntryBloc animeEditBloc = MediaEntryBloc();
+
+  final List<String> _statusItems = [
+    "CURRENT",
+    "PLANNING",
+    "COMPLETED",
+    "DROPPED",
+    "PAUSED"
+  ];
+  late String _dropdownValue;
 
   late int episodesWatched;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit"),
-        elevation: 0.0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return BlocProvider(
+      create: (context) => animeEditBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Edit"),
+          elevation: 0.0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.save),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: const Icon(Icons.info),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MediaInfoPage(mediaResult: widget.mediaResult)));
+              },
+            ),
+          ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.info),
-            onPressed: () {
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => MediaInfoPage(mediaResult: widget.mediaResult)
-                )
-              );
-            },
-          ),
-        ],
-      ),
+        body: Container(
+          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  mediaHeader(),
 
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              mediaHeader(),
+                  createSpacing(),
 
-              createSpacing(),
+                  createSpacing(),
 
-              createSpacing(),
+                  // statusDropdownMenu(),
 
-              // statusDropdownMenu(),
-              
-              createSpacing(),
+                  createSpacing(),
 
-              // progressCounter(),
-            ]
+                  // progressCounter(),
+                ]),
           ),
         ),
       ),
@@ -97,15 +109,13 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     );
   }
 
-  Widget mediaAverageScore () {
+  Widget mediaAverageScore() {
     return Row(
       children: <Widget>[
         const Icon(Icons.star_border),
-
         Container(
           width: 10,
         ),
-
         Text(
           widget.mediaResult.averageScore.toString(),
           style: const TextStyle(
@@ -117,7 +127,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     );
   }
 
-  Widget mediaAverageScoreRatingBar () {
+  Widget mediaAverageScoreRatingBar() {
     return RatingBar(
       initialRating: widget.mediaResult.averageScore.toDouble() / 20,
       direction: Axis.horizontal,
@@ -171,44 +181,46 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget> [
-          coverImage(),
-
-          createSpacing(),
-    
-          SizedBox(
-            width: 190,
-            height: 250,
-            child: ListView(
-              children: <Widget>[
-                mediaTitleUserPreferred(),
-                Container(
-                  height: 5,
-                ),
-                mediaAverageScoreRatingBar(),
-                createSpacing(),
-                const Text("Alternative titles: "),
-                mediaTitleAlternatives(widget.mediaResult.titleEnglish),
-                mediaTitleAlternatives(widget.mediaResult.titleRomaji),
-                mediaTitleAlternatives(widget.mediaResult.titleNative),
-              ],
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            coverImage(),
+            createSpacing(),
+            SizedBox(
+              width: 190,
+              height: 250,
+              child: ListView(
+                children: <Widget>[
+                  mediaTitleUserPreferred(),
+                  Container(
+                    height: 5,
+                  ),
+                  mediaAverageScoreRatingBar(),
+                  createSpacing(),
+                  const Text("Alternative titles: "),
+                  mediaTitleAlternatives(widget.mediaResult.titleEnglish),
+                  mediaTitleAlternatives(widget.mediaResult.titleRomaji),
+                  mediaTitleAlternatives(widget.mediaResult.titleNative),
+                ],
+              ),
             ),
-          ),
-        ]
-      ),
+          ]),
     );
   }
 
   Widget statusDropdownMenu() {
-    List<String> statusValues = ["CURRENT", "PLANNING", "COMPLETED", "DROPPED", "PAUSED"];
+    List<String> statusValues = [
+      "CURRENT",
+      "PLANNING",
+      "COMPLETED",
+      "DROPPED",
+      "PAUSED"
+    ];
     List<DropdownMenuEntry<String>> statusDropdownMenuItems = [];
 
-    for (String statusValue in statusValues){
-      statusDropdownMenuItems.add(
-        DropdownMenuEntry(value: statusValue, label: statusValue)
-      );
+    for (String statusValue in statusValues) {
+      statusDropdownMenuItems
+          .add(DropdownMenuEntry(value: statusValue, label: statusValue));
     }
 
     return Container(
@@ -217,31 +229,28 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text("Status: "),
-
           const SizedBox(
             height: 5,
           ),
-
           DropdownMenu<String>(
-            initialSelection: widget.mediaResult.userStatus,
-            dropdownMenuEntries: statusDropdownMenuItems,
-            onSelected: (String? value) {
-              setState(() {
-                _dropdownValue = value;
-              });
-            },
-            inputDecorationTheme: const InputDecorationTheme(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-            )
-          ),
+              initialSelection: widget.mediaResult.userStatus,
+              dropdownMenuEntries: statusDropdownMenuItems,
+              onSelected: (String? value) {
+                setState(() {
+                  _dropdownValue = value!;
+                });
+              },
+              inputDecorationTheme: const InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                ),
+              )),
         ],
       ),
     );
   }
 
-  BoxDecoration customBoxDecoration () {
+  BoxDecoration customBoxDecoration() {
     return const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       border: Border(
@@ -256,8 +265,12 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   Widget progressCounter() {
     episodesWatched = widget.mediaResult.progress;
 
-    String mediaProgressTitle = widget.mediaResult.type == "ANIME" ? "Episodes watched: " : "Chapters read: ";
-    String mediaProgressCounter = widget.mediaResult.type == "ANIME" ? "${widget.mediaResult.progress}/${widget.mediaResult.episodes}" : "${widget.mediaResult.progress}/${widget.mediaResult.chapters}";
+    String mediaProgressTitle = widget.mediaResult.type == "ANIME"
+        ? "Episodes watched: "
+        : "Chapters read: ";
+    String mediaProgressCounter = widget.mediaResult.type == "ANIME"
+        ? "${widget.mediaResult.progress}/${widget.mediaResult.episodes}"
+        : "${widget.mediaResult.progress}/${widget.mediaResult.chapters}";
 
     return Container(
       alignment: Alignment.topLeft,
@@ -269,18 +282,16 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(mediaProgressTitle),
-
               const SizedBox(
                 height: 5,
               ),
-              
               Row(
                 children: [
                   Container(
                     alignment: Alignment.center,
                     width: 100,
                     height: 60,
-                    decoration: customBoxDecoration(), 
+                    decoration: customBoxDecoration(),
                     child: Text(
                       mediaProgressCounter,
                       style: const TextStyle(
@@ -289,11 +300,9 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(
                     width: 10,
                   ),
-
                   IconButton(
                     icon: const Icon(Icons.remove),
                     splashRadius: 500,
@@ -303,7 +312,6 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                       });
                     },
                   ),
-
                   IconButton(
                     icon: const Icon(Icons.add),
                     splashRadius: 500,
