@@ -1,4 +1,6 @@
+import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/blocs/media_entry/media_entry_bloc.dart';
+import 'package:arcanus_reborn/models/media_result.dart';
 import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +17,7 @@ class MediaEntryPage extends StatefulWidget {
 
 class _MediaEntryPageState extends State<MediaEntryPage> {
   final MediaEntryBloc mediaEntryBloc = MediaEntryBloc();
+  late MediaResult mediaEntryResult;
 
   @override
   void initState() {
@@ -24,56 +27,67 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => mediaEntryBloc,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Edit"),
-          elevation: 0.0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.save),
-              onPressed: () {},
+    return BlocConsumer<MediaEntryBloc, MediaEntryState>(
+      bloc: mediaEntryBloc,
+      listener: (_, state) {
+        if (state is MediaEntryLoadedState) {
+          mediaEntryResult = state.mediaResult;
+        }
+      },
+      builder: (blocContext, state) {
+        if (state is MediaEntryLoadedState){
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Edit"),
+              elevation: 0.0,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.save),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.info),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MediaInfoPage(mediaResult: mediaEntryResult)));
+                  },
+                ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.info),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MediaInfoPage(mediaResult: widget.mediaResult)));
-              },
+            body: Container(
+              padding: const EdgeInsets.all(10),
+              child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      mediaHeader(),
+                      createSpacing(),
+                      createSpacing(),
+                      statusDropdownMenu(),
+                      createSpacing(),
+                      progressCounter(),
+                      createSpacing(),
+                      scoreCounter(),
+                    ]),
+              ),
             ),
-          ],
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  mediaHeader(),
-
-                  createSpacing(),
-
-                  createSpacing(),
-
-                  statusDropdownMenu(),
-
-                  createSpacing(),
-
-                  progressCounter(),
-                ]),
-          ),
-        ),
-      ),
+          );
+        }
+        else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
@@ -92,7 +106,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         child: Image.network(
-          widget.mediaResult.coverImage,
+          mediaEntryResult.coverImage,
           fit: BoxFit.fill,
         ),
       ),
@@ -107,7 +121,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           width: 10,
         ),
         Text(
-          widget.mediaResult.averageScore.toString(),
+          mediaEntryResult.averageScore.toString(),
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -119,7 +133,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
   Widget mediaAverageScoreRatingBar() {
     return RatingBar(
-      initialRating: widget.mediaResult.averageScore.toDouble() / 20,
+      initialRating: mediaEntryResult.averageScore.toDouble() / 20,
       direction: Axis.horizontal,
       allowHalfRating: true,
       itemCount: 5,
@@ -137,7 +151,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
   Widget mediaTitleUserPreferred() {
     return Text(
-      widget.mediaResult.titleUserPreferred,
+      mediaEntryResult.titleUserPreferred,
       style: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
@@ -159,7 +173,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     return Container(
       alignment: Alignment.topLeft,
       child: Text(
-        "Status: ${widget.mediaResult.status}",
+        "Status: ${mediaEntryResult.status}",
         style: const TextStyle(
           fontSize: 15,
         ),
@@ -188,9 +202,9 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                   mediaAverageScoreRatingBar(),
                   createSpacing(),
                   const Text("Alternative titles: "),
-                  mediaTitleAlternatives(widget.mediaResult.titleEnglish),
-                  mediaTitleAlternatives(widget.mediaResult.titleRomaji),
-                  mediaTitleAlternatives(widget.mediaResult.titleNative),
+                  mediaTitleAlternatives(mediaEntryResult.titleEnglish),
+                  mediaTitleAlternatives(mediaEntryResult.titleRomaji),
+                  mediaTitleAlternatives(mediaEntryResult.titleNative),
                 ],
               ),
             ),
@@ -209,7 +223,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     List<DropdownMenuEntry<String>> statusDropdownMenuItems = [];
 
     for (String statusValue in statusValues) {
-      statusDropdownMenuItems.add(DropdownMenuEntry(value: statusValue, label: statusValue));
+      statusDropdownMenuItems
+          .add(DropdownMenuEntry(value: statusValue, label: statusValue));
     }
 
     return Container(
@@ -222,11 +237,10 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             height: 5,
           ),
           DropdownMenu<String>(
-              initialSelection: widget.mediaResult.userStatus,
+              initialSelection: mediaEntryResult.userStatus,
               dropdownMenuEntries: statusDropdownMenuItems,
               onSelected: (String? value) {
-                setState(() {
-                });
+                setState(() {});
               },
               inputDecorationTheme: const InputDecorationTheme(
                 border: OutlineInputBorder(
@@ -251,13 +265,26 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget progressCounter() {
-    int progress = widget.mediaResult.inUserLists ? widget.mediaResult.progress : 0;
-    String mediaProgressTitle = widget.mediaResult.mediaType == "ANIME"
+    String progress = mediaEntryResult.inUserLists
+        ? mediaEntryResult.userProgress.toString()
+        : 0.toString();
+    String total;
+    if (mediaEntryResult.mediaType == MediaType.ANIME) {
+      total = mediaEntryResult.episodes == 0
+          ? "?"
+          : mediaEntryResult.episodes.toString();
+    } else {
+      total = mediaEntryResult.chapters == 0
+          ? "?"
+          : mediaEntryResult.chapters.toString();
+    }
+
+    String mediaProgressTitle = mediaEntryResult.mediaType == MediaType.ANIME
         ? "Episodes watched: "
         : "Chapters read: ";
-    String mediaProgressCounter = widget.mediaResult.mediaType == "ANIME"
-        ? "$progress/${widget.mediaResult.episodes}"
-        : "$progress/${widget.mediaResult.chapters}";
+    String mediaProgressCounter = mediaEntryResult.mediaType == MediaType.ANIME
+        ? "$progress/$total"
+        : "$progress/$total";
 
     return Container(
       alignment: Alignment.topLeft,
@@ -294,18 +321,14 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     icon: const Icon(Icons.remove),
                     splashRadius: 500,
                     onPressed: () {
-                      setState(() {
-                        
-                      });
+                      setState(() {});
                     },
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
                     splashRadius: 500,
                     onPressed: () {
-                      setState(() {
-                        
-                      });
+                      setState(() {});
                     },
                   ),
                 ],
@@ -314,6 +337,74 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget scoreCounter() {
+    int score = mediaEntryResult.inUserLists
+        ? mediaEntryResult.userScore!
+        : 0;
+
+    return BlocBuilder<MediaEntryBloc, MediaEntryState>(
+      bloc: mediaEntryBloc,
+      builder: (_, state) {
+        return Container(
+          alignment: Alignment.topLeft,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Score: "),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 100,
+                        height: 60,
+                        decoration: customBoxDecoration(),
+                        child: Text(
+                          mediaEntryResult.userScore.toString(),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.remove),
+                        splashRadius: 500,
+                        onPressed: () {
+                          setState(() {
+                            score--;
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        splashRadius: 500,
+                        onPressed: () {
+                          setState(() {
+                            score--;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

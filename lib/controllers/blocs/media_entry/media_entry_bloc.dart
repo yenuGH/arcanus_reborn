@@ -20,11 +20,6 @@ class MediaEntryBloc extends Bloc<MediaEntryEvent, MediaEntryState> {
     final dynamic mediaResult = event.mediaResult;
     MediaResult mediaEntryQueryResult = await AnilistClient().mediaEntryQuery(mediaResult.mediaType, mediaResult.id);
 
-    log("Media name: ${mediaEntryQueryResult.titleUserPreferred}");
-    log("Media status: ${mediaEntryQueryResult.userStatus}");
-    log("Media progress: ${mediaEntryQueryResult.userProgress}");
-    log("Media score: ${mediaEntryQueryResult.userScore}");
-
-    emit(MediaEntryLoadedState());
+    emit(MediaEntryLoadedState(mediaEntryQueryResult));
   }
 }
