@@ -94,6 +94,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                               progressCounter(),
                               createSpacing(),
                               scoreSlider(),
+                              createSpacing(),
+                              startEndDates(),
                             ]),
                       ),
                     );
@@ -471,6 +473,70 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           },
         ),
       ],
+    );
+  }
+
+  Widget startEndDates() {
+    return Container(
+      alignment: Alignment.topLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget> [
+          const Text("Start Date | End Date: "),
+          
+          const SizedBox(
+            height: 5,
+          ),
+
+          Container(
+            alignment: Alignment.center,
+            height: 60,
+            decoration: customBoxDecoration(),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Spacer(),
+
+                SizedBox(
+                  width: 150,
+                  child: Text(
+                    "Start Date",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                Spacer(),
+
+                VerticalDivider(
+                  color: Colors.white,
+                  indent: 10,
+                  endIndent: 10,
+                ),
+
+                Spacer(),
+
+                SizedBox(
+                  width: 150,
+                  child: Text(
+                    "End Date",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                Spacer(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
