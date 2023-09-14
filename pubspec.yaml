@@ -52,6 +52,7 @@ dependencies:
   bordered_text: ^2.0.0
   stroke_text: ^0.0.2
   dropdown_button2: ^2.3.9
+  calendar_date_picker2: ^0.5.3
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/blocs/media_entry/media_entry_bloc.dart';
 import 'package:arcanus_reborn/models/media_result.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 
 class MediaEntryPage extends StatefulWidget {
   const MediaEntryPage({super.key, required this.mediaResult});
@@ -477,6 +480,9 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget startEndDates() {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String startDate = formatter.format(DateTime.now());
+
     return Container(
       alignment: Alignment.topLeft,
       child: Column(
@@ -492,46 +498,72 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             alignment: Alignment.center,
             height: 60,
             decoration: customBoxDecoration(),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Spacer(),
+                const Spacer(),
 
-                SizedBox(
-                  width: 150,
-                  child: Text(
-                    "Start Date",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    textAlign: TextAlign.center,
+                InkWell(
+                  customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
+                  child: Container(
+                    width: 150,
+                    height: 30,
+                    alignment: Alignment.center,
+                    child: Text(
+                      startDate,
+                    ),
+                  ),
+                  onTap: () async {
+                    DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      log(picked.toString());
+                    }
+                  },
                 ),
 
-                Spacer(),
+                const Spacer(),
 
-                VerticalDivider(
+                const VerticalDivider(
                   color: Colors.white,
                   indent: 10,
                   endIndent: 10,
                 ),
 
-                Spacer(),
+                const Spacer(),
 
-                SizedBox(
-                  width: 150,
-                  child: Text(
-                    "End Date",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    textAlign: TextAlign.center,
+                InkWell(
+                  customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
+                  child: Container(
+                    width: 150,
+                    height: 30,
+                    alignment: Alignment.center,
+                    child: Text(
+                      startDate,
+                    ),
+                  ),
+                  onTap: () async {
+                    DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      log(picked.toString());
+                    }
+                  },
                 ),
 
-                Spacer(),
+                const Spacer(),
               ],
             ),
           ),
