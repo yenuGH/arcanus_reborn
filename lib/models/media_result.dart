@@ -22,6 +22,9 @@ class MediaResult {
   int? userScore;
   late bool inUserLists;
 
+  Map<String, dynamic>? startedAt;
+  Map<String, dynamic>? completedAt;
+  
   MediaResult({
     required this.id,
     required this.mediaType,
@@ -69,6 +72,9 @@ class MediaResult {
       mediaResult.userScore = null;
       mediaResult.inUserLists = false;
     }
+
+    mediaResult.startedAt = Map<String, dynamic>.from(json['mediaListEntry']['startedAt'] as Map<String, dynamic>);
+    mediaResult.completedAt = Map<String, dynamic>.from(json['mediaListEntry']['completedAt'] as Map<String, dynamic>);
 
     if (mediaResult.status == "RELEASING") {
       mediaResult.status = "RELEASING";

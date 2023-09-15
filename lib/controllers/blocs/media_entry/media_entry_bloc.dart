@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/models/media_result.dart';

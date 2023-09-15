@@ -136,6 +136,9 @@ class AnilistClient {
       log("The exception is: ${result.exception}");
     }
 
+    log("Result startedAt: ${result.data!['Media']['mediaListEntry']['startedAt']}");
+    log("Result completedAt: ${result.data!['Media']['mediaListEntry']['completedAt']}");
+
     Map<String, dynamic> resultData = result.data?['Media'];
 
     return MediaResult.fromJson(resultData);

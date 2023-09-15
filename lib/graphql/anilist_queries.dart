@@ -122,6 +122,16 @@ class AnilistQueries {
           status
           score
           progress
+          startedAt {
+            year
+            month
+            day
+          }
+          completedAt {
+            year
+            month
+            day
+          }
         }
       }
     }

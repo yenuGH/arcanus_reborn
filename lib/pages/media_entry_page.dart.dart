@@ -26,6 +26,11 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   late int progress = mediaEntryResult.userProgress ?? 0;
   late TextEditingController progressTextController;
 
+
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  late DateTime startedAt;
+  late DateTime completedAt;
+
   late double score;
 
   @override
@@ -96,9 +101,9 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                               createSpacing(),
                               progressCounter(),
                               createSpacing(),
-                              scoreSlider(),
-                              createSpacing(),
                               startEndDates(),
+                              createSpacing(),
+                              scoreSlider(),
                             ]),
                       ),
                     );
@@ -480,8 +485,33 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget startEndDates() {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String startDate = formatter.format(DateTime.now());
+    String startedAtFormatted;
+    String completedAtFormatted;
+
+    if (mediaEntryResult.startedAt!['year'] != null || mediaEntryResult.startedAt!['month'] != null || mediaEntryResult.startedAt!['day'] != null){
+      int startedAtYear = mediaEntryResult.startedAt!['year'] ?? 0;
+      int startedAtMonth = mediaEntryResult.startedAt!['month'] ?? 0;
+      int startedAtDay = mediaEntryResult.startedAt!['day'] ?? 0;
+      
+      startedAt = DateTime(startedAtYear, startedAtMonth, startedAtDay);
+      startedAtFormatted = formatter.format(startedAt);
+    }
+    else {
+      startedAtFormatted = "Not yet set.";
+    }
+
+    if (mediaEntryResult.completedAt!['year'] != null || mediaEntryResult.completedAt!['month'] != null || mediaEntryResult.completedAt!['day'] != null) {
+      int completedAtYear = mediaEntryResult.completedAt!['year'] ?? 0;
+      int completedAtMonth = mediaEntryResult.completedAt!['month'] ?? 0;
+      int completedAtDay = mediaEntryResult.completedAt!['day'] ?? 0;
+      
+      completedAt = DateTime(completedAtYear, completedAtMonth, completedAtDay);
+      completedAtFormatted = formatter.format(completedAt);
+    }
+    else {
+      completedAtFormatted = "Not yet set.";
+    }
+
 
     return Container(
       alignment: Alignment.topLeft,
@@ -509,10 +539,10 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                   ),
                   child: Container(
                     width: 150,
-                    height: 30,
+                    height: 50,
                     alignment: Alignment.center,
                     child: Text(
-                      startDate,
+                      startedAtFormatted,
                     ),
                   ),
                   onTap: () async {
@@ -547,7 +577,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     height: 30,
                     alignment: Alignment.center,
                     child: Text(
-                      startDate,
+                      completedAtFormatted,
                     ),
                   ),
                   onTap: () async {
