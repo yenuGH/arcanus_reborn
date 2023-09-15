@@ -87,7 +87,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             bloc: mediaEntryBloc,
             builder: (_, state) {
               switch (state.runtimeType) {
-                case (MediaEntryLoadedState || MediaEntryIdleState || MediaEntryScoreUpdateState):
+                case (MediaEntryLoadedState || MediaEntryIdleState || MediaEntryPageUpdateState):
                   {
                     return Container(
                       padding: const EdgeInsets.all(10),
@@ -475,7 +475,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
               label: score.toString(),
               onChanged: (value) {
                 score = value;
-                mediaEntryBloc.add(MediaEntryScoreUpdateEvent());
+                mediaEntryBloc.add(MediaEntryPageUpdateEvent());
               },
             );
           },
@@ -548,12 +548,13 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                   onTap: () async {
                     DateTime? picked = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
+                      initialDate: startedAt,
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2100),
                     );
                     if (picked != null) {
-                      log(picked.toString());
+                      startedAt = picked;
+                      mediaEntryBloc.add(MediaEntryPageUpdateEvent());
                     }
                   },
                 ),
@@ -583,12 +584,12 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                   onTap: () async {
                     DateTime? picked = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
+                      initialDate: completedAt,
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2100),
                     );
                     if (picked != null) {
-                      log(picked.toString());
+                      completedAt = picked;
                     }
                   },
                 ),

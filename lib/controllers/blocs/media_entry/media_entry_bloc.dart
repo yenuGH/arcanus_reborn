@@ -12,7 +12,7 @@ part 'media_entry_state.dart';
 class MediaEntryBloc extends Bloc<MediaEntryEvent, MediaEntryState> {
   MediaEntryBloc() : super(MediaEntryInitialState()) {
     on<MediaEntryInitialEvent>(mediaEntryInitialEvent);
-    on<MediaEntryScoreUpdateEvent>(mediaEntryScoreUpdateEvent);
+    on<MediaEntryPageUpdateEvent>(mediaEntryPageUpdateEvent);
   }
 
   FutureOr<void> mediaEntryInitialEvent(MediaEntryInitialEvent event, Emitter<MediaEntryState> emit) async {
@@ -24,8 +24,8 @@ class MediaEntryBloc extends Bloc<MediaEntryEvent, MediaEntryState> {
     emit(MediaEntryLoadedState(mediaEntryQueryResult));
   }
 
-  FutureOr<void> mediaEntryScoreUpdateEvent(MediaEntryScoreUpdateEvent event, Emitter<MediaEntryState> emit) async {
-    emit(MediaEntryScoreUpdateState());
+  FutureOr<void> mediaEntryPageUpdateEvent(MediaEntryPageUpdateEvent event, Emitter<MediaEntryState> emit) async {
+    emit(MediaEntryPageUpdateState());
     emit(MediaEntryIdleState());
   }
 }

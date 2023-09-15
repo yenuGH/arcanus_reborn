@@ -20,6 +20,6 @@ final class MediaEntryStatusUpdateEvent extends MediaEntryEvent {}
 
 final class MediaEntryProgressUpdateEvent extends MediaEntryEvent {}
 
-final class MediaEntryScoreUpdateEvent extends MediaEntryEvent {}
+final class MediaEntryPageUpdateEvent extends MediaEntryEvent {}
 
 final class MediaEntrySaveEvent extends MediaEntryEvent {}
