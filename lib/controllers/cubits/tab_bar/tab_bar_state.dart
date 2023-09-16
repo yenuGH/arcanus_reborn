@@ -11,4 +11,6 @@ final class TabBarAnime extends TabBarState {}
 
 final class TabBarManga extends TabBarState {}
 
-final class TabBarReload extends TabBarState {}
+final class TabBarReloading extends TabBarState {}
+
+final class TabBarReloaded extends TabBarState {}

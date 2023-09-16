@@ -22,6 +22,8 @@ class TabBarCubit extends Cubit<TabBarState> {
   } // this will emit the manga tab
 
   void reloadTab() {
-    emit(TabBarReload());
+    emit(TabBarReloading());
+
+    emit(TabBarReloaded());
   }
 }

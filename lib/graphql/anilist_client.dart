@@ -165,7 +165,7 @@ class AnilistClient {
 
     hasMutated = true;
 
-    reloadLists();
+    await reloadLists();
 
     return;
   }

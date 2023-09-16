@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/blocs/media_entry/media_entry_bloc.dart';
+import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
 import 'package:arcanus_reborn/models/media_result.dart';
 import 'package:arcanus_reborn/pages/home_page.dart';
 import 'package:arcanus_reborn/pages/media_info_page.dart';
@@ -102,6 +103,9 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
               duration: Duration(seconds: 1),
             ),
           );
+          BlocProvider.of<TabBarCubit>(context).reloadTab();
+          Navigator.pop(context);
+          Navigator.pop(context);
         }
       },
       child: WillPopScope(

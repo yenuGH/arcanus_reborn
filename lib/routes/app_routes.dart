@@ -64,11 +64,8 @@ class AppRoutes {
         final arguments = routeSettings.arguments as Map<String, dynamic>;
 
         return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: tabBarCubit,
-            child: MediaInfoPage(
-              mediaResult: arguments["mediaResult"],
-            ),
+          builder: (_) => MediaInfoPage(
+            mediaResult: arguments["mediaResult"],
           ),
         );
       }
