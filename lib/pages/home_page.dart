@@ -1,9 +1,7 @@
 import 'package:arcanus_reborn/constants/enums.dart';
-import 'package:arcanus_reborn/controllers/blocs/user_media/user_media_bloc.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/anime/filter_bar_anime_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/manga/filter_bar_manga_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/tab_bar/tab_bar_cubit.dart';
-import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/views/anime_view.dart';
 import 'package:arcanus_reborn/views/manga_view.dart';
 import 'package:arcanus_reborn/widgets/app_drawer.dart';

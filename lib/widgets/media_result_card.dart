@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +22,12 @@ class _MediaResultCardState extends State<MediaResultCard> {
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
-          Navigator.push(
+          Navigator.pushNamed(
             context, 
-            MaterialPageRoute(
-              builder: (context) => MediaInfoPage(mediaResult: widget.mediaResult)
-            )
+            "/media_info_page",
+            arguments: {
+              "mediaResult": widget.mediaResult,
+            }
           );
         },
         child: Container(

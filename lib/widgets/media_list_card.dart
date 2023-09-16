@@ -18,11 +18,12 @@ class _MediaListCardState extends State<MediaListCard> {
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
-          Navigator.push(
+          Navigator.pushNamed(
             context, 
-            MaterialPageRoute(
-              builder: (context) => MediaEntryPage(mediaResult: widget.mediaResult)
-            )
+            "/media_entry_page",
+            arguments: {
+              "mediaResult": widget.mediaResult,
+            }
           );
         },
         child: Container(

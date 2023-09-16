@@ -102,8 +102,6 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
               duration: Duration(seconds: 1),
             ),
           );
-          Navigator.pop(context);
-          
         }
       },
       child: WillPopScope(

@@ -8,6 +8,8 @@ import 'package:arcanus_reborn/pages/about_page.dart';
 import 'package:arcanus_reborn/pages/home_page.dart';
 import 'package:arcanus_reborn/pages/loading_page.dart';
 import 'package:arcanus_reborn/pages/login_page.dart';
+import 'package:arcanus_reborn/pages/media_entry_page.dart.dart';
+import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:arcanus_reborn/pages/search_page.dart';
 import 'package:arcanus_reborn/pages/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -45,17 +47,44 @@ class AppRoutes {
         {
           return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(value: tabBarCubit),
-                  BlocProvider.value(value: filterBarAnimeCubit),
-                  BlocProvider.value(value: filterBarMangaCubit),
-                  BlocProvider.value(value: userMediaBloc),
-                ],
-                child: const HomePage(
-                  title: "arcanus",
-                )),
+              providers: [
+                BlocProvider.value(value: tabBarCubit),
+                BlocProvider.value(value: filterBarAnimeCubit),
+                BlocProvider.value(value: filterBarMangaCubit),
+                BlocProvider.value(value: userMediaBloc),
+              ],
+              child: const HomePage(
+                title: "arcanus",
+              )
+            ),
           );
         }
+      case "/media_info_page":
+      {
+        final arguments = routeSettings.arguments as Map<String, dynamic>;
+
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: tabBarCubit,
+            child: MediaInfoPage(
+              mediaResult: arguments["mediaResult"],
+            ),
+          ),
+        );
+      }
+      case "/media_entry_page" :
+      {
+        final arguments = routeSettings.arguments as Map<String, dynamic>;
+
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: tabBarCubit,
+            child: MediaEntryPage(
+              mediaResult: arguments["mediaResult"],
+            ),
+          ),
+        );
+      }
       case "/search_page":
         {
           return MaterialPageRoute(
