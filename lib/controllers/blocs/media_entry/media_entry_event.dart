@@ -22,4 +22,15 @@ final class MediaEntryProgressUpdateEvent extends MediaEntryEvent {}
 
 final class MediaEntryPageUpdateEvent extends MediaEntryEvent {}
 
-final class MediaEntrySaveEvent extends MediaEntryEvent {}
+final class MediaEntrySaveEvent extends MediaEntryEvent {
+  final String? status;
+  final int progress;
+  final DateTime? startedAt;
+  final DateTime? completedAt;
+  final double score;
+
+  const MediaEntrySaveEvent(this.status, this.progress, this.startedAt, this.completedAt, this.score);
+
+  @override
+  List<Object> get props => [status!, progress, startedAt!, completedAt!, score];
+}

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
 import 'package:arcanus_reborn/models/media_result.dart';
@@ -12,6 +13,7 @@ class MediaEntryBloc extends Bloc<MediaEntryEvent, MediaEntryState> {
   MediaEntryBloc() : super(MediaEntryInitialState()) {
     on<MediaEntryInitialEvent>(mediaEntryInitialEvent);
     on<MediaEntryPageUpdateEvent>(mediaEntryPageUpdateEvent);
+    on<MediaEntrySaveEvent>(mediaEntrySaveEvent);
   }
 
   FutureOr<void> mediaEntryInitialEvent(MediaEntryInitialEvent event, Emitter<MediaEntryState> emit) async {
@@ -26,5 +28,16 @@ class MediaEntryBloc extends Bloc<MediaEntryEvent, MediaEntryState> {
   FutureOr<void> mediaEntryPageUpdateEvent(MediaEntryPageUpdateEvent event, Emitter<MediaEntryState> emit) async {
     emit(MediaEntryPageUpdateState());
     emit(MediaEntryIdleState());
+  }
+
+  FutureOr<void> mediaEntrySaveEvent(MediaEntrySaveEvent event, Emitter<MediaEntryState> emit) async {
+    emit(MediaEntrySavingState());
+
+    log("Saving media entry: ${event.status}, ${event.progress}, ${event.startedAt}, ${event.completedAt}, ${event.score}");
+
+    //final dynamic mediaResult = event.mediaResult;
+    //MediaResult mediaEntryQueryResult = await AnilistClient().mediaEntryQuery(mediaResult.mediaType, mediaResult.id);
+
+    emit(MediaEntrySavedState());
   }
 }
