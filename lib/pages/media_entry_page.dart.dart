@@ -23,6 +23,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   final MediaEntryBloc mediaEntryBloc = MediaEntryBloc();
   late MediaResult mediaEntryResult;
 
+  bool changesMade = false;
+
   late int progress;
   late TextEditingController progressTextController;
 
@@ -87,7 +89,12 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
-                Navigator.pop(context);
+                if (changesMade == true){
+                  cancelEntryDialog(context);
+                }
+                else {
+                  Navigator.pop(context);
+                }
               },
             ),
             actions: <Widget>[
@@ -283,6 +290,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     ];
     List<DropdownMenuEntry<String>> statusDropdownMenuItems = [];
 
+    log("User status is: ${mediaEntryResult.userStatus}");
+
     for (String statusValue in statusValues) {
       statusDropdownMenuItems
           .add(DropdownMenuEntry(value: statusValue, label: statusValue));
@@ -298,10 +307,11 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             height: 5,
           ),
           DropdownMenu<String>(
-              initialSelection: mediaEntryResult.userStatus,
+              initialSelection: mediaEntryResult.mediaType == MediaType.ANIME ? "WATCHING" : "READING",
               dropdownMenuEntries: statusDropdownMenuItems,
               onSelected: (String? value) {
                 setState(() {});
+                changesMade = true;
               },
               inputDecorationTheme: const InputDecorationTheme(
                 border: OutlineInputBorder(
@@ -449,6 +459,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                 iconSize: 35,
                 icon: const Icon(Icons.add),
                 onPressed: () {
+                  changesMade = true;
                   progress++;
                   if (mediaEntryResult.episodes != 0 || mediaEntryResult.chapters != 0){
                     if (progress > mediaEntryResult.episodes && progress > mediaEntryResult.chapters){
@@ -461,6 +472,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
               const Spacer(),
               TextButton(
                 onPressed: (){
+                  changesMade = true;
                   progress = mediaEntryResult.userProgress ?? 0;
                   progressTextController.text = progress.toString();
                 }, 
@@ -499,6 +511,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
               label: score.toString(),
               onChanged: (value) {
                 score = value;
+                changesMade = true;
                 mediaEntryBloc.add(MediaEntryPageUpdateEvent());
               },
             );
@@ -553,6 +566,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                       startedAt = picked;
                       mediaEntryBloc.add(MediaEntryPageUpdateEvent());
                     }
+
+                    changesMade = true;
                   },
                 ),
 
@@ -590,6 +605,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                       completedAt = picked;
                       mediaEntryBloc.add(MediaEntryPageUpdateEvent());
                     }
+
+                    changesMade = true;
                   },
                 ),
 
@@ -600,5 +617,41 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
         ],
       ),
     );
+  }
+
+  void cancelEntryDialog(BuildContext context){
+    AlertDialog alertDialog = AlertDialog(
+      title: const Text("Discard changes?"),
+      content: const Text(
+        "Are you sure you want to exit?\n\nAny changes you have made to this entry will not be saved.",
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text(
+            "No",
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: const Text(
+            "Yes",
+            style: TextStyle(
+              color: Colors.green,
+            ),
+          ),
+        ),
+      ],
+    );
+
+    showDialog(context: context, builder: (context) => alertDialog);
   }
 }
