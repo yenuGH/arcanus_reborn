@@ -313,7 +313,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
   Widget statusDropdownMenu() {
     List<String> statusValues = [
-      mediaEntryResult.mediaType == MediaType.ANIME ? "WATCHING" : "READING",
+      "CURRENT",
       "PLANNING",
       "COMPLETED",
       "DROPPED",
@@ -338,7 +338,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             height: 5,
           ),
           DropdownMenu<String>(
-              initialSelection: mediaEntryResult.mediaType == MediaType.ANIME ? "WATCHING" : "READING",
+              initialSelection: mediaEntryResult.userStatus ?? statusValues[0],
               dropdownMenuEntries: statusDropdownMenuItems,
               onSelected: (String? value) {
                 setState(() {});
@@ -470,9 +470,15 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(
-                width: 30,
+              TextButton(
+                onPressed: (){
+                  changesMade = true;
+                  progress = mediaEntryResult.userProgress ?? 0;
+                  progressTextController.text = progress.toString();
+                }, 
+                child: const Text("Reset")
               ),
+
               IconButton(
                 iconSize: 35,
                 icon: const Icon(Icons.remove),
@@ -485,7 +491,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                 },
               ),
               const SizedBox(
-                width: 30,
+                width: 10,
               ),
               IconButton(
                 iconSize: 35,
@@ -502,17 +508,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                 },
               ),
               const Spacer(),
-              TextButton(
-                onPressed: (){
-                  changesMade = true;
-                  progress = mediaEntryResult.userProgress ?? 0;
-                  progressTextController.text = progress.toString();
-                }, 
-                child: const Text("Reset")
-              ),
-              const SizedBox(
-                width: 30,
-              ),
+              
             ],
           ),
         ],
@@ -554,100 +550,118 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget startEndDates() {
-    return Container(
-      alignment: Alignment.topLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget> [
-          const Text("Start Date | End Date: "),
-          
-          const SizedBox(
-            height: 5,
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.topLeft,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget> [
+              const Text("Start Date | End Date: "),
+              
+              const SizedBox(
+                height: 5,
+              ),
+
+              Container(
+                alignment: Alignment.center,
+                height: 60,
+                decoration: customBoxDecoration(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Spacer(),
+
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                        width: 150,
+                        height: 50,
+                        alignment: Alignment.center,
+                        child: Text(
+                          startedAt == null ? "Not yet set." : formatter.format(startedAt!),
+                        ),
+                      ),
+                      onTap: () async {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: startedAt ?? DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
+
+                        if (picked != null) {
+                          startedAt = picked;
+                          mediaEntryBloc.add(MediaEntryPageUpdateEvent());
+                        }
+
+                        changesMade = true;
+                      },
+                    ),
+
+                    const Spacer(),
+
+                    const VerticalDivider(
+                      color: Colors.white,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+
+                    const Spacer(),
+
+                    InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                        width: 150,
+                        height: 30,
+                        alignment: Alignment.center,
+                        child: Text(
+                          completedAt == null ? "Not yet set." : formatter.format(completedAt!),
+                        ),
+                      ),
+                      onTap: () async {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: completedAt ?? DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
+
+                        if (picked != null) {
+                          completedAt = picked;
+                          mediaEntryBloc.add(MediaEntryPageUpdateEvent());
+                        }
+
+                        changesMade = true;
+                      },
+                    ),
+
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            ],
           ),
-
-          Container(
-            alignment: Alignment.center,
-            height: 60,
-            decoration: customBoxDecoration(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Spacer(),
-
-                InkWell(
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Container(
-                    width: 150,
-                    height: 50,
-                    alignment: Alignment.center,
-                    child: Text(
-                      startedAt == null ? "Not yet set." : formatter.format(startedAt!),
-                    ),
-                  ),
-                  onTap: () async {
-                    DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: startedAt ?? DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-
-                    if (picked != null) {
-                      startedAt = picked;
-                      mediaEntryBloc.add(MediaEntryPageUpdateEvent());
-                    }
-
-                    changesMade = true;
-                  },
-                ),
-
-                const Spacer(),
-
-                const VerticalDivider(
-                  color: Colors.white,
-                  indent: 10,
-                  endIndent: 10,
-                ),
-
-                const Spacer(),
-
-                InkWell(
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Container(
-                    width: 150,
-                    height: 30,
-                    alignment: Alignment.center,
-                    child: Text(
-                      completedAt == null ? "Not yet set." : formatter.format(completedAt!),
-                    ),
-                  ),
-                  onTap: () async {
-                    DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: completedAt ?? DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-
-                    if (picked != null) {
-                      completedAt = picked;
-                      mediaEntryBloc.add(MediaEntryPageUpdateEvent());
-                    }
-
-                    changesMade = true;
-                  },
-                ),
-
-                const Spacer(),
-              ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TextButton(
+              onPressed: (){
+                changesMade = true;
+                startedAt = null;
+                completedAt = null;
+                mediaEntryBloc.add(MediaEntryPageUpdateEvent());
+              }, 
+              child: const Text("Reset")
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 
