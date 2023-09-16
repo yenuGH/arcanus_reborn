@@ -97,9 +97,6 @@ class _HomePageState extends State<HomePage> {
                                 }
                               }
                               break;
-                            case TabBarReload: {
-                              selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
-                            }
                             default:
                               selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
                               break;

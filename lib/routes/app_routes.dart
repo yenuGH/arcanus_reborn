@@ -1,3 +1,4 @@
+import 'package:arcanus_reborn/controllers/blocs/media_view/media_view_bloc.dart';
 import 'package:arcanus_reborn/controllers/blocs/user_media/user_media_bloc.dart';
 import 'package:arcanus_reborn/controllers/cubits/anilist_login/anilist_login_cubit.dart';
 import 'package:arcanus_reborn/controllers/cubits/filter_bar/anime/filter_bar_anime_cubit.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppRoutes {
   final TabBarCubit tabBarCubit = TabBarCubit();
+  final MediaViewBloc mediaViewBloc = MediaViewBloc();
   final FilterBarAnimeCubit filterBarAnimeCubit = FilterBarAnimeCubit();
   final FilterBarMangaCubit filterBarMangaCubit = FilterBarMangaCubit();
   final AnilistLoginCubit anilistLoginCubit = AnilistLoginCubit();
@@ -49,6 +51,7 @@ class AppRoutes {
             builder: (_) => MultiBlocProvider(
               providers: [
                 BlocProvider.value(value: tabBarCubit),
+                BlocProvider.value(value: mediaViewBloc),
                 BlocProvider.value(value: filterBarAnimeCubit),
                 BlocProvider.value(value: filterBarMangaCubit),
                 BlocProvider.value(value: userMediaBloc),
