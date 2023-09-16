@@ -22,6 +22,8 @@ class AnilistClient {
   late AuthLink authLink;
   late Link implicitGrantLink;
 
+  bool hasMutated = false;
+
   List<MediaListResult>? userAnimeListCurrent;
   List<MediaListResult>? userAnimeListPlanning;
   List<MediaListResult>? userAnimeListCompleted;
@@ -160,6 +162,29 @@ class AnilistClient {
     if (result.hasException) {
       log("The exception is: ${result.exception}");
     }
+
+    hasMutated = true;
+
+    reloadLists();
+
+    return;
+  }
+
+  Future<void> reloadLists() async{
+    setUserAnimeLists(
+      await userMediaListQuery(MediaType.ANIME, "CURRENT"),
+      await userMediaListQuery(MediaType.ANIME, "PLANNING"),
+      await userMediaListQuery(MediaType.ANIME, "COMPLETED"),
+      await userMediaListQuery(MediaType.ANIME, "DROPPED"),
+      await userMediaListQuery(MediaType.ANIME, "PAUSED"),
+    );
+
+    setUserMangaLists(
+      await userMediaListQuery(MediaType.MANGA, "CURRENT"),
+      await userMediaListQuery(MediaType.MANGA, "PLANNING"),
+      await userMediaListQuery(MediaType.MANGA, "COMPLETED"),
+      await userMediaListQuery(MediaType.MANGA, "DROPPED"),
+    );
   }
 
   void setUserAnimeLists(

@@ -10,3 +10,5 @@ sealed class TabBarState extends Equatable {
 final class TabBarAnime extends TabBarState {}
 
 final class TabBarManga extends TabBarState {}
+
+final class TabBarReload extends TabBarState {}

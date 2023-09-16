@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/blocs/media_entry/media_entry_bloc.dart';
 import 'package:arcanus_reborn/models/media_result.dart';
+import 'package:arcanus_reborn/pages/home_page.dart';
 import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -95,8 +96,14 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           );
         }
         if (state is MediaEntrySavedState) {
-            Navigator.pop(context);
-            Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Saved!"),
+              duration: Duration(seconds: 1),
+            ),
+          );
+          Navigator.pop(context);
+          
         }
       },
       child: WillPopScope(
@@ -338,7 +345,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             height: 5,
           ),
           DropdownMenu<String>(
-              initialSelection: mediaEntryResult.userStatus ?? statusValues[0],
+              initialSelection: mediaEntryResult.userStatus,
               dropdownMenuEntries: statusDropdownMenuItems,
               onSelected: (String? value) {
                 setState(() {});

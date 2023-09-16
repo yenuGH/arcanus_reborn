@@ -84,7 +84,6 @@ class _SearchPageState extends State<SearchPage> {
                             itemCount: mediaList?.length,
                             itemBuilder: (context, index) {
                               return MediaResultCard(mediaResult: mediaList?[index]);
-                              //return SearchType().isAnime ? SearchAnimeCard(animeResult: mediaList?[index]) : SeachMangaCard(mangaResult: mediaList?[index]);
                             },
                           ),
                         );

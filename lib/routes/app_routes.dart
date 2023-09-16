@@ -49,6 +49,7 @@ class AppRoutes {
                   BlocProvider.value(value: tabBarCubit),
                   BlocProvider.value(value: filterBarAnimeCubit),
                   BlocProvider.value(value: filterBarMangaCubit),
+                  BlocProvider.value(value: userMediaBloc),
                 ],
                 child: const HomePage(
                   title: "arcanus",
