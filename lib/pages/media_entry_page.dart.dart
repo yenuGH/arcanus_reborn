@@ -28,8 +28,9 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
 
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
-  late DateTime startedAt;
-  late DateTime completedAt;
+  DateTime? startedAt;
+  DateTime? completedAt;
+
   late double score;
 
   @override
@@ -55,8 +56,26 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
           progress = mediaEntryResult.userProgress ?? 0;
 
-          startedAt = DateTime(mediaEntryResult.startedAt!['year'] ?? 0, mediaEntryResult.startedAt!['month'] ?? 0, mediaEntryResult.startedAt!['day'] ?? 0);
-          completedAt = DateTime(mediaEntryResult.completedAt!['year'] ?? 0, mediaEntryResult.completedAt!['month'] ?? 0, mediaEntryResult.completedAt!['day'] ?? 0);
+          try {
+            int year = mediaEntryResult.startedAt!['year'];
+            int month = mediaEntryResult.startedAt!['month'];
+            int day = mediaEntryResult.startedAt!['day'];
+            startedAt = DateTime(year, month, day);
+          }
+          catch (e) {
+            startedAt = null;
+          }
+
+          try {
+            int year = mediaEntryResult.completedAt!['year'];
+            int month = mediaEntryResult.completedAt!['month'];
+            int day = mediaEntryResult.completedAt!['day'];
+            completedAt = DateTime(year, month, day);
+          }
+          catch (e) {
+            completedAt = null;
+          }
+
         }
       },
       child: WillPopScope(
@@ -256,7 +275,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
   Widget statusDropdownMenu() {
     List<String> statusValues = [
-      "CURRENT",
+      mediaEntryResult.mediaType == MediaType.ANIME ? "WATCHING" : "READING",
       "PLANNING",
       "COMPLETED",
       "DROPPED",
@@ -519,13 +538,13 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     height: 50,
                     alignment: Alignment.center,
                     child: Text(
-                      formatter.format(startedAt),
+                      startedAt == null ? "Not yet set." : formatter.format(startedAt!),
                     ),
                   ),
                   onTap: () async {
                     DateTime? picked = await showDatePicker(
                       context: context,
-                      initialDate: startedAt,
+                      initialDate: startedAt ?? DateTime.now(),
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2100),
                     );
@@ -556,13 +575,13 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     height: 30,
                     alignment: Alignment.center,
                     child: Text(
-                      formatter.format(completedAt),
+                      completedAt == null ? "Not yet set." : formatter.format(completedAt!),
                     ),
                   ),
                   onTap: () async {
                     DateTime? picked = await showDatePicker(
                       context: context,
-                      initialDate: completedAt,
+                      initialDate: completedAt ?? DateTime.now(),
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2100),
                     );
