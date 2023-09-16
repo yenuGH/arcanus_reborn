@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:arcanus_reborn/constants/enums.dart';
+import 'package:arcanus_reborn/graphql/anilist_mutations.dart';
 import 'package:arcanus_reborn/graphql/anilist_oauth.dart';
 import 'package:arcanus_reborn/graphql/anilist_queries.dart';
 import 'package:arcanus_reborn/models/anilist_user.dart';
@@ -139,6 +140,26 @@ class AnilistClient {
     Map<String, dynamic> resultData = result.data?['Media'];
 
     return MediaResult.fromJson(resultData);
+  }
+
+  Future<void> mediaEntryMutation(int mediaId, String status, int progress, double score, Map<String, dynamic> startedAt, Map<String, dynamic> completedAt) async {
+    QueryResult result = await graphQLClient.mutate(
+      MutationOptions(
+        document: gql(AnilistMutations.mediaEntryMutation),
+        variables: {
+          'mediaId': mediaId,
+          'status': MediaListStatus.values.byName(status).name,
+          'progress': progress,
+          'score': score,
+          'startedAt': startedAt,
+          'completedAt': completedAt,
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      log("The exception is: ${result.exception}");
+    }
   }
 
   void setUserAnimeLists(

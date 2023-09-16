@@ -33,10 +33,42 @@ class MediaEntryBloc extends Bloc<MediaEntryEvent, MediaEntryState> {
   FutureOr<void> mediaEntrySaveEvent(MediaEntrySaveEvent event, Emitter<MediaEntryState> emit) async {
     emit(MediaEntrySavingState());
 
-    log("Saving media entry: ${event.status}, ${event.progress}, ${event.startedAt}, ${event.completedAt}, ${event.score}");
+    // log("Saving media entry: ${event.status}, ${event.progress}, ${event.startedAt}, ${event.completedAt}, ${event.score}");
 
-    //final dynamic mediaResult = event.mediaResult;
-    //MediaResult mediaEntryQueryResult = await AnilistClient().mediaEntryQuery(mediaResult.mediaType, mediaResult.id);
+    int mediaId = event.mediaId;
+
+    String status;
+    if (event.status == "WATCHING" || event.status == "READING") {
+      status = "CURRENT";
+    } 
+    else {
+      status = event.status!;
+    }
+
+    int progress = event.progress;
+
+    double score = event.score;
+
+    Map<String, dynamic> startedAt = {
+      "year": event.startedAt?.year,
+      "month": event.startedAt?.month,
+      "day": event.startedAt?.day,
+    };
+
+    Map<String, dynamic> completedAt = {
+      "year": event.completedAt?.year,
+      "month": event.completedAt?.month,
+      "day": event.completedAt?.day,
+    };
+
+    await AnilistClient().mediaEntryMutation(
+      mediaId,
+      status,
+      progress,
+      score,
+      startedAt,
+      completedAt,
+    );
 
     emit(MediaEntrySavedState());
   }

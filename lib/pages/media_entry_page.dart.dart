@@ -86,6 +86,18 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             status = mediaEntryResult.mediaType == MediaType.ANIME ? "WATCHING" : "READING";
           }
         }
+        if (state is MediaEntrySavingState){
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Saving..."),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
+        if (state is MediaEntrySavedState) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+        }
       },
       child: WillPopScope(
         onWillPop: () async => false,
@@ -513,7 +525,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Rating: "),
+        Text("Rating: $score"),
         const SizedBox(
           height: 5,
         ),
@@ -699,10 +711,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
         ),
         TextButton(
           onPressed: () {
-            mediaEntryBloc.add(MediaEntrySaveEvent(status, progress, startedAt, completedAt, score));
-
-            Navigator.pop(context);
-            Navigator.pop(context);
+            mediaEntryBloc.add(MediaEntrySaveEvent(mediaEntryResult.id, status, progress, startedAt, completedAt, score));
           },
           child: const Text(
             "Yes",
