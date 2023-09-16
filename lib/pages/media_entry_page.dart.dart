@@ -23,14 +23,13 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   final MediaEntryBloc mediaEntryBloc = MediaEntryBloc();
   late MediaResult mediaEntryResult;
 
-  late int progress = mediaEntryResult.userProgress ?? 0;
+  late int progress;
   late TextEditingController progressTextController;
 
 
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   late DateTime startedAt;
   late DateTime completedAt;
-
   late double score;
 
   @override
@@ -44,6 +43,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     return BlocListener<MediaEntryBloc, MediaEntryState>(
       bloc: mediaEntryBloc,
       listener: (_, state) {
+        //log("State is: $state");
         if (state is MediaEntryLoadedState) {
           mediaEntryResult = state.mediaResult;
 
@@ -52,6 +52,11 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           } else {
             score = 0;
           }
+
+          progress = mediaEntryResult.userProgress ?? 0;
+
+          startedAt = DateTime(mediaEntryResult.startedAt!['year'] ?? 0, mediaEntryResult.startedAt!['month'] ?? 0, mediaEntryResult.startedAt!['day'] ?? 0);
+          completedAt = DateTime(mediaEntryResult.completedAt!['year'] ?? 0, mediaEntryResult.completedAt!['month'] ?? 0, mediaEntryResult.completedAt!['day'] ?? 0);
         }
       },
       child: WillPopScope(
@@ -485,34 +490,6 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget startEndDates() {
-    String startedAtFormatted;
-    String completedAtFormatted;
-
-    if (mediaEntryResult.startedAt!['year'] != null || mediaEntryResult.startedAt!['month'] != null || mediaEntryResult.startedAt!['day'] != null){
-      int startedAtYear = mediaEntryResult.startedAt!['year'] ?? 0;
-      int startedAtMonth = mediaEntryResult.startedAt!['month'] ?? 0;
-      int startedAtDay = mediaEntryResult.startedAt!['day'] ?? 0;
-      
-      startedAt = DateTime(startedAtYear, startedAtMonth, startedAtDay);
-      startedAtFormatted = formatter.format(startedAt);
-    }
-    else {
-      startedAtFormatted = "Not yet set.";
-    }
-
-    if (mediaEntryResult.completedAt!['year'] != null || mediaEntryResult.completedAt!['month'] != null || mediaEntryResult.completedAt!['day'] != null) {
-      int completedAtYear = mediaEntryResult.completedAt!['year'] ?? 0;
-      int completedAtMonth = mediaEntryResult.completedAt!['month'] ?? 0;
-      int completedAtDay = mediaEntryResult.completedAt!['day'] ?? 0;
-      
-      completedAt = DateTime(completedAtYear, completedAtMonth, completedAtDay);
-      completedAtFormatted = formatter.format(completedAt);
-    }
-    else {
-      completedAtFormatted = "Not yet set.";
-    }
-
-
     return Container(
       alignment: Alignment.topLeft,
       child: Column(
@@ -542,7 +519,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     height: 50,
                     alignment: Alignment.center,
                     child: Text(
-                      startedAtFormatted,
+                      formatter.format(startedAt),
                     ),
                   ),
                   onTap: () async {
@@ -552,6 +529,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2100),
                     );
+
                     if (picked != null) {
                       startedAt = picked;
                       mediaEntryBloc.add(MediaEntryPageUpdateEvent());
@@ -578,7 +556,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                     height: 30,
                     alignment: Alignment.center,
                     child: Text(
-                      completedAtFormatted,
+                      formatter.format(completedAt),
                     ),
                   ),
                   onTap: () async {
@@ -588,8 +566,10 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
                       firstDate: DateTime(1900),
                       lastDate: DateTime(2100),
                     );
+
                     if (picked != null) {
                       completedAt = picked;
+                      mediaEntryBloc.add(MediaEntryPageUpdateEvent());
                     }
                   },
                 ),

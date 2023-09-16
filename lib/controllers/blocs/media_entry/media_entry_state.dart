@@ -22,9 +22,7 @@ final class MediaEntryLoadedState extends MediaEntryState {
   List<Object> get props => [mediaResult];
 }
 
-final class MediaEntryPageUpdateState extends MediaEntryState {
-
-}
+final class MediaEntryPageUpdateState extends MediaEntryState {}
 
 final class MediaEntryErrorState extends MediaEntryState {}
 

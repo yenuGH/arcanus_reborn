@@ -73,8 +73,19 @@ class MediaResult {
       mediaResult.inUserLists = false;
     }
 
-    mediaResult.startedAt = Map<String, dynamic>.from(json['mediaListEntry']['startedAt'] as Map<String, dynamic>);
-    mediaResult.completedAt = Map<String, dynamic>.from(json['mediaListEntry']['completedAt'] as Map<String, dynamic>);
+    try {
+      mediaResult.startedAt = Map<String, dynamic>.from(json['mediaListEntry']['startedAt'] as Map<String, dynamic>);
+    }
+    catch (e) {
+      mediaResult.startedAt = null;
+    }
+
+    try {
+      mediaResult.completedAt = Map<String, dynamic>.from(json['mediaListEntry']['completedAt'] as Map<String, dynamic>);
+    }
+    catch (e) {
+      mediaResult.completedAt = null;
+    }
 
     if (mediaResult.status == "RELEASING") {
       mediaResult.status = "RELEASING";

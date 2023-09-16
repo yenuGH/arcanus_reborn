@@ -60,16 +60,23 @@ class UserMediaBloc extends Bloc<UserMediaEvent, UserMediaState> {
     List<MediaListResult>? userMangaListCompleted;
     List<MediaListResult>? userMangaListDropped;
 
-    userAnimeListCurrent = await AnilistClient().userMediaListQuery(MediaType.ANIME, "CURRENT");
-    userAnimeListPlanning = await AnilistClient().userMediaListQuery(MediaType.ANIME, "PLANNING");
-    userAnimeListCompleted = await AnilistClient().userMediaListQuery(MediaType.ANIME, "COMPLETED");
-    userAnimeListDropped = await AnilistClient().userMediaListQuery(MediaType.ANIME, "DROPPED");
-    userAnimeListPaused = await AnilistClient().userMediaListQuery(MediaType.ANIME, "PAUSED");
+    try {
+      userAnimeListCurrent = await AnilistClient().userMediaListQuery(MediaType.ANIME, "CURRENT");
+      userAnimeListPlanning = await AnilistClient().userMediaListQuery(MediaType.ANIME, "PLANNING");
+      userAnimeListCompleted = await AnilistClient().userMediaListQuery(MediaType.ANIME, "COMPLETED");
+      userAnimeListDropped = await AnilistClient().userMediaListQuery(MediaType.ANIME, "DROPPED");
+      userAnimeListPaused = await AnilistClient().userMediaListQuery(MediaType.ANIME, "PAUSED");
 
-    userMangaListCurrent = await AnilistClient().userMediaListQuery(MediaType.MANGA, "CURRENT");
-    userMangaListPlanning = await AnilistClient().userMediaListQuery(MediaType.MANGA, "PLANNING");
-    userMangaListCompleted = await AnilistClient().userMediaListQuery(MediaType.MANGA, "COMPLETED");
-    userMangaListDropped = await AnilistClient().userMediaListQuery(MediaType.MANGA, "DROPPED");
+      userMangaListCurrent = await AnilistClient().userMediaListQuery(MediaType.MANGA, "CURRENT");
+      userMangaListPlanning = await AnilistClient().userMediaListQuery(MediaType.MANGA, "PLANNING");
+      userMangaListCompleted = await AnilistClient().userMediaListQuery(MediaType.MANGA, "COMPLETED");
+      userMangaListDropped = await AnilistClient().userMediaListQuery(MediaType.MANGA, "DROPPED");
+    }
+    catch (e) {
+      log(e.toString());
+      add(UserMediaErrorEvent());
+      return;
+    }
 
     AnilistClient().setUserAnimeLists(
       userAnimeListCurrent,
