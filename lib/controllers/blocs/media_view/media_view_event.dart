@@ -10,3 +10,5 @@ sealed class MediaViewEvent extends Equatable {
 final class MediaViewInitialEvent extends MediaViewEvent {}
 
 final class MediaViewReloadEvent extends MediaViewEvent {}
+
+final class MediaViewUpdateEvent extends MediaViewEvent {}

@@ -30,7 +30,7 @@ class _AnimeViewState extends State<AnimeView> {
     return ListView.builder(
       itemCount: animeList.length,
       itemBuilder: (context, index) {
-        return MediaListCard(mediaResult: animeList[index]);
+        return MediaListCard(mediaResult: AnilistClient().getUserAnimeList(widget.mediaListStatus)[index]);
       },
     );
   }

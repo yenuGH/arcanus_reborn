@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
-import 'package:arcanus_reborn/models/media_list_result.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +13,7 @@ class MediaViewBloc extends Bloc<MediaViewEvent, MediaViewState> {
   MediaViewBloc() : super(MediaViewInitialState()) {
     on<MediaViewInitialEvent>(mediaViewIntialEvent);
     on<MediaViewReloadEvent>(mediaViewReloadEvent);
+    on<MediaViewUpdateEvent>(mediaViewUpdateEvent);
   }
 
   FutureOr<void> mediaViewIntialEvent(MediaViewInitialEvent event, Emitter<MediaViewState> emit) async {
@@ -23,51 +22,13 @@ class MediaViewBloc extends Bloc<MediaViewEvent, MediaViewState> {
 
   FutureOr<void> mediaViewReloadEvent(MediaViewReloadEvent event, Emitter<MediaViewState> emit) async {
     emit(MediaViewReloadingState());
-    
-    List<MediaListResult>? userAnimeListCurrent;
-    List<MediaListResult>? userAnimeListPlanning;
-    List<MediaListResult>? userAnimeListCompleted;
-    List<MediaListResult>? userAnimeListDropped;
-    List<MediaListResult>? userAnimeListPaused;
 
-    List<MediaListResult>? userMangaListCurrent;
-    List<MediaListResult>? userMangaListPlanning;
-    List<MediaListResult>? userMangaListCompleted;
-    List<MediaListResult>? userMangaListDropped;
-
-    try {
-      userAnimeListCurrent = await AnilistClient().userMediaListQuery(MediaType.ANIME, "CURRENT");
-      userAnimeListPlanning = await AnilistClient().userMediaListQuery(MediaType.ANIME, "PLANNING");
-      userAnimeListCompleted = await AnilistClient().userMediaListQuery(MediaType.ANIME, "COMPLETED");
-      userAnimeListDropped = await AnilistClient().userMediaListQuery(MediaType.ANIME, "DROPPED");
-      userAnimeListPaused = await AnilistClient().userMediaListQuery(MediaType.ANIME, "PAUSED");
-
-      userMangaListCurrent = await AnilistClient().userMediaListQuery(MediaType.MANGA, "CURRENT");
-      userMangaListPlanning = await AnilistClient().userMediaListQuery(MediaType.MANGA, "PLANNING");
-      userMangaListCompleted = await AnilistClient().userMediaListQuery(MediaType.MANGA, "COMPLETED");
-      userMangaListDropped = await AnilistClient().userMediaListQuery(MediaType.MANGA, "DROPPED");
-    }
-    catch (e) {
-      log(e.toString());
-      return;
-    }
-
-    AnilistClient().setUserAnimeLists(
-      userAnimeListCurrent,
-      userAnimeListPlanning,
-      userAnimeListCompleted,
-      userAnimeListDropped,
-      userAnimeListPaused,
-    );
-
-    AnilistClient().setUserMangaLists(
-      userMangaListCurrent,
-      userMangaListPlanning,
-      userMangaListCompleted,
-      userMangaListDropped,
-    );
-
+    await AnilistClient().reloadLists();
+   
     emit(MediaViewReloadedState());
-    emit(MediaViewIdleState());
+  }
+
+  FutureOr<void> mediaViewUpdateEvent(MediaViewUpdateEvent event, Emitter<MediaViewState> emit) async {
+    emit(MediaViewUpdateState());
   }
 }

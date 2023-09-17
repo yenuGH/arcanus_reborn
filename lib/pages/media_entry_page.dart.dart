@@ -319,19 +319,28 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
   }
 
   Widget statusDropdownMenu() {
-    List<String> statusValues = [
+    List<String> animeStatusValues = [
       "CURRENT",
       "PLANNING",
       "COMPLETED",
       "DROPPED",
       "PAUSED"
     ];
-    List<DropdownMenuEntry<String>> statusDropdownMenuItems = [];
+    List<DropdownMenuEntry<String>> statusDropdownMenuItemsAnime = [];
+    for (String statusValue in animeStatusValues) {
+      statusDropdownMenuItemsAnime
+          .add(DropdownMenuEntry(value: statusValue, label: statusValue));
+    }
 
-    //log("User status is: ${mediaEntryResult.userStatus}");
-
-    for (String statusValue in statusValues) {
-      statusDropdownMenuItems
+    List<String> mangaStatusValues = [
+      "CURRENT",
+      "PLANNING",
+      "COMPLETED",
+      "DROPPED",
+    ];
+    List<DropdownMenuEntry<String>> statusDropdownMenuItemsManga = [];
+    for (String statusValue in mangaStatusValues) {
+      statusDropdownMenuItemsManga
           .add(DropdownMenuEntry(value: statusValue, label: statusValue));
     }
 
@@ -346,9 +355,8 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
           ),
           DropdownMenu<String>(
               initialSelection: mediaEntryResult.userStatus,
-              dropdownMenuEntries: statusDropdownMenuItems,
+              dropdownMenuEntries: mediaEntryResult.mediaType == MediaType.ANIME ? statusDropdownMenuItemsAnime : statusDropdownMenuItemsManga,
               onSelected: (String? value) {
-                setState(() {});
                 status = value!;
                 changesMade = true;
               },

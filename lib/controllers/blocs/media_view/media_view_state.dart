@@ -13,5 +13,9 @@ final class MediaViewReloadingState extends MediaViewState {}
 
 final class MediaViewReloadedState extends MediaViewState {}
 
+final class MediaViewReloadState extends MediaViewState {}
+
+final class MediaViewUpdateState extends MediaViewState {}
+
 final class MediaViewIdleState extends MediaViewState {}
 
