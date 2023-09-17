@@ -6,58 +6,31 @@ import 'package:arcanus_reborn/widgets/media_list_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AnimeView extends StatelessWidget {
+class AnimeView extends StatefulWidget {
   const AnimeView({super.key, required this.mediaListStatus});
 
   final MediaListStatus mediaListStatus;
 
   @override
+  State<AnimeView> createState() => _AnimeViewState();
+}
+
+class _AnimeViewState extends State<AnimeView> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<MediaViewBloc>(context).add(MediaViewInitialEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<MediaListResult> animeList;
-    switch (mediaListStatus) {
-      case (MediaListStatus.CURRENT):
-        {
-          animeList = AnilistClient().userAnimeListCurrent!;
-          break;
-        }
-      case (MediaListStatus.PLANNING):
-        {
-          animeList = AnilistClient().userAnimeListPlanning!;
-          break;
-        }
-      case (MediaListStatus.COMPLETED):
-        {
-          animeList = AnilistClient().userAnimeListCompleted!;
-          break;
-        }
-      case (MediaListStatus.DROPPED):
-        {
-          animeList = AnilistClient().userAnimeListDropped!;
-          break;
-        }
-      case (MediaListStatus.PAUSED):
-        {
-          animeList = AnilistClient().userAnimeListPaused!;
-          break;
-        }
-      default:
-        {
-          animeList = AnilistClient().userAnimeListCurrent!;
-        }
-    }
+    animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
 
-    return BlocBuilder<MediaViewBloc, MediaViewState>(
-      builder: (_, state) {
-        switch (state.runtimeType){
-          default: {
-            return ListView.builder(
-              itemCount: animeList.length,
-              itemBuilder: (context, index) {
-                return MediaListCard(mediaResult: animeList[index]);
-              },
-            );
-          }
-        }
+    return ListView.builder(
+      itemCount: animeList.length,
+      itemBuilder: (context, index) {
+        return MediaListCard(mediaResult: animeList[index]);
       },
     );
   }

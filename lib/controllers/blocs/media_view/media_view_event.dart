@@ -6,3 +6,7 @@ sealed class MediaViewEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+final class MediaViewInitialEvent extends MediaViewEvent {}
+
+final class MediaViewReloadEvent extends MediaViewEvent {}

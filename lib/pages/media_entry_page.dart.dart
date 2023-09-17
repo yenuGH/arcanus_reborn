@@ -1,6 +1,7 @@
 
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/blocs/media_entry/media_entry_bloc.dart';
+import 'package:arcanus_reborn/controllers/blocs/media_view/media_view_bloc.dart';
 import 'package:arcanus_reborn/models/media_result.dart';
 import 'package:arcanus_reborn/pages/media_info_page.dart';
 import 'package:flutter/material.dart';
@@ -732,6 +733,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
         TextButton(
           onPressed: () {
             mediaEntryBloc.add(MediaEntrySaveEvent(mediaEntryResult.id, status, progress, startedAt, completedAt, score));
+            BlocProvider.of<MediaViewBloc>(context).add(MediaViewReloadEvent());
           },
           child: const Text(
             "Yes",

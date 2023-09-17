@@ -7,4 +7,11 @@ sealed class MediaViewState extends Equatable {
   List<Object> get props => [];
 }
 
-final class MediaViewInitial extends MediaViewState {}
+final class MediaViewInitialState extends MediaViewState {}
+
+final class MediaViewReloadingState extends MediaViewState {}
+
+final class MediaViewReloadedState extends MediaViewState {}
+
+final class MediaViewIdleState extends MediaViewState {}
+

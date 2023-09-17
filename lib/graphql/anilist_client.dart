@@ -165,25 +165,46 @@ class AnilistClient {
 
     hasMutated = true;
 
-    //await reloadLists();
+    await reloadLists();
 
     return;
   }
 
-  Future<void> reloadLists() async{
-    setUserAnimeLists(
-      await userMediaListQuery(MediaType.ANIME, "CURRENT"),
-      await userMediaListQuery(MediaType.ANIME, "PLANNING"),
-      await userMediaListQuery(MediaType.ANIME, "COMPLETED"),
-      await userMediaListQuery(MediaType.ANIME, "DROPPED"),
-      await userMediaListQuery(MediaType.ANIME, "PAUSED"),
-    );
+  Future<void> reloadLists() async {
+    userAnimeListCurrent?.clear();
+    userAnimeListPlanning?.clear();
+    userAnimeListCompleted?.clear();
+    userAnimeListDropped?.clear();
+    userAnimeListPaused?.clear();
 
+    userMangaListCurrent?.clear();
+    userMangaListPlanning?.clear();
+    userMangaListCompleted?.clear();
+    userMangaListDropped?.clear();
+
+    List<MediaListResult> animeListCurrent = await userMediaListQuery(MediaType.ANIME, "CURRENT");
+    List<MediaListResult> animeListPlanning = await userMediaListQuery(MediaType.ANIME, "PLANNING");
+    List<MediaListResult> animeListCompleted = await userMediaListQuery(MediaType.ANIME, "COMPLETED");
+    List<MediaListResult> animeListDropped = await userMediaListQuery(MediaType.ANIME, "DROPPED");
+    List<MediaListResult> animeListPaused = await userMediaListQuery(MediaType.ANIME, "PAUSED");
+    
+    List<MediaListResult> mangaListCurrent = await userMediaListQuery(MediaType.MANGA, "CURRENT");
+    List<MediaListResult> mangaListPlanning = await userMediaListQuery(MediaType.MANGA, "PLANNING");
+    List<MediaListResult> mangaListCompleted = await userMediaListQuery(MediaType.MANGA, "COMPLETED");
+    List<MediaListResult> mangaListDropped = await userMediaListQuery(MediaType.MANGA, "DROPPED");
+
+    setUserAnimeLists(
+      animeListCurrent,
+      animeListPlanning,
+      animeListCompleted,
+      animeListDropped,
+      animeListPaused,
+    );
     setUserMangaLists(
-      await userMediaListQuery(MediaType.MANGA, "CURRENT"),
-      await userMediaListQuery(MediaType.MANGA, "PLANNING"),
-      await userMediaListQuery(MediaType.MANGA, "COMPLETED"),
-      await userMediaListQuery(MediaType.MANGA, "DROPPED"),
+      mangaListCurrent,
+      mangaListPlanning,
+      mangaListCompleted,
+      mangaListDropped,
     );
   }
 
@@ -219,5 +240,59 @@ class AnilistClient {
     this.userMangaListPlanning = userMangaListPlanning;
     this.userMangaListCompleted = userMangaListCompleted;
     this.userMangaListDropped = userMangaListDropped;
+  }
+
+  List<MediaListResult> getUserAnimeList(MediaListStatus mediaListStatus) {
+    switch (mediaListStatus) {
+      case (MediaListStatus.CURRENT):
+        {
+          return userAnimeListCurrent!;
+        }
+      case (MediaListStatus.PLANNING):
+        {
+          return userAnimeListPlanning!;
+        }
+      case (MediaListStatus.COMPLETED):
+        {
+          return userAnimeListCompleted!;
+        }
+      case (MediaListStatus.DROPPED):
+        {
+          return userAnimeListDropped!;
+        }
+      case (MediaListStatus.PAUSED):
+        {
+          return userAnimeListPaused!;
+        }
+      default:
+        {
+          return userAnimeListCurrent!;
+        }
+    }
+  }
+
+  List<MediaListResult> getUserMangaList(MediaListStatus mediaListStatus) {
+    switch (mediaListStatus) {
+      case (MediaListStatus.CURRENT):
+        {
+          return userMangaListCurrent!;
+        }
+      case (MediaListStatus.PLANNING):
+        {
+          return userMangaListPlanning!;
+        }
+      case (MediaListStatus.COMPLETED):
+        {
+          return userMangaListCompleted!;
+        }
+      case (MediaListStatus.DROPPED):
+        {
+          return userMangaListDropped!;
+        }
+      default:
+        {
+          return userMangaListCurrent!;
+        }
+    }
   }
 }
