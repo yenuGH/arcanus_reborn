@@ -305,7 +305,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
 
   Widget statusDropdownMenu() {
     List<String> animeStatusValues = [
-      "CURRENT",
+      "WATCHING",
       "PLANNING",
       "COMPLETED",
       "DROPPED",
@@ -318,7 +318,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     }
 
     List<String> mangaStatusValues = [
-      "CURRENT",
+      "READING",
       "PLANNING",
       "COMPLETED",
       "DROPPED",
@@ -327,6 +327,11 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
     for (String statusValue in mangaStatusValues) {
       statusDropdownMenuItemsManga
           .add(DropdownMenuEntry(value: statusValue, label: statusValue));
+    }
+
+    String? currentStatus;
+    if (mediaEntryResult.userStatus == "CURRENT"){
+      currentStatus = mediaEntryResult.mediaType == MediaType.ANIME ? "WATCHING" : "READING";
     }
 
     return Container(
@@ -339,7 +344,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             height: 5,
           ),
           DropdownMenu<String>(
-              initialSelection: mediaEntryResult.userStatus,
+              initialSelection: currentStatus ?? mediaEntryResult.userStatus,
               dropdownMenuEntries: mediaEntryResult.mediaType == MediaType.ANIME ? statusDropdownMenuItemsAnime : statusDropdownMenuItemsManga,
               onSelected: (String? value) {
                 status = value!;
@@ -535,7 +540,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
               value: score,
               max: 10,
               activeColor: Colors.white,
-              divisions: 20,
+              divisions: 10,
               label: score.toString(),
               onChanged: (value) {
                 score = value;
@@ -725,6 +730,10 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
         ),
         TextButton(
           onPressed: () {
+            if (status == "WATCHING" || status == "READING"){
+              status = "CURRENT";
+            }
+
             mediaEntryBloc.add(MediaEntrySaveEvent(mediaEntryResult.id, status, progress, startedAt, completedAt, score));
             BlocProvider.of<MediaViewBloc>(context).add(MediaViewReloadEvent());
           },
