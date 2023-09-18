@@ -29,22 +29,17 @@ class _AnimeViewState extends State<AnimeView> {
 
     return BlocConsumer<MediaViewBloc, MediaViewState>(
       listener:(_, state) {
-        //log("State: ${state.runtimeType}");
         switch (state.runtimeType) {
           case (MediaViewInitialState): {
             animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
-            //BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
             break;
           }
           case (MediaViewReloadedState): {
-            log("Reloading ${widget.mediaListStatus.name} list...");
-
             BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
             break;
           }
           default: {
             animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
-            //BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
             break;
           }
         }  

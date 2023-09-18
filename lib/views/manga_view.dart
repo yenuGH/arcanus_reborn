@@ -25,17 +25,55 @@ class _MangaViewState extends State<MangaView> {
 
   @override
   Widget build(BuildContext context) {
-    List<MediaListResult> mangaList;
-    mangaList = AnilistClient().getUserMangaList(widget.mediaListStatus);
+    List<MediaListResult> mangaList = AnilistClient().getUserMangaList(widget.mediaListStatus);
 
-    return BlocBuilder<MediaViewBloc, MediaViewState>(
+    return BlocConsumer<MediaViewBloc, MediaViewState>(
+      listener:(_, state) {
+        //log("State: ${state.runtimeType}");
+        switch (state.runtimeType) {
+          case (MediaViewInitialState): {
+            mangaList = AnilistClient().getUserMangaList(widget.mediaListStatus);
+            break;
+          }
+          case (MediaViewReloadedState): {
+            BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
+            break;
+          }
+          default: {
+            mangaList = AnilistClient().getUserMangaList(widget.mediaListStatus);
+            break;
+          }
+        }  
+      },
       builder: (_, state) {
-        return ListView.builder(
-          itemCount: mangaList.length,
-          itemBuilder: (context, index) {
-            return MediaListCard(mediaResult: mangaList[index]);
-          },
-        );
+        switch (state.runtimeType) {
+          case (MediaViewReloadingState):
+          {
+            return const CircularProgressIndicator();
+          }
+          case (MediaViewInitialState || MediaViewUpdateState):
+          {
+
+            return ListView.builder(
+              itemCount: mangaList.length,
+              itemBuilder: (context, index) {
+                return MediaListCard(mediaResult: mangaList[index]);
+              },
+            );
+          }
+          case (MediaViewErrorState): {
+            return const Text("Error has occured, please restart the app.");
+          }
+          default:
+          {
+            return Container(
+              alignment: Alignment.center,
+              child: const Center(
+                child: CircularProgressIndicator()
+              )
+            );
+          }
+        }
       },
     );
   }
