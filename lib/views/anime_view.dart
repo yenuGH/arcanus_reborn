@@ -28,21 +28,24 @@ class _AnimeViewState extends State<AnimeView> {
     List<MediaListResult> animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
 
     return BlocConsumer<MediaViewBloc, MediaViewState>(
-      listener:(_, state) async {
+      listener:(_, state) {
+        //log("State: ${state.runtimeType}");
         switch (state.runtimeType) {
           case (MediaViewInitialState): {
             animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
+            //BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
+            break;
           }
           case (MediaViewReloadedState): {
             log("Reloading ${widget.mediaListStatus.name} list...");
-/*             animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
-            for (MediaListResult mediaListResult in animeList) {
-              log(mediaListResult.titleUserPreferred);
-            } */
+
             BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
+            break;
           }
           default: {
             animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
+            //BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
+            break;
           }
         }  
       },
@@ -52,7 +55,7 @@ class _AnimeViewState extends State<AnimeView> {
           {
             return const CircularProgressIndicator();
           }
-          case (MediaViewUpdateState || MediaViewInitialState):
+          case (MediaViewInitialState || MediaViewUpdateState):
           {
             return ListView.builder(
               itemCount: animeList.length,

@@ -49,11 +49,6 @@ class MediaViewBloc extends Bloc<MediaViewEvent, MediaViewState> {
     userMangaListCompleted = await AnilistClient().userMediaListQuery(MediaType.MANGA, "COMPLETED");
     userMangaListDropped = await AnilistClient().userMediaListQuery(MediaType.MANGA, "DROPPED");
     
-
-    for (MediaListResult mediaListResult in userAnimeListCurrent){
-      log(mediaListResult.titleUserPreferred);
-    }
-
     AnilistClient().setUserAnimeLists(
       userAnimeListCurrent,
       userAnimeListPlanning,
@@ -74,5 +69,6 @@ class MediaViewBloc extends Bloc<MediaViewEvent, MediaViewState> {
 
   FutureOr<void> mediaViewUpdateEvent(MediaViewUpdateEvent event, Emitter<MediaViewState> emit) async {
     emit(MediaViewUpdateState());
+    emit(MediaViewInitialState());
   }
 }

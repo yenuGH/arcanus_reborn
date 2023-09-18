@@ -86,22 +86,7 @@ class _MediaEntryPageState extends State<MediaEntryPage> {
             status = mediaEntryResult.mediaType == MediaType.ANIME ? "WATCHING" : "READING";
           }
         }
-        if (state is MediaEntrySavingState){
-          /* ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Saving..."),
-              duration: Duration(seconds: 1),
-            ),
-          ); */
-        }
         if (state is MediaEntrySavedState) {
-          /* ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Saved!"),
-              duration: Duration(seconds: 1),
-            ),
-          ); */
-
           Navigator.pop(context);
           Navigator.pop(context);
         }
