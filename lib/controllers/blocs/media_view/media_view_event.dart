@@ -12,3 +12,5 @@ final class MediaViewInitialEvent extends MediaViewEvent {}
 final class MediaViewReloadEvent extends MediaViewEvent {}
 
 final class MediaViewUpdateEvent extends MediaViewEvent {}
+
+final class MediaViewErrorEvent extends MediaViewEvent {}

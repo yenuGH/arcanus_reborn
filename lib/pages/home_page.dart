@@ -43,71 +43,74 @@ class _HomePageState extends State<HomePage> {
               ),
               drawer: const AppDrawer(),
           
-              body: BlocBuilder<TabBarCubit, TabBarState>(
-                builder: (_, tabBarState) {
-                  return BlocBuilder<FilterBarAnimeCubit, FilterBarAnimeState>(
-                    builder: (_, filterBarAnimeState) {
-                      return BlocBuilder<FilterBarMangaCubit, FilterBarMangaState>(
-                        builder: (_, filterBarMangaState) {
-                          Widget selectedView;
-          
-                          switch (tabBarState.runtimeType) {
-                            case TabBarAnime:
-                              {
-                                switch (filterBarAnimeState.runtimeType) {
-                                  case FilterBarAnimeWatching:
-                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
-                                    break;
-                                  case FilterBarAnimePlanning:
-                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.PLANNING);
-                                    break;
-                                  case FilterBarAnimeCompleted:
-                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.COMPLETED);
-                                    break;
-                                  case FilterBarAnimePaused:
-                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.PAUSED);
-                                    break;
-                                  case FilterBarAnimeDropped:
-                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.DROPPED);
-                                    break;
-                                  default:
-                                    selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
-                                    break;
+              body: Container(
+                alignment: Alignment.center,
+                child: BlocBuilder<TabBarCubit, TabBarState>(
+                  builder: (_, tabBarState) {
+                    return BlocBuilder<FilterBarAnimeCubit, FilterBarAnimeState>(
+                      builder: (_, filterBarAnimeState) {
+                        return BlocBuilder<FilterBarMangaCubit, FilterBarMangaState>(
+                          builder: (_, filterBarMangaState) {
+                            Widget selectedView;
+                        
+                            switch (tabBarState.runtimeType) {
+                              case TabBarAnime:
+                                {
+                                  switch (filterBarAnimeState.runtimeType) {
+                                    case FilterBarAnimeWatching:
+                                      selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
+                                      break;
+                                    case FilterBarAnimePlanning:
+                                      selectedView = const AnimeView(mediaListStatus: MediaListStatus.PLANNING);
+                                      break;
+                                    case FilterBarAnimeCompleted:
+                                      selectedView = const AnimeView(mediaListStatus: MediaListStatus.COMPLETED);
+                                      break;
+                                    case FilterBarAnimePaused:
+                                      selectedView = const AnimeView(mediaListStatus: MediaListStatus.PAUSED);
+                                      break;
+                                    case FilterBarAnimeDropped:
+                                      selectedView = const AnimeView(mediaListStatus: MediaListStatus.DROPPED);
+                                      break;
+                                    default:
+                                      selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
+                                      break;
+                                  }
                                 }
-                              }
-                              break;
-                            case TabBarManga:
-                              {
-                                switch (filterBarMangaState.runtimeType) {
-                                  case FilterBarMangaReading:
-                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.CURRENT);
-                                    break;
-                                  case FilterBarMangaPlanning:
-                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.PLANNING);
-                                    break;
-                                  case FilterBarMangaCompleted:
-                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.COMPLETED);
-                                    break;
-                                  case FilterBarMangaDropped:
-                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.DROPPED);
-                                    break;
-                                  default:
-                                    selectedView = const MangaView(mediaListStatus: MediaListStatus.CURRENT);
-                                    break;
+                                break;
+                              case TabBarManga:
+                                {
+                                  switch (filterBarMangaState.runtimeType) {
+                                    case FilterBarMangaReading:
+                                      selectedView = const MangaView(mediaListStatus: MediaListStatus.CURRENT);
+                                      break;
+                                    case FilterBarMangaPlanning:
+                                      selectedView = const MangaView(mediaListStatus: MediaListStatus.PLANNING);
+                                      break;
+                                    case FilterBarMangaCompleted:
+                                      selectedView = const MangaView(mediaListStatus: MediaListStatus.COMPLETED);
+                                      break;
+                                    case FilterBarMangaDropped:
+                                      selectedView = const MangaView(mediaListStatus: MediaListStatus.DROPPED);
+                                      break;
+                                    default:
+                                      selectedView = const MangaView(mediaListStatus: MediaListStatus.CURRENT);
+                                      break;
+                                  }
                                 }
-                              }
-                              break;
-                            default:
-                              selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
-                              break;
-                          }
-          
-                          return selectedView;
-                        },
-                      );
-                    },
-                  );
-                },
+                                break;
+                              default:
+                                selectedView = const AnimeView(mediaListStatus: MediaListStatus.CURRENT);
+                                break;
+                            }
+                        
+                            return selectedView;
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
           
           

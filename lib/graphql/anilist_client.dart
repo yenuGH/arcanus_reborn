@@ -72,9 +72,11 @@ class AnilistClient {
   }
 
   Future<List<MediaListResult>> userMediaListQuery(MediaType mediaType, String status) async {
+
     QueryResult queryResult = await graphQLClient.query(
       QueryOptions(
         document: gql(AnilistQueries.userMediaListQuery),
+        fetchPolicy: FetchPolicy.noCache,
         variables: {
           'userId': Hive.box('anilistUser').get('anilistUserId'),
           'type': mediaType.name,
@@ -103,6 +105,7 @@ class AnilistClient {
     QueryResult result = await graphQLClient.query(
       QueryOptions(
         document: gql(AnilistQueries.mediaQuery),
+        fetchPolicy: FetchPolicy.noCache,
         variables: {
           'query': query,
           'type': mediaType.name,
@@ -128,6 +131,7 @@ class AnilistClient {
     QueryResult result = await graphQLClient.query(
       QueryOptions(
         document: gql(AnilistQueries.mediaEntryQuery),
+        fetchPolicy: FetchPolicy.noCache,
         variables: {
           'mediaId': mediaId,
           'type': mediaType.name,
@@ -148,6 +152,7 @@ class AnilistClient {
     QueryResult result = await graphQLClient.mutate(
       MutationOptions(
         document: gql(AnilistMutations.mediaEntryMutation),
+        fetchPolicy: FetchPolicy.noCache,
         variables: {
           'mediaId': mediaId,
           'status': MediaListStatus.values.byName(status).name,
@@ -165,47 +170,7 @@ class AnilistClient {
 
     hasMutated = true;
 
-    await reloadLists();
-
     return;
-  }
-
-  Future<void> reloadLists() async {
-    userAnimeListCurrent?.clear();
-    userAnimeListPlanning?.clear();
-    userAnimeListCompleted?.clear();
-    userAnimeListDropped?.clear();
-    userAnimeListPaused?.clear();
-
-    userMangaListCurrent?.clear();
-    userMangaListPlanning?.clear();
-    userMangaListCompleted?.clear();
-    userMangaListDropped?.clear();
-
-    List<MediaListResult> animeListCurrent = await userMediaListQuery(MediaType.ANIME, "CURRENT");
-    List<MediaListResult> animeListPlanning = await userMediaListQuery(MediaType.ANIME, "PLANNING");
-    List<MediaListResult> animeListCompleted = await userMediaListQuery(MediaType.ANIME, "COMPLETED");
-    List<MediaListResult> animeListDropped = await userMediaListQuery(MediaType.ANIME, "DROPPED");
-    List<MediaListResult> animeListPaused = await userMediaListQuery(MediaType.ANIME, "PAUSED");
-    
-    List<MediaListResult> mangaListCurrent = await userMediaListQuery(MediaType.MANGA, "CURRENT");
-    List<MediaListResult> mangaListPlanning = await userMediaListQuery(MediaType.MANGA, "PLANNING");
-    List<MediaListResult> mangaListCompleted = await userMediaListQuery(MediaType.MANGA, "COMPLETED");
-    List<MediaListResult> mangaListDropped = await userMediaListQuery(MediaType.MANGA, "DROPPED");
-
-    setUserAnimeLists(
-      animeListCurrent,
-      animeListPlanning,
-      animeListCompleted,
-      animeListDropped,
-      animeListPaused,
-    );
-    setUserMangaLists(
-      mangaListCurrent,
-      mangaListPlanning,
-      mangaListCompleted,
-      mangaListDropped,
-    );
   }
 
   void setUserAnimeLists(

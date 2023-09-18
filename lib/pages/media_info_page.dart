@@ -31,11 +31,12 @@ class _MediaInfoPageState extends State<MediaInfoPage> {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushNamed(
                 context, 
-                MaterialPageRoute(
-                  builder: (context) => MediaEntryPage(mediaResult: widget.mediaResult)
-                )
+                "/media_entry_page",
+                arguments: {
+                  "mediaResult": widget.mediaResult,
+                }
               );
             },
           )

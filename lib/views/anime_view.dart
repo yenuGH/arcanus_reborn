@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/blocs/media_view/media_view_bloc.dart';
 import 'package:arcanus_reborn/graphql/anilist_client.dart';
@@ -19,18 +21,59 @@ class _AnimeViewState extends State<AnimeView> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<MediaViewBloc>(context).add(MediaViewInitialEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    List<MediaListResult> animeList;
-    animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
+    List<MediaListResult> animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
 
-    return ListView.builder(
-      itemCount: animeList.length,
-      itemBuilder: (context, index) {
-        return MediaListCard(mediaResult: AnilistClient().getUserAnimeList(widget.mediaListStatus)[index]);
+    return BlocConsumer<MediaViewBloc, MediaViewState>(
+      listener:(_, state) async {
+        switch (state.runtimeType) {
+          case (MediaViewInitialState): {
+            animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
+          }
+          case (MediaViewReloadedState): {
+            log("Reloading ${widget.mediaListStatus.name} list...");
+/*             animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
+            for (MediaListResult mediaListResult in animeList) {
+              log(mediaListResult.titleUserPreferred);
+            } */
+            BlocProvider.of<MediaViewBloc>(context).add(MediaViewUpdateEvent());
+          }
+          default: {
+            animeList = AnilistClient().getUserAnimeList(widget.mediaListStatus);
+          }
+        }  
+      },
+      builder: (_, state) {
+        switch (state.runtimeType) {
+          case (MediaViewReloadingState):
+          {
+            return const CircularProgressIndicator();
+          }
+          case (MediaViewUpdateState || MediaViewInitialState):
+          {
+            return ListView.builder(
+              itemCount: animeList.length,
+              itemBuilder: (context, index) {
+                return MediaListCard(mediaResult: animeList[index]);
+              },
+            );
+          }
+          case (MediaViewErrorState): {
+            return const Text("Error has occured, please restart the app.");
+          }
+          default:
+          {
+            return Container(
+              alignment: Alignment.center,
+              child: const Center(
+                child: CircularProgressIndicator()
+              )
+            );
+          }
+        }
       },
     );
   }
