@@ -57,6 +57,8 @@ class _AnimeViewState extends State<AnimeView> {
           }
           case (MediaViewInitialState || MediaViewUpdateState):
           {
+            log("Building ${widget.mediaListStatus.name} list...");
+
             return ListView.builder(
               itemCount: animeList.length,
               itemBuilder: (context, index) {

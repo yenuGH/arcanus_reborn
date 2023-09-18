@@ -25,6 +25,8 @@ class MediaViewBloc extends Bloc<MediaViewEvent, MediaViewState> {
   FutureOr<void> mediaViewReloadEvent(MediaViewReloadEvent event, Emitter<MediaViewState> emit) async {
     emit(MediaViewReloadingState());
 
+    // this delay is added so anilist can update first before the app reloads the apps
+    await Future.delayed(const Duration(milliseconds: 500));
     //await AnilistClient().reloadLists();
 
     List<MediaListResult>? userAnimeListCurrent;
