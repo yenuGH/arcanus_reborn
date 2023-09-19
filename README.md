@@ -1,7 +1,9 @@
 
 # arcanus reborn
 
-An app made for managing your anime and manga lists, with the functionality to search for new ones - all built in Flutter. Made for Android and iOS devices. Uses AniList API v2.
+An app made for managing your anime and manga lists, with the functionality to search for new ones - all built in Flutter. Made for Android and iOS devices.
+This app uses AniList's public API v2. It grabs and stores (locally, so none of your data leaves your device) your account's authentication token (which you must manually grab on Android, not on iOS) using Hive.
+It then uses that authentication token to make authorized requests to the AnilList API with graphql_flutter's client, querying and mutating account data as you see fit.
 
 This was a personal project aimed towards learning the Dart programming language along with the Flutter SDK, meaning it most likely won't be maintained after version 1.0 is released.
 
