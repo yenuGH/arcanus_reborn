@@ -19,6 +19,8 @@ You can install the demo-release build via Android Studio or VS Code (both with 
   flutter pub get
   flutter run
 ```
+
+Or you can head over to the [latest release](https://github.com/yenuGH/arcanus_reborn/releases/tag/v1.0.0) and download the Android APK from there directly.
     
 ## License
 
