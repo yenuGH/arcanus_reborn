@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:arcanus_reborn/constants/enums.dart';
 import 'package:arcanus_reborn/controllers/blocs/media_view/media_view_bloc.dart';
@@ -52,7 +51,9 @@ class _AnimeViewState extends State<AnimeView> {
           }
           case (MediaViewInitialState || MediaViewUpdateState):
           {
-            log("Building ${widget.mediaListStatus.name} list...");
+            if (animeList.isEmpty){
+              return const Text("No anime found.");
+            }
 
             return ListView.builder(
               itemCount: animeList.length,

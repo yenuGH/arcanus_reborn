@@ -53,6 +53,9 @@ class _MangaViewState extends State<MangaView> {
           }
           case (MediaViewInitialState || MediaViewUpdateState):
           {
+            if (mangaList.isEmpty){
+              return const Text("No manga found.");
+            }
 
             return ListView.builder(
               itemCount: mangaList.length,
